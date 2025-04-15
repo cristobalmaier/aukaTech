@@ -1,0 +1,26 @@
+{
+  "name": "auka-api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node --watch src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/Exaedro/auka-api.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Exaedro/auka-api/issues"
+  },
+  "homepage": "https://github.com/Exaedro/auka-api#readme",
+  "description": "",
+  "type": "module",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "express": "^5.1.0",
+    "morgan": "^1.10.0",
+    "mysql2": "^3.14.0"
+  }
+}
