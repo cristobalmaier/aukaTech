@@ -12,10 +12,10 @@ export async function query(sql, valores) {
     try {
         const conexion = await mysql.createConnection(CONFIGURACION)
 
-        const data = await conexion.query(sql, valores)
+        const [data] = await conexion.query(sql, valores)
         await conexion.end()
 
-        return data[0]
+        return data.length == 0 ? null : data
     } catch(err) {
         console.error(err)
         throw new Error('No se pudo conectar con la base de datos.')

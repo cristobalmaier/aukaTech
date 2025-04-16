@@ -1,4 +1,4 @@
-import { validarLlamado } from "./validadores/llamado.js"
+import { validarLlamado } from "../validadores/llamado.js"
 
 class LlamadoControlador {
     constructor({ llamadoServicio }) {
@@ -33,7 +33,7 @@ class LlamadoControlador {
             const mensaje = Object.values(errores)[0]
             throw new ErrorCliente(mensaje, 400)
         }
-        
+
         try {
             const resultado = await this.llamadoServicio.crearLlamado({ id_preceptor, id_emisor, id_curso, numero_nivel, mensaje, fecha_envio })
             res.status(200).json(resultado)

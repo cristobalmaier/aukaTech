@@ -27,9 +27,56 @@ const usuarioSchema = z.object({
     }),
 });
 
+const actualizarUsuarioSchema = z.object({
+    nombre: z
+    .string()
+    .max(64, 'Máximo 64 caracteres')
+    .optional(),
+
+    apellido: z
+    .string()
+    .max(64, 'Máximo 64 caracteres')
+    .optional(),
+    
+    email: z
+    .string()
+    .email()
+    .max(64)
+    .optional(),
+
+    contrasena: z
+    .string()
+    .max(255)
+    .optional(),
+
+    tipo_usuario: z
+    .enum(['preceptor', 'profesor', 'directivo'], {
+        errorMap: () => ({ message: 'Tipo de usuario no válido' }),
+    })
+    .optional(),
+
+}).refine((data) => Object.keys(data).length > 0, {
+    message: 'Debe incluir al menos un campo para actualizar',
+});
+
 // Función para validar datos
 export function validarUsuario(data) {
     const resultado = usuarioSchema.safeParse(data);
+    if (!resultado.success) {
+        return {
+            valido: false,
+            errores: resultado.error.flatten().fieldErrors,
+        };
+    }
+
+    return {
+        valido: true,
+        datos: resultado.data,
+    };
+}
+
+export function validarActualizacionUsuario(data) {
+    const resultado = actualizarUsuarioSchema.safeParse(data);
     if (!resultado.success) {
         return {
             valido: false,

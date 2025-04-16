@@ -1,5 +1,4 @@
 import ErrorCliente from "../utiles/error.js"
-import { validarUsuario } from "./validadores/usuario.js"
 
 class UsuarioControlador {
     constructor({ usuarioServicio }) {
@@ -31,12 +30,6 @@ class UsuarioControlador {
     crearUsuario = async (req, res, next) => {
         const { nombre, apellido, email, contrasena, tipo_usuario } = req.body
         
-        const { valido, errores } = validarUsuario({ nombre, apellido, email, contrasena, tipo_usuario })
-        if (!valido) {
-            const mensaje = Object.values(errores)[0]
-            throw new ErrorCliente(mensaje, 400)
-        }
-
         try {
             await this.usuarioServicio.crearUsuario({ nombre, apellido, email, contrasena, tipo_usuario })
             res.status(200).json({ mensaje: "Usuario creado con exito." })
@@ -46,13 +39,14 @@ class UsuarioControlador {
     }
 
     actualizarUsuario = async (req, res, next) => {
-        const { id, nombre, apellido, email, contrasena, tipo_usuario } = req.body
-        
+        const { id } = req.params
+        const { nombre, apellido, email, contrasena, tipo_usuario } = req.body || {}
+
         try {
-            const resultado = await this.usuarioServicio.actualizarUsuario({ id, nombre, apellido, email, contrasena, tipo_usuario })
-            res.status(200).json(resultado)
+            await this.usuarioServicio.actualizarUsuario({ id, nombre, apellido, email, contrasena, tipo_usuario })
+            res.status(200).json({ mensaje: "Datos actualizados con exito." })
         } catch(err) {
-            next()
+            next(err)
         }
     }
 
@@ -61,6 +55,9 @@ class UsuarioControlador {
 
         try {
             const resultado = await this.usuarioServicio.eliminarUsuario({ id })
+
+            if(!resultado.affectedRows >= 1) throw new ErrorCliente('No se pudo eliminar el usuario', 400)
+
             res.status(200).json(resultado)   
         } catch(err) {
             next(err)
