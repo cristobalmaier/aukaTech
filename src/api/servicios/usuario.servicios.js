@@ -1,4 +1,4 @@
-import { query } from "../bd.js";
+import { query } from "../../bd.js";
 import { encriptar } from "../utiles/encriptar.js";
 import ErrorCliente from "../utiles/error.js";
 import { validarUsuario, validarActualizacionUsuario } from "../validadores/usuario.js"

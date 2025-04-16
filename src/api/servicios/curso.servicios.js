@@ -1,4 +1,4 @@
-import { query } from "../bd.js";
+import { query } from "../../bd.js";
 
 class CursoServicio {
     static async obtenerTodos() {

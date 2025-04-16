@@ -1,4 +1,4 @@
-import { query } from "../bd.js";
+import { query } from "../../bd.js";
 import { validarLlamado } from "../validadores/llamado.js";
 import ErrorCliente from "../utiles/error.js";
 
@@ -10,11 +10,6 @@ class LlamadoServicio {
 
     static async obtenerLlamadoPorId({ id }) {
         const resultado = await query(`SELECT * FROM llamados WHERE id_llamado = ?`, id)
-        return resultado
-    }
-
-    static async obtenerCursoPorId({ id }) {
-        const resultado = await query(`SELECT * FROM cursos WHERE id_curso = ?`, id)
         return resultado
     }
 

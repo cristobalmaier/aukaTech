@@ -4,7 +4,7 @@ import morgan from 'morgan'
 const app = express()
 
 // Configuracion
-const PUERTO = 3000 || process.env.PORT
+const PUERTO = process.env.PUERTO_API
 app.set('json spaces', 2)
 
 // Middlewares
@@ -29,5 +29,7 @@ app.use((err, req, res, next) => {
 
 // Iniciar servidor
 app.listen(PUERTO, () => {
-    console.log('Servidor encendido.')
+    console.log('API: http://localhost:' + PUERTO)
 })
+
+export default app

@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "node --env-file=.env --watch src/index.js"
+    "dev": "node --env-file=.env --watch src/web/index.js"
   },
   "repository": {
     "type": "git",
@@ -19,6 +19,7 @@
   "type": "module",
   "dependencies": {
     "bcrypt": "^5.1.1",
+    "ejs": "^3.1.10",
     "express": "^5.1.0",
     "morgan": "^1.10.0",
     "mysql2": "^3.14.0",
