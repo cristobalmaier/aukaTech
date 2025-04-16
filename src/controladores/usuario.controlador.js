@@ -28,7 +28,7 @@ class UsuarioControlador {
     }
 
     crearUsuario = async (req, res, next) => {
-        const { nombre, apellido, email, contrasena, tipo_usuario } = req.body
+        const { nombre, apellido, email, contrasena, tipo_usuario } = req.body || {}
         
         try {
             await this.usuarioServicio.crearUsuario({ nombre, apellido, email, contrasena, tipo_usuario })

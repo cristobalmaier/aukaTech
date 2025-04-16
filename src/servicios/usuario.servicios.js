@@ -23,6 +23,7 @@ class UsuarioServicio {
         // Validacion de datos
         const { valido, errores } = validarUsuario({ nombre, apellido, email, contrasena, tipo_usuario })
         if (!valido) {
+            console.log(errores)
             const mensaje = Object.values(errores)[0]
             throw new ErrorCliente(mensaje, 400)
         }
@@ -66,9 +67,12 @@ class UsuarioServicio {
         const setClause = campos.map((campo) => `${campo} = ?`).join(', ');
         const consulta = `UPDATE usuarios SET ${setClause} WHERE id_usuario = ?`;
     
-        await query(consulta, [...valores, id]);
+        try {
+            await query(consulta, [...valores, id]);
+        } catch(err) {
+            throw new ErrorCliente(err.message, 400)
+        }
     }
-    
 
     static async eliminarUsuario({ id }) {
         const resultado = await query(`DELETE FROM usuarios WHERE id_usuario = ?`, id)

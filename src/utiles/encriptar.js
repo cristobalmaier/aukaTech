@@ -1,6 +1,6 @@
 import { hashSync, genSaltSync } from 'bcrypt'
 
-const rondas = 10
+const rondas = parseInt(process.env.RONDAS)
 
 export async function encriptar({ contrasena }) {
     const salt = genSaltSync(rondas)

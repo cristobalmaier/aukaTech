@@ -1,11 +1,11 @@
 import mysql from 'mysql2/promise'
 
 const CONFIGURACION = {
-    user: 'root',
-    database: 'auka',
-    password: '',
-    port: 3306,
-    host: 'localhost',
+    user: process.env.BD_USUARIO,
+    database: process.env.BD_BASE,
+    password: process.env.BD_CONTRASENA,
+    port: process.env.BD_PUERTO,
+    host: process.env.BD_HOST
 }
 
 export async function query(sql, valores) {
