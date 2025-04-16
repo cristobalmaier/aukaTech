@@ -25,13 +25,13 @@ class LlamadoServicio {
             throw new ErrorCliente(mensaje, 400)
         }
 
-        const preceptorExiste = await this.obtenerLlamadoPorId({ id: id_preceptor })
+        const preceptorExiste = await query('SELECT * FROM usuarios WHERE id_usuario = ?', id_preceptor)
         if (!preceptorExiste) throw new ErrorCliente('El preceptor no existe', 400)
 
-        const emisorExiste = await this.obtenerLlamadoPorId({ id: id_emisor })
+        const emisorExiste = await query('SELECT * FROM usuarios WHERE id_usuario = ?', id_emisor)
         if (!emisorExiste) throw new ErrorCliente('El emisor no existe', 400)
 
-        const cursoExiste = await this.obtenerCursoPorId({ id: id_curso })
+        const cursoExiste = await query('SELECT * FROM cursos WHERE id_curso = ?', id_curso)
         if (!cursoExiste) throw new ErrorCliente('El curso no existe', 400)
 
         const resultado = await query(`INSERT INTO llamados (id_preceptor, id_emisor, id_curso, numero_nivel, mensaje, fecha_envio) VALUES (?, ?, ?, ?, ?, ?)`, [id_preceptor, id_emisor, id_curso, numero_nivel, mensaje, fecha_envio])
