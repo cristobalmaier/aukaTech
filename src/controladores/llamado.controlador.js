@@ -1,3 +1,4 @@
+import ErrorCliente from "../utiles/error.js"
 import { validarLlamado } from "../validadores/llamado.js"
 
 class LlamadoControlador {
@@ -26,13 +27,7 @@ class LlamadoControlador {
     }
 
     crearLlamado = async (req, res, next) => {
-        const { id_preceptor, id_emisor, id_curso, numero_nivel, mensaje, fecha_envio } = req.body
-
-        const { valido, errores } = validarLlamado({ id_preceptor, id_emisor, id_curso, numero_nivel, mensaje, fecha_envio })
-        if (!valido) {
-            const mensaje = Object.values(errores)[0]
-            throw new ErrorCliente(mensaje, 400)
-        }
+        const { id_preceptor, id_emisor, id_curso, numero_nivel, mensaje, fecha_envio } = req.body || {}
 
         try {
             const resultado = await this.llamadoServicio.crearLlamado({ id_preceptor, id_emisor, id_curso, numero_nivel, mensaje, fecha_envio })
