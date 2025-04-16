@@ -1,4 +1,5 @@
-import APIERROR from "../utiles/error.js"
+import ErrorCliente from "../utiles/error.js"
+import { validarUsuario } from "./validadores/usuario.js"
 
 class UsuarioControlador {
     constructor({ usuarioServicio }) {
@@ -6,15 +7,17 @@ class UsuarioControlador {
     }
 
     obtenerTodos = async (req, res, next) => {
+        const { email } = req.query
+
         try {
-            const resultado = await this.usuarioServicio.obtenerTodos()
+            const resultado = await this.usuarioServicio.obtenerTodos({ email })
             res.status(200).json(resultado)
         } catch(err) {
             next(err)
         }
     }
 
-    obtenerUsuarioPorId = async (req, res) => {
+    obtenerUsuarioPorId = async (req, res, next) => {
         const { id } = req.params
 
         try {
@@ -24,30 +27,25 @@ class UsuarioControlador {
             next(err)
         }
     }
-    
-    obtenerUsuarioPorEmail = async (req, res) => {
-        const { email } = req.params
-        
-        try {
-            const resultado = await this.usuarioServicio.obtenerUsuarioPorEmail({ email })
-            res.status(200).json(resultado)
-        } catch(err) {
-            next(err)
-        }
-    }
 
-    crearUsuario = async (req, res) => {
+    crearUsuario = async (req, res, next) => {
         const { nombre, apellido, email, contrasena, tipo_usuario } = req.body
         
+        const { valido, errores } = validarUsuario({ nombre, apellido, email, contrasena, tipo_usuario })
+        if (!valido) {
+            const mensaje = Object.values(errores)[0]
+            throw new ErrorCliente(mensaje, 400)
+        }
+
         try {
-            const resultado = await this.usuarioServicio.crearUsuario({ nombre, apellido, email, contrasena, tipo_usuario })
-            res.status(200).json(resultado)
+            await this.usuarioServicio.crearUsuario({ nombre, apellido, email, contrasena, tipo_usuario })
+            res.status(200).json({ mensaje: "Usuario creado con exito." })
         } catch(err) {
             next(err)
         }
     }
 
-    actualizarUsuario = async (req, res) => {
+    actualizarUsuario = async (req, res, next) => {
         const { id, nombre, apellido, email, contrasena, tipo_usuario } = req.body
         
         try {
@@ -58,7 +56,7 @@ class UsuarioControlador {
         }
     }
 
-    eliminarUsuario = async (req, res) => {
+    eliminarUsuario = async (req, res, next) => {
         const { id } = req.params
 
         try {

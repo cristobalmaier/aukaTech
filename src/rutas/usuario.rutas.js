@@ -10,7 +10,6 @@ const usuarioControlador = new UsuarioControlador({ usuarioServicio: UsuarioServ
 
 usuarioRutas.get("/", usuarioControlador.obtenerTodos)
 usuarioRutas.get("/:id", usuarioControlador.obtenerUsuarioPorId)
-usuarioRutas.get("/email/:email", usuarioControlador.obtenerUsuarioPorEmail)
 usuarioRutas.post("/crear", usuarioControlador.crearUsuario)
 usuarioRutas.put("/actualizar/:id", usuarioControlador.actualizarUsuario)
 usuarioRutas.delete("/eliminar/:id", usuarioControlador.eliminarUsuario)

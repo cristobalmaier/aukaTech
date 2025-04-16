@@ -9,6 +9,7 @@ app.set('json spaces', 2)
 
 // Middlewares
 app.use(morgan('dev'))
+app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
 
 // Rutas

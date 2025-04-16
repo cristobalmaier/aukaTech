@@ -1,9 +1,9 @@
-class APIERROR extends Error {
-    constructor(mensaje, codigo) {
+class ErrorCliente extends Error {
+    constructor(mensaje, codigo = 400) {
         super(mensaje)  
-        this.name = 'APIERROR'
+        this.name = 'ErrorCliente'
         this.statusCode = codigo
     }
 }
 
-export default APIERROR
+export default ErrorCliente

@@ -2,7 +2,12 @@ import { query } from "../bd.js";
 import { encriptar } from "../utiles/encriptar.js";
 
 class UsuarioServicio {
-    static async obtenerTodos() {
+    static async obtenerTodos({ email }) {
+        if(email) {
+            const resultado = await query(`SELECT * FROM usuarios WHERE email = ?`, [email])
+            return resultado
+        }
+        
         const resultado = await query("SELECT * FROM usuarios")
         return resultado
     }
@@ -19,27 +24,27 @@ class UsuarioServicio {
 
     static async crearUsuario({ nombre, apellido, email, contrasena, tipo_usuario }) {
         const contrasena_encriptada = await encriptar({ contrasena })
-        const usuario = {
+        const usuario = [
             nombre,
             apellido,
             email,
-            contrasena: contrasena_encriptada,
+            contrasena_encriptada,
             tipo_usuario
-        }
+        ]
         const resultado = await query(`INSERT INTO usuarios (nombre, apellido, email, contrasena, tipo_usuario) VALUES (?, ?, ?, ?, ?)`, usuario)
         return resultado
     }
 
     static async actualizarUsuario({ id, nombre, apellido, email, contrasena, tipo_usuario }) {
         const contrasena_encriptada = await encriptar({ contrasena })
-        const usuario = {
+        const usuario = [ 
             id,
             nombre,
             apellido,
             email,
-            contrasena: contrasena_encriptada,
+            contrasena_encriptada,
             tipo_usuario
-        }
+        ]
         const resultado = await query(`UPDATE usuarios SET nombre = ?, apellido = ?, email = ?, contrasena = ?, tipo_usuario = ? WHERE id_usuario = ?`, usuario)
         return resultado
     }
