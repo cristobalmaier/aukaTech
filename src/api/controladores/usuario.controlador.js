@@ -13,7 +13,7 @@ class UsuarioControlador {
 
             if(!resultado) 
                 return res.status(404).json({ mensaje: 'No se encontro ningún usuario' })
-            
+
             res.status(200).json(resultado)
         } catch(err) {
             next(err)
@@ -73,7 +73,11 @@ class UsuarioControlador {
 
         try {
             const resultado = await this.usuarioServicio.validarContrasena({ email, contrasena })
-            res.status(200).json(resultado)
+
+            if(!resultado)
+                return res.status(400).json({ mensaje: 'Contraseña incorrecta' })
+
+            res.status(200).json({ mensaje: 'Contraseña correcta' })
         } catch(err) {
             next(err)
         }

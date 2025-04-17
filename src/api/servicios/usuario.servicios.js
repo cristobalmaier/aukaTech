@@ -81,6 +81,8 @@ class UsuarioServicio {
 
     static async validarContrasena({ email, contrasena }) {
         const resultado = await query('SELECT contrasena FROM usuarios WHERE email = ?', email)
+        if(!resultado) throw new ErrorCliente('No se encontro ningún usuario con ese email', 404)
+            
         return await compararContrasena({ contrasena, contrasena_encriptada: resultado[0].contrasena })
     }
 }
