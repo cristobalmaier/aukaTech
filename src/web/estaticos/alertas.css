@@ -1,0 +1,54 @@
+:root {
+    --color-alerta-exito-fondo: #DCFCE7;
+    --color-alerta-exito-borde: #86EFAC;
+    --color-alerta-exito-texto: #1C8B45;
+
+    --color-alerta-error-fondo: #FEE2E2;
+    --color-alerta-error-borde: #FCA5A5;
+    --color-alerta-error-texto: #EF4444;
+
+    --color-alerta-info-fondo: #DBEAFE;
+    --color-alerta-info-borde: #93C5FD;
+    --color-alerta-info-texto: #3070D7;
+}
+
+.alerta {
+    position: fixed;
+    right: 70px;
+    top: 60px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    max-width: 350px;
+}
+  
+.alerta i {
+    font-size: 36px;
+}
+  
+.alerta span {
+    font-size: 15px;
+    font-weight: 600;
+}
+ 
+.alerta-exito {
+    background-color: var(--color-alerta-exito-fondo);
+    border: 1px solid var(--color-alerta-exito-borde);
+    color: var(--color-alerta-exito-texto);
+    border-radius: 10px;
+} 
+
+.alerta-error {
+    background-color: var(--color-alerta-error-fondo);
+    border: 1px solid var(--color-alerta-error-borde);
+    color: var(--color-alerta-error-texto);
+    border-radius: 10px;
+}
+
+.alerta-info {
+    background-color: var(--color-alerta-info-fondo);
+    border: 1px solid var(--color-alerta-info-borde);
+    color: var(--color-alerta-info-texto);
+    border-radius: 10px;
+}

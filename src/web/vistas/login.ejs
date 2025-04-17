@@ -1,11 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <title>Document</title>
+    <%- include('parciales/head.html') %>
+    <link rel="stylesheet" href="logeo.css">
+    <link rel="stylesheet" href="alertas.css">
+
+    <!-- ICONOS (Font Awesome) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <!-- ANIMACIONES (Animate.css) -->
+    <link rel="stylesheet"href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 </head>
 <body>
     <div class="login-contenedor">
@@ -15,28 +18,36 @@
         <div class="derecha">
             <h1>Auka</h1>
             <h2>Envie su solicitud de acceso al sistema.</h2>
-            <form action="" class="formulario">
+            <form id="formulario" action="/registro" method="POST" class="formulario">
                 <div class="fila">
                     <div class="campo">
-                        <label for="">Nombre</label>
-                        <input type="text">
+                        <label for="nombre">Nombre</label>
+                        <input type="text" name="nombre" id="nombre">
                     </div>
                     <div class="campo">
-                        <label for="">Apellido</label>
-                        <input type="text">
+                        <label for="apellido">Apellido</label>
+                        <input type="text" name="apellido" id="apellido">
                     </div>
                 </div>
                 <div class="campo">
                     <label for="email">Email</label>
-                    <input type="email" name="email">
+                    <input type="email" name="email" id="email">
                 </div>
                 <div class="campo">
-                    <label for="contrasenia">Contraseña</label>
-                    <input type="password" name="contrasenia">
+                    <label for="contrasena">Contraseña</label>
+                    <div class="campo" style="margin-bottom: 0;">
+                        <input type="password" name="contrasena" id="contrasena">
+                        <i class="fa-solid fa-eye alternar-contrasena" id="alternar" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;"></i>
+                    </div>
                 </div>
                 <button type="submit">Enviar solicitud</button>
+                <hr>
+                <a href="/login">¿Ya tienes una cuenta? Accede aquí</a>
             </form>
         </div>
     </div>
+    
+    <script src="js/formularios/registro.js" type="module"></script>
+    <script src="js/formularios/alternarVisibilidadContrasena.js" type="module"></script>
 </body>
 </html>
