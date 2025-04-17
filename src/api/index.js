@@ -1,5 +1,6 @@
 import express from 'express'
 import morgan from 'morgan'
+import cors from 'cors'
 
 const app = express()
 
@@ -11,6 +12,7 @@ app.set('json spaces', 2)
 app.use(morgan('dev'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+app.use(cors())
 
 // Rutas
 import usuarioRutas from './rutas/usuario.rutas.js'
