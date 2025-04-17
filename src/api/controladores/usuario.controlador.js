@@ -10,6 +10,10 @@ class UsuarioControlador {
 
         try {
             const resultado = await this.usuarioServicio.obtenerTodos({ email })
+
+            if(!resultado) 
+                return res.status(404).json({ mensaje: 'No se encontro ningún usuario' })
+            
             res.status(200).json(resultado)
         } catch(err) {
             next(err)

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <%- include('parciales/head.html') %>
+    <%- include('../parciales/head.html') %>
     <link rel="stylesheet" href="logeo.css">
     <link rel="stylesheet" href="alertas.css">
 
@@ -17,18 +17,8 @@
         </div>
         <div class="derecha">
             <h1>Auka</h1>
-            <h2>Envie su solicitud de acceso al sistema.</h2>
-            <form id="formulario" action="/registro" method="POST" class="formulario">
-                <div class="fila">
-                    <div class="campo">
-                        <label for="nombre">Nombre</label>
-                        <input type="text" name="nombre" id="nombre">
-                    </div>
-                    <div class="campo">
-                        <label for="apellido">Apellido</label>
-                        <input type="text" name="apellido" id="apellido">
-                    </div>
-                </div>
+            <h2>Bienvenido de nuevo</h2>
+            <form id="formulario" action="/entrar" method="POST" class="formulario">
                 <div class="campo">
                     <label for="email">Email</label>
                     <input type="email" name="email" id="email">
@@ -40,9 +30,9 @@
                         <i class="fa-solid fa-eye alternar-contrasena" id="alternar" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;"></i>
                     </div>
                 </div>
-                <button type="submit">Enviar solicitud</button>
+                <button type="submit">Entrar</button>
                 <hr>
-                <a href="/login">¿Ya tienes una cuenta? Accede aquí</a>
+                <a href="/solicitud">¿No tienes una cuenta? Solicita una pulsando aquí</a>
             </form>
         </div>
     </div>

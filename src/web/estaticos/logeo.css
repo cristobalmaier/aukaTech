@@ -42,6 +42,10 @@
     margin-bottom: 40px;
 }
 
+.formulario {
+    width: 453px;
+}
+
 .formulario .fila {
     display: flex;
     gap: 14px;
