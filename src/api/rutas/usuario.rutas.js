@@ -13,5 +13,6 @@ usuarioRutas.get("/:id", usuarioControlador.obtenerUsuarioPorId)
 usuarioRutas.post("/crear", usuarioControlador.crearUsuario)
 usuarioRutas.put("/actualizar/:id", usuarioControlador.actualizarUsuario)
 usuarioRutas.delete("/eliminar/:id", usuarioControlador.eliminarUsuario)
+usuarioRutas.post("/validar/contrasena", usuarioControlador.validarContrasena)
 
 export default usuarioRutas

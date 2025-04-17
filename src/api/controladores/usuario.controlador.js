@@ -63,6 +63,17 @@ class UsuarioControlador {
             next(err)
         }
     }
+
+    validarContrasena = async (req, res, next) => {
+        const { email, contrasena } = req.body
+
+        try {
+            const resultado = await this.usuarioServicio.validarContrasena({ email, contrasena })
+            res.status(200).json(resultado)
+        } catch(err) {
+            next(err)
+        }
+    }
 }
 
 export default UsuarioControlador

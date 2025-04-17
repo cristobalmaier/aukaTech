@@ -1,5 +1,5 @@
 import { query } from "../../bd.js";
-import { encriptar } from "../utiles/encriptar.js";
+import { encriptar, compararContrasena } from "../utiles/encriptar.js";
 import ErrorCliente from "../utiles/error.js";
 import { validarUsuario, validarActualizacionUsuario } from "../validadores/usuario.js"
 
@@ -77,6 +77,11 @@ class UsuarioServicio {
     static async eliminarUsuario({ id }) {
         const resultado = await query(`DELETE FROM usuarios WHERE id_usuario = ?`, id)
         return resultado
+    }
+
+    static async validarContrasena({ email, contrasena }) {
+        const resultado = await query('SELECT contrasena FROM usuarios WHERE email = ?', email)
+        return await compararContrasena({ contrasena, contrasena_encriptada: resultado[0].contrasena })
     }
 }
 
