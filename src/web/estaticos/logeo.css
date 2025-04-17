@@ -77,7 +77,8 @@
     border: 2px solid var(--color-borde-hover);
 }
 
-.formulario button {
+.formulario button, .espera-contenedor a {
+    text-decoration: none;
     border-radius: 4px;
     background-color: var(--color-boton);
     color: white;
@@ -88,7 +89,7 @@
     transition: 0.3s ease background;
 }
 
-.formulario button:hover {
+.formulario button:hover, .espera-contenedor a:hover {
     background-color: var(--color-boton-hover);
 }
 
@@ -133,4 +134,43 @@
     top: 50%;
     transform: translateY(-50%);
     right: 15px;
+}
+
+/* //////// SALA DE ESPERA //////// */
+
+.fondo-partido {
+    background: linear-gradient(90deg, var(--color-fondo-secundario) 50%, var(--color-fondo) 30%);
+}
+
+.contenedor-vh {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.espera-contenedor {
+    border: 1px solid var(--color-borde);
+    background-color: var(--color-fondo);
+    width: 700px;
+    text-align: center;
+    text-wrap: balance;
+    padding: 50px 80px 80px 80px;
+    border-radius: 10px;
+}
+
+.espera-contenedor h1 {
+    font-size: 48px;
+    font-weight: 500;
+    margin-bottom: 20px;
+}
+
+.espera-contenedor p {
+    font-size: 24px;
+    font-weight: 300;
+}
+
+.espera-contenedor .botones {
+    margin-top: 40px;
 }
