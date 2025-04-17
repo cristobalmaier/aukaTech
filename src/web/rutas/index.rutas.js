@@ -29,16 +29,21 @@ router.post('/enviar_solicitud', async (req, res) => {
 router.post('/entrar', async (req, res) => {
     const { email, contrasena } = req.body
 
+    // Validar que el usuario existe
     const usuario = await peticion({ url: `${api_url}/usuarios?email=${email}`, metodo: 'GET' })
     if(!usuario.ok)
         return res.redirect('/login?error=usuario_no_existe')
 
+    // Validar contraseña
     const validarContrasena = await peticion({ url: `${api_url}/usuarios/validar/contrasena`, metodo: 'POST', cuerpo: { email, contrasena } })
-    const resultado = await validarContrasena.json()
-    if(!resultado)
+    if(!validarContrasena.ok)
         return res.redirect('/login?error=contrasena_incorrecta')
 
-    res.redirect('/pendiente')
+    const [infoUsuario] = await usuario.json()
+    if(!infoUsuario.autorizado) 
+        return res.redirect('/pendiente')
+
+    res.redirect('/panel/' + infoUsuario.tipo_usuario)
 })
 
 router.get('/pendiente', (req, res) => {
