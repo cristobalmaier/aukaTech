@@ -72,13 +72,16 @@ CREATE TABLE `usuarios` (
   `apellido` varchar(64) NOT NULL,
   `email` varchar(64) NOT NULL,
   `contrasena` varchar(255) NOT NULL,
-  `tipo_usuario` enum('preceptor','profesor','directivo','') NOT NULL
+  `tipo_usuario` enum('preceptor','profesor','directivo','') NOT NULL DEFAULT 'profesor',
+  `autorizado` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-INSERT INTO `usuarios` (`id_usuario`, `nombre`, `apellido`, `email`, `contrasena`, `tipo_usuario`) VALUES
-(1, 'Alejandro', 'Del Caño', 'alejadro.cano@gmail.com', '$2a$10$p.ODN3lLj5E3KcMzykKTaezvv', 'preceptor'),
-(2, 'Ezequiel', 'Torres', 'ezequiel.torres@gmail.com', '$2a$10$4NqshlvJ7W6Nu3eU.8SCU.xZrOPpad65CnG7bFgX0.gAvRwKnY/kq', 'directivo'),
-(3, 'Carlos Alberto', 'Robello', 'carlos.robello@gmail.com', '$2a$10$1ZeU/sArc.2fUtZ.QCWs/ep3YZ6yO.9u6jEa9vpHmBPcGzqZo6HSS', 'profesor');
+INSERT INTO `usuarios` (`id_usuario`, `nombre`, `apellido`, `email`, `contrasena`, `tipo_usuario`, `autorizado`) VALUES
+(1, 'Alejandro', 'Del Caño', 'alejadro.cano@gmail.com', '$2a$10$p.ODN3lLj5E3KcMzykKTaezvv', 'preceptor', 0),
+(2, 'Ezequiel', 'Torres', 'ezequiel.torres@gmail.com', '$2a$10$4NqshlvJ7W6Nu3eU.8SCU.xZrOPpad65CnG7bFgX0.gAvRwKnY/kq', 'directivo', 0),
+(3, 'Carlos Alberto', 'Robello', 'carlos.robello@gmail.com', '$2a$10$1ZeU/sArc.2fUtZ.QCWs/ep3YZ6yO.9u6jEa9vpHmBPcGzqZo6HSS', 'profesor', 0),
+(6, 'Julian', 'Grippaldi', 'juliangrippaldi@gmail.com', '$2b$05$zLQZzxR1p.iEDy59ENQ8KesMltgcMp2V2bc8mstBEwNXkSjJa8toy', 'profesor', 1),
+(7, 'elpepe', 'ponardo', 'elpepe@gmail.com', '$2b$05$F5WNqz9aBPIlWK9g7vNuv.AGJrLEqDfFb5eSVvfHBx4MmW8v2xDeK', 'profesor', 0);
 
 
 ALTER TABLE `cursos`
@@ -102,10 +105,10 @@ ALTER TABLE `cursos`
   MODIFY `id_curso` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 ALTER TABLE `llamados`
-  MODIFY `id_llamado` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_llamado` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 ALTER TABLE `usuarios`
-  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 
 ALTER TABLE `llamados`
