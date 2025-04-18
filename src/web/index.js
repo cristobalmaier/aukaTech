@@ -1,4 +1,5 @@
 import express from 'express'
+import session from 'express-session'
 
 const webApp = express()
 import '../api/index.js'
@@ -11,6 +12,12 @@ webApp.set('views', process.cwd() + '/src/web/vistas')
 // Middlewares
 webApp.use(express.urlencoded({ extended: true }))
 webApp.use(express.json())
+webApp.use(session({
+    secret: 'cambiar despues',
+    resave: false,
+    saveUninitialized: false,
+    cookie: { maxAge: 60000 },
+}))
 
 // Rutas
 import router from './rutas/index.rutas.js'

@@ -8,11 +8,22 @@ router.get('/', (req, res) => {
     res.redirect('/login')
 })
 
+router.get('/logout', (req, res) => {
+    req.session.destroy()
+    res.redirect('/')
+})
+
+router.get('/panel/:tipo_usuario', (req, res) => {
+    res.render('panel', { titulo: 'AUKA - Panel', usuario: req.session.usuario })
+})
+
 /* ////////////////////// SOLICITUDES DE ACCESO Y LOGIN ////////////////////// */
 
 // LOGIN
 router.get('/login', (req, res) => {
-    res.render('login/iniciar_sesion', { titulo: 'AUKA - Inicio de sesión' })
+    const { error } = req.query
+
+    res.render('login/iniciar_sesion', { titulo: 'AUKA - Inicio de sesión', error })
 })
 
 router.post('/entrar', async (req, res) => {
@@ -29,6 +40,9 @@ router.post('/entrar', async (req, res) => {
         return res.redirect('/login?error=contrasena_incorrecta')
 
     const [infoUsuario] = await usuario.json()
+    
+    req.session.usuario = infoUsuario
+
     if(!infoUsuario.autorizado) 
         return res.redirect('/pendiente')
 

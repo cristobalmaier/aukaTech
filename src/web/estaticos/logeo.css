@@ -43,7 +43,7 @@
 }
 
 .formulario {
-    width: 453px;
+    min-width: 453px;
 }
 
 .formulario .fila {

@@ -19,6 +19,17 @@
             <h1>Auka</h1>
             <h2>Bienvenido de nuevo</h2>
             <form id="formulario" action="/entrar" method="POST" class="formulario">
+                <% if(error === 'usuario_no_existe') { %>
+                    <div class="alerta alerta-error">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                        <p>No existe ningun usuario con ese email</p>
+                    </div>
+                <% } else if(error === 'contrasena_incorrecta') { %>
+                    <div class="alerta alerta-error">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                        <p>La contraseña es incorrecta</p>
+                    </div>
+                <% } %>
                 <div class="campo">
                     <label for="email">Email</label>
                     <input type="email" name="email" id="email">
@@ -35,8 +46,7 @@
                 <a href="/solicitud">¿No tienes una cuenta? Solicita una pulsando aquí</a>
             </form>
         </div>
-    </div>
-    
+    </div>   
     <script src="js/formularios/iniciar_sesion.js" type="module"></script>
     <script src="js/formularios/alternarVisibilidadContrasena.js" type="module"></script>
 </body>
