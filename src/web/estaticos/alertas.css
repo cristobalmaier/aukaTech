@@ -52,3 +52,20 @@
     color: var(--color-alerta-info-texto);
     border-radius: 10px;
 }
+
+.bloque-error {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    background-color: var(--color-alerta-error-fondo);
+    border: 1px solid var(--color-alerta-error-borde);
+    border-radius: 10px;
+    padding: 15px;
+    color: var(--color-alerta-error-texto);
+    font-weight: 600;
+}
+
+.bloque-error i {
+    font-size: 24px;
+}
