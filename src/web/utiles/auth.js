@@ -1,3 +1,10 @@
+export const estaLogeado = (req, res, next) => {
+    if(req.session.usuario)
+        return next()
+
+    res.redirect('/login')
+}
+
 export const esDirectivo = (req, res, next) => {
     const { tipo_usuario } = req.session.usuario
 

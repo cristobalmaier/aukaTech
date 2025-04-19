@@ -81,10 +81,10 @@
             <div class="perfil">
                 <hr>
                 <div class="perfil-info">
-                    <p class="perfil-siglas">JG</p>
+                    <p class="perfil-siglas"><%- usuario.nombre[0] %><%- usuario.apellido[0] %></p>
                     <div class="perfil-usuario">
-                        <p class="perfil-nombre">Julian Grippaldi</p>
-                        <p class="perfil-tipo-usuario">Profesor</p>
+                        <p class="perfil-nombre"><%- usuario.nombre %> <%- usuario.apellido %></p>
+                        <p class="perfil-tipo-usuario"><%- usuario.tipo_usuario %></p>
                     </div>
                 </div>
                 <a class="perfil-cerrar-sesion" href="/logout"><i class="fa-solid fa-right-from-bracket"></i>Cerrar sesión</a>
