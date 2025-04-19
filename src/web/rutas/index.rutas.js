@@ -13,7 +13,7 @@ router.get('/logout', (req, res) => {
     res.redirect('/')
 })
 
-router.get('/panel/:tipo_usuario', (req, res) => {
+router.get('/panel/preceptor', (req, res) => {
     res.render('panel', { titulo: 'AUKA - Panel', usuario: req.session.usuario })
 })
 

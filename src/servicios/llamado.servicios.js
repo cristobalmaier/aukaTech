@@ -1,4 +1,4 @@
-import { query } from "../../bd.js";
+import { query } from "../bd.js";
 import { validarLlamado } from "../validadores/llamado.js";
 import ErrorCliente from "../utiles/error.js";
 
