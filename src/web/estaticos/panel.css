@@ -1,0 +1,237 @@
+@import url('global.css');
+
+:root {
+    --color-fondo: #F3F4F6;
+    --color-fondo-secundario: #EFF6FF;
+    --color-borde: #E5E7EB;
+
+    --color-texto: #000000;
+    --color-texto-secundario: #686868;
+
+    --color-estado-finalizado: #4DE04D;
+    --color-estado-cancelado: #FF0000;
+    --color-estado-derivado: #FFA515;
+
+    --color-fondo-llamado: #ffffff;
+    --color-primario-llamado: #4DE04D;
+
+    --color-fondo-respuesta: #DBEAFE;
+    --color-texto-respuesta: #4F63EB;
+}
+
+.panel-contenedor {   
+    background-color: var(--color-fondo);
+    height: 100vh;
+}
+
+.columna {
+    position: absolute;
+    top: 0;
+    width: 300px;
+    border-right: 1px solid var(--color-borde);
+    border-left: 1px solid var(--color-borde);
+    max-height: 100vh;
+    height: 100%;
+    background-color: var(--color-fondo-secundario);
+}
+
+.columna:nth-child(1) {
+    left: 0;
+}
+
+.columna:nth-child(3) {
+    right: 0;
+}
+
+.titulo {
+    font-size: 16px;
+    font-weight: 500;
+    border-bottom: 1px solid var(--color-borde);
+    padding: 20px 0px 20px 20px;
+}
+
+.historial {
+    padding: 20px;
+}
+
+.historial-contenedor {
+    margin-top: 20px;
+}
+
+.historial-titulo {
+    color: var(--color-texto-secundario);
+}
+
+.historial-item {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 100px;
+    max-height: 100%;
+    border: 1px solid var(--color-borde);
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 13px;
+}
+
+.historial-item-cabecera {
+    display: flex;
+    justify-content: space-between;
+}
+
+.historial-item-titulo {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--color-texto);
+}
+
+.historial-item-hora {
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--color-texto-secundario);
+}
+
+.historial-item-texto {
+    font-size: 12px;
+    margin: 10px 0;
+}
+
+.historial-item-estado {
+    font-size: 12px;
+}
+
+.historial-item-estado-texto {
+    display: flex;    
+    align-items: center;
+    color: var(--color-texto-secundario);
+    font-size: 12px;
+    font-weight: 400;
+}
+
+.historial-item-estado-texto::before {
+    content: '';
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background-color: var(--color-estado-finalizado);
+    display: inline-block;
+    margin-right: 5px;
+}
+
+.preceptores {
+    padding: 20px;
+    right: 0;
+}
+
+.preceptores-titulo {
+    margin-bottom: 20px;
+}
+
+.preceptores-contenedor {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.preceptores-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px;
+    border: 1px solid var(--color-borde);
+    border-radius: 50px;
+    max-height: 58px;
+}
+
+.preceptores-item img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.preceptores-item p {
+    font-size: 15px;
+}
+
+.no-hay-llamados {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.llamados {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding-left: 330px;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    margin-right: 300px;
+    max-height: 100vh;
+    overflow: auto;
+}
+
+.llamado {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    width: 100%;
+    max-width: 407px;
+    height: 100%;
+    border-radius: 15px;
+    box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.25);
+    background-color: var(--color-fondo-llamado);
+    padding: 25px;
+}
+
+.llamado hr {
+    height: 2px;
+    border: none;
+    background-color: var(--color-borde);
+}
+
+.llamado-titulo {
+    font-size: 30px;
+    font-weight: 800;
+    margin-bottom: 25px;
+}
+
+.llamado-mensaje {
+    font-size: 18px;
+}
+
+.llamado-cuerpo {
+    font-size: 18px;
+}
+
+.llamado-cuerpo p {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.llamado-cuerpo p::before {
+    content: '';
+    width: 30px;
+    height: 30px;
+    display: inline-block;
+    border-radius: 50%;
+    background-color: var(--color-primario-llamado);
+}
+
+.llamado-respuestas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.llamado-respuestas .respuesta {
+    text-decoration: none;
+    background-color: var(--color-fondo-respuesta);
+    color: var(--color-texto-respuesta);
+    border-radius: 50px;
+    padding: 5px 12px;
+    font-weight: 800;
+    font-size: 15px;
+}

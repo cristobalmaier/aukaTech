@@ -1,15 +1,4 @@
-* {
-    margin: 0;
-    padding: 0;
-    border: 0;
-    box-sizing: border-box;
-    font-family: "Inter", system-ui, sans-serif;
-}
-
-@font-face {
-    font-family: 'Inter';
-    src: url('fuentes/inter.ttf');
-}
+@import url('global.css');
 
 :root {
     --color-texto: #000000;
@@ -140,14 +129,6 @@
 
 .fondo-partido {
     background: linear-gradient(90deg, var(--color-fondo-secundario) 50%, var(--color-fondo) 30%);
-}
-
-.contenedor-vh {
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
 }
 
 .espera-contenedor {
