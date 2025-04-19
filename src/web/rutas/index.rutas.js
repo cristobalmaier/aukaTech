@@ -14,7 +14,12 @@ router.get('/logout', (req, res) => {
 })
 
 router.get('/panel/preceptor', (req, res) => {
-    res.render('panel', { titulo: 'AUKA - Panel', usuario: req.session.usuario })
+    res.render('paneles/preceptor', { titulo: 'AUKA - Panel', usuario: req.session.usuario })
+})
+
+router.get('/panel/profesor', (req, res) => {
+    console.log(req.session.usuario)
+    res.render('paneles/profesor', { titulo: 'AUKA - Panel', usuario: req.session.usuario })
 })
 
 /* ////////////////////// SOLICITUDES DE ACCESO Y LOGIN ////////////////////// */

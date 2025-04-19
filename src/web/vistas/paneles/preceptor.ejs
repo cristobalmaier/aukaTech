@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <%- include('parciales/head.html') %>
+    <%- include('../parciales/head.html') %>
     <link rel="stylesheet" href="panel.css">
+
+    <!-- ICONOS (Font Awesome) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
     <div class="panel-contenedor">
-        <div class="columna">
+        <div class="columna columna-izquierda">
             <div class="titulo">
                 <h1>Auka</h1>
             </div>
@@ -56,7 +59,7 @@
                 </div>
             </div>
         </div>
-        <div class="columna">
+        <div class="columna columna-derecha">
             <div class="preceptores">
                 <p class="preceptores-titulo">Preceptores activos</p>
 
@@ -74,6 +77,17 @@
                         <p>Nombre del preceptor</p>
                     </div>
                 </div>
+            </div>
+            <div class="perfil">
+                <hr>
+                <div class="perfil-info">
+                    <p class="perfil-siglas">JG</p>
+                    <div class="perfil-usuario">
+                        <p class="perfil-nombre">Julian Grippaldi</p>
+                        <p class="perfil-tipo-usuario">Profesor</p>
+                    </div>
+                </div>
+                <a class="perfil-cerrar-sesion" href="/logout"><i class="fa-solid fa-right-from-bracket"></i>Cerrar sesión</a>
             </div>
         </div>
     </div>

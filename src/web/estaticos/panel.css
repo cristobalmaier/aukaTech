@@ -17,11 +17,39 @@
 
     --color-fondo-respuesta: #DBEAFE;
     --color-texto-respuesta: #4F63EB;
+
+    --color-boton: #09f;
+    --color-boton-hover: rgb(11, 110, 223);
+
+    --color-boton-secundario: #F0F0F0;
+    --color-boton-hover-secundario: #E0E0E0;
+    --color-boton-texto-secundario: #969696;
+
+    --color-texto-siglas: #B776FF;
+    --color-fondo-siglas: #F3E8FF;
 }
 
 .panel-contenedor {   
     background-color: var(--color-fondo);
     height: 100vh;
+}
+
+hr {
+    height: 2px;
+    border: none;
+    background-color: var(--color-borde);
+}
+
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    margin-right: 300px;
+    border-bottom: 1px solid var(--color-borde);
+    font-size: 16px;
+    font-weight: 500;
+    background-color: var(--color-fondo-secundario);
 }
 
 .columna {
@@ -35,12 +63,15 @@
     background-color: var(--color-fondo-secundario);
 }
 
-.columna:nth-child(1) {
+.columna-izquierda {
     left: 0;
 }
 
-.columna:nth-child(3) {
+.columna-derecha {
     right: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .titulo {
@@ -120,7 +151,6 @@
 
 .preceptores {
     padding: 20px;
-    right: 0;
 }
 
 .preceptores-titulo {
@@ -131,6 +161,8 @@
     display: flex;
     flex-direction: column;
     gap: 20px;
+    max-height: 515px;
+    overflow-y: auto;
 }
 
 .preceptores-item {
@@ -185,12 +217,6 @@
     padding: 25px;
 }
 
-.llamado hr {
-    height: 2px;
-    border: none;
-    background-color: var(--color-borde);
-}
-
 .llamado-titulo {
     font-size: 30px;
     font-weight: 800;
@@ -234,4 +260,141 @@
     padding: 5px 12px;
     font-weight: 800;
     font-size: 15px;
+}
+
+/* ////////////////////// PROFESORES ////////////////////// */
+
+.formulario-llamado {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: calc(100vh - 140px);
+    gap: 20px;
+    padding: 20px;
+    margin: 20px 320px 20px 20px;
+}
+
+.formulario-llamado h2 {
+    font-size: 24px;
+    font-weight: 500;
+}
+
+.formulario-llamado form {
+    display: flex;
+    flex-direction: column;
+    border-radius: 15px;
+    box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.25);
+    background-color: var(--color-fondo-llamado);
+    max-width: 490px;
+    width: 100%;
+    max-height: 700px;
+    padding: 20px;
+}
+
+.formulario-llamado label {
+    text-align: left;
+    font-size: 16px;
+    font-weight: 300;
+    color: var(--color-texto-secundario);
+    margin-bottom: 10px;
+}
+
+.formulario-llamado input, .formulario-llamado textarea, .formulario-llamado select {
+    border-radius: 4px;
+    border: 2px solid var(--color-borde);
+    padding: 10px 16px;
+    outline: none;
+    margin-bottom: 25px;
+}
+
+.formulario-llamado textarea {
+    resize: vertical;
+}
+
+.formulario-llamado button {
+    text-decoration: none;
+    border-radius: 4px;
+    background-color: var(--color-boton);
+    color: white;
+    padding: 10px 30px;
+    font-size: 15px;
+    font-weight: 700;
+    width: 100%;
+    outline: none;
+    cursor: pointer;
+    transition: 0.3s ease background;
+}
+
+.formulario-llamado button:hover {
+    background-color: var(--color-boton-hover);
+}
+
+.formulario-llamado input:focus {
+    border: 2px solid var(--color-borde-hover);
+}
+
+.formulario-cabecera {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px 0;
+}
+
+.formulario-cabecera h2 {
+    font-size: 36px;
+    font-weight: 800;
+}
+
+/* ////////////////////// PERFIL ////////////////////// */
+
+.perfil {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.perfil-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.perfil-info .perfil-siglas {
+    background-color: var(--color-fondo-siglas);
+    color: var(--color-texto-siglas);
+    padding: 10px;
+    border-radius: 100%;
+    font-weight: 500;
+}
+
+.perfil-usuario .perfil-nombre {
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.perfil-usuario .perfil-tipo-usuario {
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--color-texto-secundario);
+}
+
+.perfil-cerrar-sesion {
+    text-decoration: none;
+    color: var(--color-boton-texto-secundario);
+    background-color: var(--color-boton-secundario);
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 13px;
+    transition: background 0.3s ease;
+    text-align: center;
+}
+
+.perfil-cerrar-sesion i {
+    margin-right: 5px;
+}
+
+.perfil-cerrar-sesion:hover {
+    background-color: var(--color-boton-hover-secundario);
 }

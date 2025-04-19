@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('../parciales/head.html') %>
+    <link rel="stylesheet" href="panel.css">
+
+    <!-- ICONOS (Font Awesome) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    <div class="panel-contenedor">
+        <div class="navbar">
+            <h1>Auka</h1>
+            <div>
+                <p>Parrafo 1</p>
+                <p>Parrafo 2</p>
+            </div>
+        </div>
+        <div class="formulario-llamado">
+            <form action="">
+                <div class="formulario-cabecera">
+                    <h2>Realizar llamado</h2>
+                </div>
+                <label for="">Seleccionar preceptor</label>
+                <select name="preceptor" id="">
+                    <option value="0">Enviar a todos</option>
+                    <option value="1">Alejandro</option>
+                    <option value="2">Noemi</option>
+                </select>
+                <label for="">Mensaje</label>
+                <textarea name="mensaje" id="" cols="30" rows="10"></textarea>
+                <label for="">Nivel de importancia</label>
+                <select name="nivel" id="">
+                    <option value="0">Alta</option>
+                    <option value="1">Medio</option>
+                    <option value="2">Baja</option>
+                </select>
+                <button type="submit">Llamar preceptor</button>
+            </form>
+        </div>
+        <div class="columna columna-derecha">
+            <div class="preceptores">
+                <p class="preceptores-titulo">Preceptores activos</p>
+
+                <div class="preceptores-contenedor">
+                    <div class="preceptores-item">
+                        <img src="img/user.png" alt="">
+                        <p>Nombre del preceptor</p>
+                    </div>
+                    <div class="preceptores-item">
+                        <img src="img/user.png" alt="">
+                        <p>Nombre del preceptor</p>
+                    </div>
+                    <div class="preceptores-item">
+                        <img src="img/user.png" alt="">
+                        <p>Nombre del preceptor</p>
+                    </div>
+                    <div class="preceptores-item">
+                        <img src="img/user.png" alt="">
+                        <p>Nombre del preceptor</p>
+                    </div>
+                    <div class="preceptores-item">
+                        <img src="img/user.png" alt="">
+                        <p>Nombre del preceptor</p>
+                    </div>
+                    <div class="preceptores-item">
+                        <img src="img/user.png" alt="">
+                        <p>Nombre del preceptor</p>
+                    </div>
+                    <div class="preceptores-item">
+                        <img src="img/user.png" alt="">
+                        <p>Nombre del preceptor</p>
+                    </div>
+                    <div class="preceptores-item">
+                        <img src="img/user.png" alt="">
+                        <p>Nombre del preceptor</p>
+                    </div>
+                    <div class="preceptores-item">
+                        <img src="img/user.png" alt="">
+                        <p>Nombre del preceptor</p>
+                    </div>
+                    <div class="preceptores-item">
+                        <img src="img/user.png" alt="">
+                        <p>Nombre del preceptor</p>
+                    </div>
+                    <div class="preceptores-item">
+                        <img src="img/user.png" alt="">
+                        <p>Nombre del preceptor</p>
+                    </div>
+                    <div class="preceptores-item">
+                        <img src="img/user.png" alt="">
+                        <p>Nombre del preceptor</p>
+                    </div>
+                    <div class="preceptores-item">
+                        <img src="img/user.png" alt="">
+                        <p>Nombre del preceptor</p>
+                    </div>
+                    <div class="preceptores-item">
+                        <img src="img/user.png" alt="">
+                        <p>Nombre del preceptor</p>
+                    </div>
+                </div>
+            </div>
+            <div class="perfil">
+                <hr>
+                <div class="perfil-info">
+                    <p class="perfil-siglas">JG</p>
+                    <div class="perfil-usuario">
+                        <p class="perfil-nombre">Julian Grippaldi</p>
+                        <p class="perfil-tipo-usuario">Profesor</p>
+                    </div>
+                </div>
+                <a class="perfil-cerrar-sesion" href="/logout"><i class="fa-solid fa-right-from-bracket"></i>Cerrar sesión</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
