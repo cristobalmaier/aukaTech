@@ -39,8 +39,13 @@ app.use((err, req, res, next) => {
 })
 
 // Rutas de la WEB
-import router from './web/rutas/index.rutas.js'
-app.use(router)
+import indexRutas from './web/rutas/index.rutas.js'
+import loginRutas from './web/rutas/login.rutas.js'
+import panelRutas from './web/rutas/panel.rutas.js'
+
+app.use(indexRutas)
+app.use(loginRutas)
+app.use(panelRutas)
 
 // Estaticos
 app.use('/', express.static(process.cwd() + '/src/web/estaticos'))
