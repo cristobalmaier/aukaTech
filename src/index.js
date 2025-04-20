@@ -1,7 +1,7 @@
 import express from 'express'
 import morgan from 'morgan'
 import cors from 'cors'
-import session from 'express-session'
+import cookieParser from 'cookie-parser'
 
 const app = express()
 
@@ -15,13 +15,8 @@ app.set('views', process.cwd() + '/src/web/vistas')
 app.use(morgan('dev'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+app.use(cookieParser())
 app.use(cors())
-app.use(session({
-    secret: 'cambiar despues',
-    resave: false,
-    saveUninitialized: false,
-    cookie: { maxAge: 60000 },
-}))
 
 // Rutas de la API
 import usuarioRutas from './rutas/usuario.rutas.js'

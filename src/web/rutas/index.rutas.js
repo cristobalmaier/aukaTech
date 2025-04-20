@@ -6,8 +6,9 @@ router.get('/', (req, res) => {
 })
 
 router.get('/logout', (req, res) => {
-    req.session.destroy()
-    res.redirect('/')
+    res
+    .clearCookie('access_token')
+    .redirect('/')
 })
 
 router.get('/error', (req, res) => {

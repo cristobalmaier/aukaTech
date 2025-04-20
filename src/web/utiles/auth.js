@@ -1,12 +1,16 @@
+import { obtenerDatosToken as obtenerDatos } from './obtenerDatosToken.js'
+
 export const estaLogeado = (req, res, next) => {
-    if(req.session.usuario)
+    const usuario = obtenerDatos(req)
+    
+    if(usuario)
         return next()
 
     res.redirect('/login')
 }
 
 export const esDirectivo = (req, res, next) => {
-    const { tipo_usuario } = req.session.usuario
+    const { tipo_usuario } = obtenerDatos(req)
 
     if(tipo_usuario === 'directivo')
         return next()
@@ -15,7 +19,7 @@ export const esDirectivo = (req, res, next) => {
 }
 
 export const esPreceptor = (req, res, next) => {
-    const { tipo_usuario } = req.session.usuario
+    const { tipo_usuario } = obtenerDatos(req)
 
     if(tipo_usuario === 'preceptor')
         return next()
@@ -24,7 +28,7 @@ export const esPreceptor = (req, res, next) => {
 }
 
 export const esProfesor = (req, res, next) => {
-    const { tipo_usuario } = req.session.usuario
+    const { tipo_usuario } = obtenerDatos(req)
 
     if(tipo_usuario === 'profesor')
         return next()
