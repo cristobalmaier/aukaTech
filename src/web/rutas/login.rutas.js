@@ -7,6 +7,8 @@ import { peticion } from '../utiles/peticion.js'
 const API_URL = process.env.API_URL
 const JWT_SECRET = process.env.JWT_SECRET
 
+import { io } from '../../index.js'
+
 /* ////////////////////// SOLICITUDES DE ACCESO Y LOGIN ////////////////////// */
 
 // LOGIN

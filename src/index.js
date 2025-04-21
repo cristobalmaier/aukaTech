@@ -2,8 +2,12 @@ import express from 'express'
 import morgan from 'morgan'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
+import server from 'node:http'
+import { Server } from 'socket.io'
 
 const app = express()
+const serverApp = server.createServer(app)
+export const io = new Server(serverApp)
 
 // Configuracion
 const PUERTO = process.env.PUERTO_API
@@ -46,8 +50,15 @@ app.use(panelRutas)
 app.use('/', express.static(process.cwd() + '/src/web/estaticos'))
 app.use('/panel', express.static(process.cwd() + '/src/web/estaticos'))
 
+// Socket.io
+io.on('connection', (socket) => {
+    socket.on('mensaje', (data) => {
+        console.log(data.socket_id, data.mensaje)
+    })
+})
+
 // Iniciar servidor
-app.listen(PUERTO, () => {
+serverApp.listen(PUERTO, () => {
     console.log('API: http://localhost:' + PUERTO)
 })
 
