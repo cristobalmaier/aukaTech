@@ -15,7 +15,6 @@
         socket.on('nuevo-llamado', (data) => {
             const { usuario, llamado } = data
 
-            console.log(usuario)
             const nuevoLlamado = document.createElement('div');
             nuevoLlamado.classList.add('llamado');
             nuevoLlamado.dataset.usuario_id = usuario.id
@@ -53,14 +52,17 @@
 
                 respuesta1.addEventListener('click', () => {
                     socket.emit('respuesta-llamado', { usuario_id: usuario.id, respuesta: "Yendo", nombre: nombrePreceptor, apellido: apellidoPreceptor })
+                    mostrarBotonesFinales([respuesta1, respuesta2, respuesta3], usuario, socket)
                 })
 
                 respuesta2.addEventListener('click', () => {
                     socket.emit('respuesta-llamado', { usuario_id: usuario.id, respuesta: "No puedo", nombre: nombrePreceptor, apellido: apellidoPreceptor })
+                    mostrarBotonesFinales([respuesta1, respuesta2, respuesta3], usuario, socket)
                 })
 
                 respuesta3.addEventListener('click', () => {
                     socket.emit('respuesta-llamado', { usuario_id: usuario.id, respuesta: "Derivo otro preceptor", nombre: nombrePreceptor, apellido: apellidoPreceptor })
+                    mostrarBotonesFinales([respuesta1, respuesta2, respuesta3], usuario, socket)
                 })
 
                 llamadoRespuestas.appendChild(respuesta1)
@@ -71,6 +73,32 @@
                 
             document.querySelector('.llamados').appendChild(nuevoLlamado)
         })
+
+        /**
+         * @param {Array} respuestas
+         * @param {Object} usuario
+         * @returns {void}
+         */
+        function mostrarBotonesFinales(respuestas, usuario, socket) {
+            for(const respuesta of respuestas) {
+                respuesta.remove()
+            }
+
+            const terminado = document.createElement('p')
+            terminado.classList.add('respuesta')
+            terminado.innerText = 'Terminado'
+            terminado.dataset.usuario_id = usuario.id
+
+            const nombrePreceptor = document.querySelector('.perfil-nombre').innerText.split(' ')[0].trim()
+            const apellidoPreceptor = document.querySelector('.perfil-nombre').innerText.split(' ')[1].trim()
+
+            terminado.addEventListener('click', () => {
+                socket.emit('terminar-llamado', { usuario_id: usuario.id, respuesta: "Terminado", nombre: nombrePreceptor, apellido: apellidoPreceptor })
+            })
+
+            const llamadoRespuestas = document.querySelector('.llamado[data-usuario_id="' + usuario.id + '"] .llamado-respuestas')
+            llamadoRespuestas.appendChild(terminado)
+        }
     </script>
 </head>
 <body>

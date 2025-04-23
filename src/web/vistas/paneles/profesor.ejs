@@ -12,8 +12,8 @@
     <script type="module">
         const socket = io();
 
-        const formulario = document.getElementById('formulario')
-
+        /* ////////////////////////////////////////////////////////////////// */
+        
         socket.on('respuesta-llamado', (data) => {
             const { nombre, apellido } = data
 
@@ -27,6 +27,25 @@
             }
         })
 
+        /* ////////////////////////////////////////////////////////////////// */
+
+        socket.on('terminar-llamado', (data) => {
+            const { nombre, apellido } = data
+
+            const id = "<%- usuario.id_usuario %>"
+
+            if (data.usuario_id == id) {
+                const respuesta = data.respuesta
+                
+                document.querySelector('.estado-llamado-titulo').innerText = nombre + " " + apellido
+                document.querySelector('.estado-llamado-texto').innerText = respuesta
+            }
+        })
+
+        /* ////////////////////////////////////////////////////////////////// */
+
+        const formulario = document.getElementById('formulario')
+        
         formulario.addEventListener('submit', (event) => {
             event.preventDefault()
 
