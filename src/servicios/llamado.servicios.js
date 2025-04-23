@@ -3,7 +3,12 @@ import { validarLlamado } from "../validadores/llamado.js";
 import ErrorCliente from "../utiles/error.js";
 
 class LlamadoServicio {
-    static async obtenerTodos() {
+    static async obtenerTodos({ usuarioId }) {
+        if(usuarioId) {
+            const resultado = await query("SELECT * FROM llamados WHERE id_emisor = ?", usuarioId)
+            return resultado
+        }
+
         const resultado = await query("SELECT * FROM llamados")
         return resultado
     }
@@ -20,8 +25,10 @@ class LlamadoServicio {
             throw new ErrorCliente(mensaje, 400)
         }
 
-        const preceptorExiste = await query('SELECT * FROM usuarios WHERE id_usuario = ?', id_preceptor)
-        if (!preceptorExiste) throw new ErrorCliente('El preceptor no existe', 400)
+        if(id_preceptor !== null) {
+            const preceptorExiste = await query('SELECT * FROM usuarios WHERE id_usuario = ?', id_preceptor)
+            if (!preceptorExiste) throw new ErrorCliente('El preceptor no existe', 400)
+        }
 
         const emisorExiste = await query('SELECT * FROM usuarios WHERE id_usuario = ?', id_emisor)
         if (!emisorExiste) throw new ErrorCliente('El emisor no existe', 400)

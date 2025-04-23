@@ -3,17 +3,11 @@ import { z } from 'zod';
 // Esquema de validación para la tabla llamados
 const llamadoSchema = z.object({
     id_preceptor: z
-        .number({ 
-            required_error: 'El ID del preceptor es obligatorio',
-            invalid_type_error: 'El ID del preceptor debe ser un número' 
-        })
-        .int()
-        .positive('El ID del preceptor debe ser positivo'),
+        .nullable(),
 
     id_emisor: z
         .number({
             required_error: 'El ID del emisor es obligatorio',
-            invalid_type_error: 'El ID del emisor debe ser un número' 
         })
         .int()
         .positive('El ID del emisor debe ser positivo'),

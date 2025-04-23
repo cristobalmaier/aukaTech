@@ -10,10 +10,12 @@
     <!-- SOCKET.IO -->
     <script type="module" src="/socket.io/socket.io.js"></script>
     <script type="module">
+        import { peticion } from './js/peticion.js'
+
         const socket = io();
 
         // Datos del profesor logeado
-        const idProfesor = document.documentElement.dataset.id_usuario
+        const idProfesor = parseInt(document.documentElement.dataset.id_usuario)
         const nombreProfesor = document.documentElement.dataset.nombre
         const apellidoProfesor = document.documentElement.dataset.apellido
         const tipoUsuario = document.documentElement.dataset.tipo_usuario
@@ -35,8 +37,6 @@
                 usuario_id: idProfesorLlamado, 
                 respuesta 
             } = data
-
-            console.log(data)
 
             // Si el llamado no es del mismo profesor, no se muestra la respuesta
             if (idProfesorLlamado != idProfesor) return
@@ -67,20 +67,37 @@
 
         botonCancelarLlamado.addEventListener('click', () => {
             socket.emit('cancelar-llamado', { usuario_id: idProfesor })
-            
+
             estadoLlamado.classList.add('esconder')
             botonLlamado.disabled = false
         })
 
         /* ////////////////////////////////////////////////////////////////// */
 
-        formulario.addEventListener('submit', (event) => {
+        formulario.addEventListener('submit', async (event) => {
             event.preventDefault()
 
             const mensaje = formulario.mensaje.value
 
             estadoLlamado.classList.remove('esconder')
             botonLlamado.disabled = true
+
+            const resultado = await peticion({ 
+                url: '/api/llamados/crear', 
+                metodo: 'POST', 
+                cuerpo: { 
+                    id_preceptor: null,
+                    id_emisor: idProfesor,
+                    id_curso: 12,
+                    numero_nivel: 1,
+                    mensaje 
+                } 
+            })
+
+            if(!resultado.ok) {
+                console.log(resultado)
+                alert('ERROR GARRAFAL')
+            }
 
             socket.emit('nuevo-llamado', {
                 usuario: {
@@ -124,13 +141,19 @@
                         <option value="1">Medio</option>
                         <option value="2">Baja</option>
                     </select>
-                    <button type="submit" id="boton-llamado">Llamar preceptor</button>
+                    <% if(llamados.length > 0) { %>
+                        <button type="submit" id="boton-llamado" disabled>Llamar preceptor</button> 
+                    <% } else { %>
+                        <button type="submit" id="boton-llamado">Llamar preceptor</button> 
+                    <% } %>
                 </form>
-                <div class="estado-llamado esconder">
-                    <p class="estado-llamado-titulo">Estado de tu llamado</p>
-                    <p class="estado-llamado-texto">Pendiente...</p>
-                    <button class="boton-cancelar">Cancelar llamado</button>
-                </div>
+                <% if(llamados.length > 0) { %>
+                    <div class="estado-llamado">
+                        <p class="estado-llamado-titulo">Estado de tu llamado</p>
+                        <p class="estado-llamado-texto">Pendiente...</p>
+                        <button class="boton-cancelar">Cancelar llamado</button>
+                    </div>
+                <% } %>
             </div>     
         <div class="columna columna-derecha">
             <div class="preceptores">

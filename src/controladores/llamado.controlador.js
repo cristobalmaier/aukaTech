@@ -7,8 +7,10 @@ class LlamadoControlador {
     }
 
     obtenerTodos = async (req, res, next) => {
+        const { usuarioId } = req.query
+
         try {
-            const resultado = await this.llamadoServicio.obtenerTodos()
+            const resultado = await this.llamadoServicio.obtenerTodos({ usuarioId })
             res.status(200).json(resultado)
         } catch(err) {
             next(err)
