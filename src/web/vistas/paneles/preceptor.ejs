@@ -12,20 +12,6 @@
     <script type="module">
         const socket = io();
 
-        const respuestas = document.querySelectorAll('.respuesta')
-        respuestas.forEach((respuesta) => {
-            respuesta.addEventListener('click', (event) => {
-
-                const usuario_id = event.target.dataset.usuario_id
-                const respuestaSeleccionada = event.target.innerText
-                
-                socket.emit('respuesta-llamado', {
-                    usuario_id,
-                    respuesta: respuestaSeleccionada
-                })
-            })
-        })
-
         socket.on('nuevo-llamado', (data) => {
             const { usuario, llamado } = data
 
@@ -62,16 +48,19 @@
                 respuesta3.innerText = 'Derivo otro preceptor'
                 respuesta3.dataset.usuario_id = usuario.id
 
+                const nombrePreceptor = document.querySelector('.perfil-nombre').innerText.split(' ')[0].trim()
+                const apellidoPreceptor = document.querySelector('.perfil-nombre').innerText.split(' ')[1].trim()
+
                 respuesta1.addEventListener('click', () => {
-                    socket.emit('respuesta-llamado', { usuario_id: usuario.id, respuesta: "Yendo" })
+                    socket.emit('respuesta-llamado', { usuario_id: usuario.id, respuesta: "Yendo", nombre: nombrePreceptor, apellido: apellidoPreceptor })
                 })
 
                 respuesta2.addEventListener('click', () => {
-                    socket.emit('respuesta-llamado', { usuario_id: usuario.id, respuesta: "No puedo" })
+                    socket.emit('respuesta-llamado', { usuario_id: usuario.id, respuesta: "No puedo", nombre: nombrePreceptor, apellido: apellidoPreceptor })
                 })
 
                 respuesta3.addEventListener('click', () => {
-                    socket.emit('respuesta-llamado', { usuario_id: usuario.id, respuesta: "Derivo otro preceptor" })
+                    socket.emit('respuesta-llamado', { usuario_id: usuario.id, respuesta: "Derivo otro preceptor", nombre: nombrePreceptor, apellido: apellidoPreceptor })
                 })
 
                 llamadoRespuestas.appendChild(respuesta1)

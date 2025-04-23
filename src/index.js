@@ -57,7 +57,6 @@ io.on('connection', (socket) => {
     })
 
     socket.on('respuesta-llamado', (data) => {
-        console.log(data)
         io.emit('respuesta-llamado', data)
     })
 })
