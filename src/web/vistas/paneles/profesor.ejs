@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es" data-id_usuario="<%- usuario.id_usuario %>" data-nombre="<%- usuario.nombre %>" data-apellido="<%- usuario.apellido %>" data-tipo_usuario="<%- usuario.tipo_usuario %>">
 <head>
     <%- include('../parciales/head.html') %>
     <link rel="stylesheet" href="panel.css">
@@ -12,57 +12,82 @@
     <script type="module">
         const socket = io();
 
+        // Datos del profesor logeado
+        const idProfesor = document.documentElement.dataset.id_usuario
+        const nombreProfesor = document.documentElement.dataset.nombre
+        const apellidoProfesor = document.documentElement.dataset.apellido
+        const tipoUsuario = document.documentElement.dataset.tipo_usuario
+
+        // Elementos HTML
+        const formulario = document.getElementById('formulario')
+        const botonLlamado = document.getElementById('boton-llamado')
+        const botonCancelarLlamado = document.querySelector('.boton-cancelar')
+        const estadoLlamado = document.querySelector('.estado-llamado')
+        const estadoLlamadoTitulo = document.querySelector('.estado-llamado-titulo')
+        const estadoLlamadoTexto = document.querySelector('.estado-llamado-texto')
+
         /* ////////////////////////////////////////////////////////////////// */
         
         socket.on('respuesta-llamado', (data) => {
-            const { nombre, apellido } = data
+            const { 
+                nombre: nombrePreceptor, 
+                apellido: apellidoPreceptor, 
+                usuario_id: idProfesorLlamado, 
+                respuesta 
+            } = data
 
-            const id = "<%- usuario.id_usuario %>"
+            console.log(data)
 
-            if (data.usuario_id === id) {
-                const respuesta = data.respuesta
-                
-                document.querySelector('.estado-llamado-titulo').innerText = nombre + " " + apellido
-                document.querySelector('.estado-llamado-texto').innerText = respuesta
-            }
+            // Si el llamado no es del mismo profesor, no se muestra la respuesta
+            if (idProfesorLlamado != idProfesor) return
+    
+            estadoLlamadoTitulo.innerText = nombrePreceptor + " " + apellidoPreceptor
+            estadoLlamadoTexto.innerText = respuesta
+            botonCancelarLlamado.classList.add('esconder')
         })
 
         /* ////////////////////////////////////////////////////////////////// */
 
         socket.on('terminar-llamado', (data) => {
-            const { nombre, apellido } = data
+            const { 
+                nombre: nombrePreceptor,
+                apellido: apellidoPreceptor,
+                usuario_id: idProfesorLlamado, 
+                respuesta 
+            } = data
 
-            const id = "<%- usuario.id_usuario %>"
+            // Si el llamado es del mismo profesor, no se muestra la respuesta
+            if (idProfesorLlamado != idProfesor) return 
 
-            if (data.usuario_id == id) {
-                const respuesta = data.respuesta
-                
-                document.querySelector('.estado-llamado-titulo').innerText = nombre + " " + apellido
-                document.querySelector('.estado-llamado-texto').innerText = respuesta
-            }
+            estadoLlamado.classList.add('esconder')
+            botonLlamado.disabled = false
         })
 
         /* ////////////////////////////////////////////////////////////////// */
 
-        const formulario = document.getElementById('formulario')
-        
+        botonCancelarLlamado.addEventListener('click', () => {
+            socket.emit('cancelar-llamado', { usuario_id: idProfesor })
+            
+            estadoLlamado.classList.add('esconder')
+            botonLlamado.disabled = false
+        })
+
+        /* ////////////////////////////////////////////////////////////////// */
+
         formulario.addEventListener('submit', (event) => {
             event.preventDefault()
 
             const mensaje = formulario.mensaje.value
-            const id = "<%- usuario.id_usuario %>"
-            const nombre = "<%- usuario.nombre %>"
-            const apellido = "<%- usuario.apellido %>"
-            const tipo_usuario = "<%- usuario.tipo_usuario %>"
 
-            document.querySelector('.estado-llamado').classList.remove('esconder')
+            estadoLlamado.classList.remove('esconder')
+            botonLlamado.disabled = true
 
             socket.emit('nuevo-llamado', {
                 usuario: {
-                    id,
-                    nombre,
-                    apellido,
-                    tipo_usuario
+                    id: idProfesor,
+                    nombre: nombreProfesor,
+                    apellido: apellidoProfesor,
+                    tipo_usuario: tipoUsuario
                 },
                 llamado: {
                     mensaje,
@@ -99,11 +124,12 @@
                         <option value="1">Medio</option>
                         <option value="2">Baja</option>
                     </select>
-                    <button type="submit">Llamar preceptor</button>
+                    <button type="submit" id="boton-llamado">Llamar preceptor</button>
                 </form>
                 <div class="estado-llamado esconder">
                     <p class="estado-llamado-titulo">Estado de tu llamado</p>
                     <p class="estado-llamado-texto">Pendiente...</p>
+                    <button class="boton-cancelar">Cancelar llamado</button>
                 </div>
             </div>     
         <div class="columna columna-derecha">

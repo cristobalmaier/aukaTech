@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-id_usuario="<%- usuario.id_usuario %>" data-nombre="<%- usuario.nombre %>" data-apellido="<%- usuario.apellido %>" data-tipo_usuario="<%- usuario.tipo_usuario %>">
 <head>
     <%- include('../parciales/head.html') %>
     <link rel="stylesheet" href="panel.css">
@@ -10,17 +10,33 @@
     <!-- SOCKET.IO -->
     <script type="module" src="/socket.io/socket.io.js"></script>
     <script type="module">
+
         const socket = io();
 
+        // Datos del preceptor logeado
+        const idPreceptor = document.documentElement.dataset.id_usuario
+        const nombrePreceptor = document.documentElement.dataset.nombre
+        const apellidoPreceptor = document.documentElement.dataset.apellido
+        const tipoUsuario = document.documentElement.dataset.tipo_usuario
+
+        const respuestas = [
+            "Yendo", "No puedo", "Derivo otro preceptor"
+        ]
+
+        // Elementos HTML
+        const llamadosContenedor = document.querySelector('.llamados')
+
+        /* ////////////////////////////////////////////////////////////////// */
+
         socket.on('nuevo-llamado', (data) => {
-            const { usuario, llamado } = data
+            const { usuario: profesor, llamado } = data
 
             const nuevoLlamado = document.createElement('div');
             nuevoLlamado.classList.add('llamado');
-            nuevoLlamado.dataset.usuario_id = usuario.id
+            nuevoLlamado.dataset.usuario_id = profesor.id
             nuevoLlamado.innerHTML = `
                 <div class="llamado-cabecera">
-                    <p class="llamado-titulo">${usuario.nombre} ${usuario.apellido}</p>
+                    <p class="llamado-titulo">${profesor.nombre} ${profesor.apellido}</p>
                     <p class="llamado-mensaje">${llamado.mensaje}</p>
                 </div>
                 <hr>
@@ -29,57 +45,36 @@
                 </div>
                 `
 
-                const llamadoRespuestas = document.createElement('div')
-                llamadoRespuestas.classList.add('llamado-respuestas')
+            const llamadoRespuestas = document.createElement('div')
+            llamadoRespuestas.classList.add('llamado-respuestas')
 
-                const respuesta1 = document.createElement('p')
-                respuesta1.classList.add('respuesta')
-                respuesta1.innerText = 'Yendo'
-                respuesta1.dataset.usuario_id = usuario.id
+            for(const textoRespuesta of respuestas) {
+                const respuesta = document.createElement('p')
+                respuesta.classList.add('respuesta')
+                respuesta.innerText = textoRespuesta
+                respuesta.dataset.usuario_id = profesor.id
 
-                const respuesta2 = document.createElement('p')
-                respuesta2.classList.add('respuesta')
-                respuesta2.innerText = 'No puedo'
-                respuesta2.dataset.usuario_id = usuario.id
-
-                const respuesta3 = document.createElement('p')
-                respuesta3.classList.add('respuesta')
-                respuesta3.innerText = 'Derivo otro preceptor'
-                respuesta3.dataset.usuario_id = usuario.id
-
-                const nombrePreceptor = document.querySelector('.perfil-nombre').innerText.split(' ')[0].trim()
-                const apellidoPreceptor = document.querySelector('.perfil-nombre').innerText.split(' ')[1].trim()
-
-                respuesta1.addEventListener('click', () => {
-                    socket.emit('respuesta-llamado', { usuario_id: usuario.id, respuesta: "Yendo", nombre: nombrePreceptor, apellido: apellidoPreceptor })
-                    mostrarBotonesFinales([respuesta1, respuesta2, respuesta3], usuario, socket)
+                respuesta.addEventListener('click', () => {
+                    socket.emit('respuesta-llamado', { usuario_id: profesor.id, respuesta: textoRespuesta, nombre: nombrePreceptor, apellido: apellidoPreceptor })
+                    mostrarBotonesFinales({ profesor, socket })
                 })
 
-                respuesta2.addEventListener('click', () => {
-                    socket.emit('respuesta-llamado', { usuario_id: usuario.id, respuesta: "No puedo", nombre: nombrePreceptor, apellido: apellidoPreceptor })
-                    mostrarBotonesFinales([respuesta1, respuesta2, respuesta3], usuario, socket)
-                })
-
-                respuesta3.addEventListener('click', () => {
-                    socket.emit('respuesta-llamado', { usuario_id: usuario.id, respuesta: "Derivo otro preceptor", nombre: nombrePreceptor, apellido: apellidoPreceptor })
-                    mostrarBotonesFinales([respuesta1, respuesta2, respuesta3], usuario, socket)
-                })
-
-                llamadoRespuestas.appendChild(respuesta1)
-                llamadoRespuestas.appendChild(respuesta2)
-                llamadoRespuestas.appendChild(respuesta3)
-
-                nuevoLlamado.appendChild(llamadoRespuestas)
+                llamadoRespuestas.appendChild(respuesta)
+            }
+            
+            nuevoLlamado.appendChild(llamadoRespuestas)
                 
-            document.querySelector('.llamados').appendChild(nuevoLlamado)
+            llamadosContenedor.appendChild(nuevoLlamado)
         })
 
         /**
-         * @param {Array} respuestas
          * @param {Object} usuario
+         * @param {Socket} socket
          * @returns {void}
          */
-        function mostrarBotonesFinales(respuestas, usuario, socket) {
+        function mostrarBotonesFinales({ profesor, socket }) {
+            const respuestas = document.querySelectorAll(`.llamado[data-usuario_id="${profesor.id}"] .respuesta`)
+            
             for(const respuesta of respuestas) {
                 respuesta.remove()
             }
@@ -87,18 +82,32 @@
             const terminado = document.createElement('p')
             terminado.classList.add('respuesta')
             terminado.innerText = 'Terminado'
-            terminado.dataset.usuario_id = usuario.id
-
-            const nombrePreceptor = document.querySelector('.perfil-nombre').innerText.split(' ')[0].trim()
-            const apellidoPreceptor = document.querySelector('.perfil-nombre').innerText.split(' ')[1].trim()
+            terminado.dataset.usuario_id = profesor.id
 
             terminado.addEventListener('click', () => {
-                socket.emit('terminar-llamado', { usuario_id: usuario.id, respuesta: "Terminado", nombre: nombrePreceptor, apellido: apellidoPreceptor })
+                socket.emit('terminar-llamado', { 
+                    usuario_id: profesor.id, 
+                    respuesta: "Terminado", 
+                    nombre: nombrePreceptor, 
+                    apellido: apellidoPreceptor 
+                })
+                document.querySelector(`.llamado[data-usuario_id="${profesor.id}"]`).remove()
             })
 
-            const llamadoRespuestas = document.querySelector('.llamado[data-usuario_id="' + usuario.id + '"] .llamado-respuestas')
+            const llamadoRespuestas = document.querySelector(`.llamado[data-usuario_id="${profesor.id}"] .llamado-respuestas`) 
             llamadoRespuestas.appendChild(terminado)
         }
+
+        /* ////////////////////////////////////////////////////////////////// */
+
+        socket.on('cancelar-llamado', (data) => {
+            const { usuario_id: idProfesorLlamado } = data
+
+            const llamado = document.querySelector('.llamado[data-usuario_id="' + idProfesorLlamado + '"]')
+            if(llamado) llamado.remove()
+        })
+
+        /* ////////////////////////////////////////////////////////////////// */
     </script>
 </head>
 <body>

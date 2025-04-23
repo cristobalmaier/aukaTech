@@ -63,6 +63,10 @@ io.on('connection', (socket) => {
     socket.on('terminar-llamado', (data) => {
         io.emit('terminar-llamado', data)
     })
+
+    socket.on('cancelar-llamado', (data) => {
+        io.emit('cancelar-llamado', data)
+    })
 })
 
 // Iniciar servidor
