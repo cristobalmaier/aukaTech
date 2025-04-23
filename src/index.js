@@ -16,7 +16,7 @@ app.set('view engine', 'ejs')
 app.set('views', process.cwd() + '/src/web/vistas')
 
 // Middlewares
-app.use(morgan('dev'))
+// app.use(morgan('dev'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser())
@@ -52,8 +52,13 @@ app.use('/panel', express.static(process.cwd() + '/src/web/estaticos'))
 
 // Socket.io
 io.on('connection', (socket) => {
-    socket.on('mensaje', (data) => {
-        console.log(data.socket_id, data.mensaje)
+    socket.on('nuevo-llamado', (data) => {
+        io.emit('nuevo-llamado', data)
+    })
+
+    socket.on('respuesta-llamado', (data) => {
+        console.log(data)
+        io.emit('respuesta-llamado', data)
     })
 })
 

@@ -14,14 +14,38 @@
 
         const formulario = document.getElementById('formulario')
 
+        socket.on('respuesta-llamado', (data) => {
+            const id = "<%- usuario.usuario_id %>"
+
+            console.log(data)
+            if (data.usuario_id === id) {
+                const respuesta = data.respuesta
+                
+                document.querySelector('.estado-llamado-texto').innerText = respuesta
+            }
+        })
+
         formulario.addEventListener('submit', (event) => {
             event.preventDefault()
 
             const mensaje = formulario.mensaje.value
+            const id = "<%- usuario.usuario_id %>"
+            const nombre = "<%- usuario.nombre %>"
+            const apellido = "<%- usuario.apellido %>"
+            const tipo_usuario = "<%- usuario.tipo_usuario %>"
 
-            socket.emit('mensaje', {
-                socket_id: socket.id,
-                mensaje
+            document.querySelector('.estado-llamado').classList.remove('esconder')
+
+            socket.emit('nuevo-llamado', {
+                usuario: {
+                    id,
+                    nombre,
+                    apellido,
+                    tipo_usuario
+                },
+                llamado: {
+                    mensaje,
+                }
             })
         })
     </script>
@@ -35,28 +59,32 @@
                 <p>Parrafo 2</p>
             </div>
         </div>
-        <div class="formulario-llamado">
-            <form action="" method="GET" id="formulario">
-                <div class="formulario-cabecera">
-                    <h2>Realizar llamado</h2>
+            <div class="formulario-llamado">
+                <form action="" method="GET" id="formulario">
+                    <div class="formulario-cabecera">
+                        <h2>Realizar llamado</h2>
+                    </div>
+                    <label for="">Seleccionar preceptor</label>
+                    <select name="preceptor" id="">
+                        <option value="0">Enviar a todos</option>
+                        <option value="1">Alejandro</option>
+                        <option value="2">Noemi</option>
+                    </select>
+                    <label for="">Mensaje</label>
+                    <textarea name="mensaje" placeholder="Necesito un preceptor en L1..." name="mensaje"></textarea>
+                    <label for="">Nivel de importancia</label>
+                    <select name="nivel" id="">
+                        <option value="0">Alta</option>
+                        <option value="1">Medio</option>
+                        <option value="2">Baja</option>
+                    </select>
+                    <button type="submit">Llamar preceptor</button>
+                </form>
+                <div class="estado-llamado esconder">
+                    <p class="estado-llamado-titulo">Estado de tu llamado</p>
+                    <p class="estado-llamado-texto">Pendiente...</p>
                 </div>
-                <label for="">Seleccionar preceptor</label>
-                <select name="preceptor" id="">
-                    <option value="0">Enviar a todos</option>
-                    <option value="1">Alejandro</option>
-                    <option value="2">Noemi</option>
-                </select>
-                <label for="">Mensaje</label>
-                <textarea name="mensaje" placeholder="Necesito un preceptor en L1..." name="mensaje"></textarea>
-                <label for="">Nivel de importancia</label>
-                <select name="nivel" id="">
-                    <option value="0">Alta</option>
-                    <option value="1">Medio</option>
-                    <option value="2">Baja</option>
-                </select>
-                <button type="submit">Llamar preceptor</button>
-            </form>
-        </div>
+            </div>     
         <div class="columna columna-derecha">
             <div class="preceptores">
                 <p class="preceptores-titulo">Preceptores activos</p>

@@ -266,9 +266,8 @@ hr {
 
 .formulario-llamado {
     display: flex;
-    align-items: center;
     justify-content: center;
-    flex-direction: column;
+    align-items: flex-start;
     height: calc(100vh - 140px);
     gap: 20px;
     padding: 20px;
@@ -398,4 +397,32 @@ hr {
 
 .perfil-cerrar-sesion:hover {
     background-color: var(--color-boton-hover-secundario);
+}
+
+.principal {
+    display: flex;
+    gap: 30px;
+}
+
+.estado-llamado {
+    display: flex;
+    flex-direction: column;
+    border-radius: 15px;
+    box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.25);
+    background-color: var(--color-fondo-llamado);
+    max-width: 490px;
+    width: 100%;
+    max-height: 700px;
+    padding: 20px;
+}
+
+.estado-llamado-titulo {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.estado-llamado-texto {
+    font-size: 18px;
+    color: var(--color-texto-secundario);
 }

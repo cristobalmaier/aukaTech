@@ -8,9 +8,80 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <!-- SOCKET.IO -->
-    <script src="/socket.io/socket.io.js"></script>
-    <script>
+    <script type="module" src="/socket.io/socket.io.js"></script>
+    <script type="module">
         const socket = io();
+
+        const respuestas = document.querySelectorAll('.respuesta')
+        respuestas.forEach((respuesta) => {
+            respuesta.addEventListener('click', (event) => {
+
+                const usuario_id = event.target.dataset.usuario_id
+                const respuestaSeleccionada = event.target.innerText
+                
+                socket.emit('respuesta-llamado', {
+                    usuario_id,
+                    respuesta: respuestaSeleccionada
+                })
+            })
+        })
+
+        socket.on('nuevo-llamado', (data) => {
+            const { usuario, llamado } = data
+
+            console.log(usuario)
+            const nuevoLlamado = document.createElement('div');
+            nuevoLlamado.classList.add('llamado');
+            nuevoLlamado.dataset.usuario_id = usuario.id
+            nuevoLlamado.innerHTML = `
+                <div class="llamado-cabecera">
+                    <p class="llamado-titulo">${usuario.nombre} ${usuario.apellido}</p>
+                    <p class="llamado-mensaje">${llamado.mensaje}</p>
+                </div>
+                <hr>
+                <div class="llamado-cuerpo">
+                    <p>Llamado - Hace 2 minutos</p>
+                </div>
+                `
+
+                const llamadoRespuestas = document.createElement('div')
+                llamadoRespuestas.classList.add('llamado-respuestas')
+
+                const respuesta1 = document.createElement('p')
+                respuesta1.classList.add('respuesta')
+                respuesta1.innerText = 'Yendo'
+                respuesta1.dataset.usuario_id = usuario.id
+
+                const respuesta2 = document.createElement('p')
+                respuesta2.classList.add('respuesta')
+                respuesta2.innerText = 'No puedo'
+                respuesta2.dataset.usuario_id = usuario.id
+
+                const respuesta3 = document.createElement('p')
+                respuesta3.classList.add('respuesta')
+                respuesta3.innerText = 'Derivo otro preceptor'
+                respuesta3.dataset.usuario_id = usuario.id
+
+                respuesta1.addEventListener('click', () => {
+                    socket.emit('respuesta-llamado', { usuario_id: usuario.id, respuesta: "Yendo" })
+                })
+
+                respuesta2.addEventListener('click', () => {
+                    socket.emit('respuesta-llamado', { usuario_id: usuario.id, respuesta: "No puedo" })
+                })
+
+                respuesta3.addEventListener('click', () => {
+                    socket.emit('respuesta-llamado', { usuario_id: usuario.id, respuesta: "Derivo otro preceptor" })
+                })
+
+                llamadoRespuestas.appendChild(respuesta1)
+                llamadoRespuestas.appendChild(respuesta2)
+                llamadoRespuestas.appendChild(respuesta3)
+
+                nuevoLlamado.appendChild(llamadoRespuestas)
+                
+            document.querySelector('.llamados').appendChild(nuevoLlamado)
+        })
     </script>
 </head>
 <body>
@@ -59,9 +130,9 @@
                     <p>Llamado - Hace 2 minutos</p>
                 </div>
                 <div class="llamado-respuestas">
-                    <a class="respuesta" href="">Yendo</a>
-                    <a class="respuesta" href="">No puedo</a>
-                    <a class="respuesta" href="">Derivo preceptor</a>
+                    <a class="respuesta" href="#">Yendo</a>
+                    <a class="respuesta" href="#">No puedo</a>
+                    <a class="respuesta" href="#">Derivo preceptor</a>
                 </div>
             </div>
         </div>
