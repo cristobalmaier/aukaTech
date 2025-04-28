@@ -33,7 +33,7 @@ class LlamadoControlador {
 
         try {
             const resultado = await this.llamadoServicio.crearLlamado({ id_preceptor, id_emisor, id_curso, numero_nivel, mensaje, fecha_envio })
-            res.status(200).json(resultado)
+            res.status(200).json({ mensaje: 'llamado creado', data: { id: resultado.insertId } }) 
         } catch(err) {
             next(err)
         }
@@ -44,6 +44,17 @@ class LlamadoControlador {
 
         try {
             const resultado = await this.llamadoServicio.eliminarLlamado({ id })
+            res.status(200).json(resultado)
+        } catch(err) {
+            next(err)
+        }
+    }
+
+    actualizarLlamado = async (req, res, next) => {
+        const { id } = req.params
+
+        try {
+            const resultado = await this.llamadoServicio.actualizarLlamado({ id_llamado: id, ...req.body })
             res.status(200).json(resultado)
         } catch(err) {
             next(err)

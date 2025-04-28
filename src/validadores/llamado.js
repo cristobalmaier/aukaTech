@@ -36,6 +36,64 @@ const llamadoSchema = z.object({
         .max(300, 'El mensaje no puede tener más de 300 caracteres'),
 });
 
+const actualizarLlamadoSchema = z.object({
+    id_preceptor: z
+        .number()
+        .int('Debe ser un número entero')
+        .positive('Debe ser un número positivo')
+        .optional(),
+
+    id_emisor: z
+        .number()
+        .int('Debe ser un número entero')
+        .positive('Debe ser un número positivo')
+        .optional(),
+
+    id_curso: z
+        .number()
+        .int('Debe ser un número entero')
+        .positive('Debe ser un número positivo')
+        .optional(),
+
+    numero_nivel: z
+        .number()
+        .int('Debe ser un número entero')
+        .min(1, 'El nivel debe ser al menos 1')
+        .optional(),
+
+    mensaje: z
+        .string()
+        .max(500, 'Máximo 500 caracteres')
+        .optional(),
+
+    fecha_envio: z
+        .string()
+        .datetime({ message: 'Fecha de envío no válida' })
+        .optional(),
+
+    finalizado: z
+        .boolean()
+        .optional(),
+
+}).refine((data) => Object.keys(data).length > 0, {
+    message: 'Debe incluir al menos un campo para actualizar',
+});
+
+export function validarActualizacionLlamado(data) {
+    const resultado = actualizarLlamadoSchema.safeParse(data);
+    if (!resultado.success) {
+        return {
+            valido: false,
+            errores: resultado.error.flatten().fieldErrors,
+        };
+    }
+
+    return {
+        valido: true,
+        datos: resultado.data,
+    };
+}
+
 // Función para validar un nuevo llamado
 export function validarLlamado(data) {
     const resultado = llamadoSchema.safeParse(data);

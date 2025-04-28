@@ -12,5 +12,6 @@ llamadoRutas.get("/", llamadoControlador.obtenerTodos)
 llamadoRutas.get("/:id", llamadoControlador.obtenerLlamadoPorId)
 llamadoRutas.post("/crear", llamadoControlador.crearLlamado)
 llamadoRutas.delete("/eliminar/:id", llamadoControlador.eliminarLlamado)
+llamadoRutas.put("/actualizar/:id", llamadoControlador.actualizarLlamado)
 
 export default llamadoRutas

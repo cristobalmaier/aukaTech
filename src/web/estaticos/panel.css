@@ -84,6 +84,8 @@ hr {
 
 .historial {
     padding: 20px;
+    max-height: 850px;
+    overflow-y: scroll;
 }
 
 .historial-contenedor {
@@ -126,6 +128,7 @@ hr {
 .historial-item-texto {
     font-size: 12px;
     margin: 10px 0;
+    word-break: break-word;
 }
 
 .historial-item-estado {
@@ -145,9 +148,16 @@ hr {
     width: 5px;
     height: 5px;
     border-radius: 50%;
-    background-color: var(--color-estado-finalizado);
     display: inline-block;
     margin-right: 5px;
+}
+
+.historial-estado-cancelado .historial-item-estado-texto::before {
+    background-color: var(--color-estado-cancelado);
+}
+
+.historial-estado-finalizado .historial-item-estado-texto::before { 
+    background-color: var(--color-estado-finalizado);
 }
 
 .preceptores {
@@ -187,10 +197,7 @@ hr {
 }
 
 .no-hay-llamados {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
+    color: var(--color-texto-secundario);
 }
 
 .llamados {
@@ -226,6 +233,7 @@ hr {
 
 .llamado-mensaje {
     font-size: 18px;
+    word-break: break-word;
 }
 
 .llamado-cuerpo {

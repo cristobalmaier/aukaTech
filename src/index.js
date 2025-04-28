@@ -4,6 +4,7 @@ import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import server from 'node:http'
 import { Server } from 'socket.io'
+import { formato, formatoHora } from './web/utiles/formato.js'
 
 const app = express()
 const serverApp = server.createServer(app)
@@ -26,10 +27,18 @@ app.use(cors())
 import usuarioRutas from './rutas/usuario.rutas.js'
 import cursoRutas from './rutas/curso.rutas.js'
 import llamadoRutas from './rutas/llamado.rutas.js'
+import respuestaRutas from './rutas/respuesta.rutas.js'
 
 app.use('/api/usuarios', usuarioRutas)
 app.use('/api/cursos', cursoRutas)
 app.use('/api/llamados', llamadoRutas)
+app.use('/api/respuestas', respuestaRutas)
+
+app.use((req, res, next) => {
+    res.locals.formato = formato
+    res.locals.formatoHora = formatoHora
+    next()
+})
 
 app.use((err, req, res, next) => {
     console.error(err)

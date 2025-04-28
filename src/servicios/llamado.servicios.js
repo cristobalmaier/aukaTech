@@ -5,11 +5,11 @@ import ErrorCliente from "../utiles/error.js";
 class LlamadoServicio {
     static async obtenerTodos({ usuarioId }) {
         if(usuarioId) {
-            const resultado = await query("SELECT * FROM llamados WHERE id_emisor = ?", usuarioId)
+            const resultado = await query("SELECT * FROM llamados WHERE id_emisor = ? ORDER BY fecha_envio DESC", usuarioId)
             return resultado
         }
 
-        const resultado = await query("SELECT * FROM llamados")
+        const resultado = await query("SELECT l.*, u.nombre, u.apellido FROM llamados l JOIN usuarios u ON l.id_emisor = u.id_usuario ORDER BY l.fecha_envio DESC") 
         return resultado
     }
 
@@ -44,6 +44,37 @@ class LlamadoServicio {
         const resultado = await query(`DELETE FROM llamados WHERE id_llamado = ?`, id)
         return resultado
     }
+
+    static async actualizarLlamado({ id_llamado, id_preceptor, id_emisor, id_curso, numero_nivel, mensaje, fecha_envio, finalizado, cancelado }) {
+        let llamado = {
+            id_preceptor,
+            id_emisor,
+            id_curso,
+            numero_nivel,
+            mensaje,
+            fecha_envio,
+            finalizado,
+            cancelado 
+        };
+    
+        // Elimina campos vacíos
+        llamado = Object.fromEntries(
+            Object.entries(llamado).filter(([_, valor]) => valor !== undefined)
+        );
+    
+        const campos = Object.keys(llamado);
+        const valores = Object.values(llamado);
+    
+        const setClause = campos.map((campo) => `${campo} = ?`).join(', ');
+        const consulta = `UPDATE llamados SET ${setClause} WHERE id_llamado = ?;`;
+    
+        try {
+            await query(consulta, [...valores, id_llamado]);
+        } catch (err) {
+            throw new ErrorCliente(err.message, 400);
+        }
+    }
+    
 }
 
 export default LlamadoServicio

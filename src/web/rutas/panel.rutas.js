@@ -10,14 +10,46 @@ import { esProfesor, esPreceptor, estaLogeado } from '../utiles/auth.js'
 panelRutas.get('/panel/preceptor', [estaLogeado, esPreceptor], async (req, res) => {
     const usuario = obtenerDatosToken(req)
 
-    res.render('paneles/preceptor', { titulo: 'AUKA - Panel', usuario })
+    const llamadosResultado = await peticion({ url: `${API_URL}/llamados`, metodo: 'GET' })
+    const llamados = await llamadosResultado.json()
+
+    res.render('paneles/preceptor', { titulo: 'AUKA - Panel', usuario, llamados })
 })
 
 panelRutas.get('/panel/profesor', [estaLogeado, esProfesor], async (req, res) => {
     const usuario = obtenerDatosToken(req)
-    const llamados = await (await peticion({ url: `${API_URL}/api/llamados?usuarioId=${usuario.id_usuario}`, metodo: 'GET' })).json()
     
-    res.render('paneles/profesor', { titulo: 'AUKA - Panel', usuario, llamados })
+    const resultadoLlamado = await peticion({ url: `${API_URL}/llamados?usuarioId=${usuario.id_usuario}`, metodo: 'GET' })
+    let llamado = await resultadoLlamado.json()
+
+    if(llamado == null) llamado = []
+
+    const resultadoRespuesta = await peticion({ url: `${API_URL}/respuestas?llamadoId=${llamado[0]?.id_llamado}`, metodo: 'GET' })
+    let respuesta = await resultadoRespuesta.json()
+
+    if(respuesta == null) respuesta = []
+
+    const objetoLlamado = {
+        data: {
+            id: llamado[0]?.id_llamado,
+            mensaje: llamado[0]?.mensaje,
+            nivel: llamado[0]?.numero_nivel,
+            fecha: llamado[0]?.fecha_envio,
+            finalizado: llamado[0]?.finalizado,
+        },
+        respuesta: {
+            id: respuesta[0]?.id_respuesta,
+            mensaje: respuesta[0]?.mensaje,
+            fecha: respuesta[0]?.fecha_respuesta,
+            usuario: {
+                id: respuesta[0]?.id_preceptor,
+                nombre: respuesta[0]?.nombre_usuario,
+                apellido: respuesta[0]?.apellido_usuario
+            }
+        }
+    }
+
+    res.render('paneles/profesor', { titulo: 'AUKA - Panel', usuario, llamado: objetoLlamado })
 })
 
 export default panelRutas

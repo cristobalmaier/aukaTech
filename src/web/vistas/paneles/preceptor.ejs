@@ -9,7 +9,17 @@
 
     <!-- SOCKET.IO -->
     <script type="module" src="/socket.io/socket.io.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/timeago.js@4.0.2/dist/timeago.min.js"></script>
+
     <script type="module">
+        const nodos = document.querySelectorAll('.fecha-envio')
+
+        timeago.render(nodos)
+    </script>
+
+    <script type="module">
+        import { peticion } from './js/peticion.js'
+        import { formatearHora } from './js/formatearHora.js'
 
         const socket = io();
 
@@ -25,15 +35,18 @@
 
         // Elementos HTML
         const llamadosContenedor = document.querySelector('.llamados')
+        const historialContenedor = document.querySelector('.historial-contenedor')
 
         /* ////////////////////////////////////////////////////////////////// */
 
-        socket.on('nuevo-llamado', (data) => {
+        // ! NUEVO LLAMADO
+        socket.on('nuevo-llamado', async (data) => {
             const { usuario: profesor, llamado } = data
 
             const nuevoLlamado = document.createElement('div');
             nuevoLlamado.classList.add('llamado');
             nuevoLlamado.dataset.usuario_id = profesor.id
+            nuevoLlamado.dataset.llamado_id = llamado.id
             nuevoLlamado.innerHTML = `
                 <div class="llamado-cabecera">
                     <p class="llamado-titulo">${profesor.nombre} ${profesor.apellido}</p>
@@ -54,10 +67,7 @@
                 respuesta.innerText = textoRespuesta
                 respuesta.dataset.usuario_id = profesor.id
 
-                respuesta.addEventListener('click', () => {
-                    socket.emit('respuesta-llamado', { usuario_id: profesor.id, respuesta: textoRespuesta, nombre: nombrePreceptor, apellido: apellidoPreceptor })
-                    mostrarBotonesFinales({ profesor, socket })
-                })
+                await responderLlamado({ botonRespuesta: respuesta, llamadoId: llamado.id, profesorId: profesor.id, textoRespuesta })
 
                 llamadoRespuestas.appendChild(respuesta)
             }
@@ -67,12 +77,53 @@
             llamadosContenedor.appendChild(nuevoLlamado)
         })
 
+        /* ////////////////////////////////////////////////////////////////// */
+
+        const botonesRespuesta = document.querySelectorAll('.respuesta')
+
+        for(const botonRespuesta of botonesRespuesta) {
+            const llamado = botonRespuesta.parentElement.parentElement
+
+            const llamadoId = llamado.dataset.llamado_id
+
+            await responderLlamado({ 
+                botonRespuesta,
+                profesorId: botonRespuesta.dataset.usuario_id, 
+                llamadoId, 
+                textoRespuesta: botonRespuesta.innerText 
+            })
+        }
+
+        /* ////////////////////////////////////////////////////////////////// */
+
+        const botonesTerminado = document.querySelectorAll('.respuesta-terminado')
+
+        for(const botonTerminado of botonesTerminado) {
+            botonTerminado.addEventListener('click', async () => {
+                const llamado = botonTerminado.parentElement.parentElement
+
+                const llamadoId = llamado.dataset.llamado_id
+                const profesorId = llamado.dataset.usuario_id
+
+                await terminarLlamado({ 
+                    profesor: { 
+                        id: profesorId 
+                    }, 
+                    llamado: { 
+                        id: llamadoId 
+                    } 
+                })
+            })
+        }
+
+        /* ////////////////////////////////////////////////////////////////// */
+
         /**
          * @param {Object} usuario
          * @param {Socket} socket
          * @returns {void}
          */
-        function mostrarBotonesFinales({ profesor, socket }) {
+        function mostrarBotonesFinales({ profesor, socket, llamado }) {
             const respuestas = document.querySelectorAll(`.llamado[data-usuario_id="${profesor.id}"] .respuesta`)
             
             for(const respuesta of respuestas) {
@@ -80,18 +131,12 @@
             }
 
             const terminado = document.createElement('p')
-            terminado.classList.add('respuesta')
+            terminado.classList.add('respuesta', 'respuesta-terminado')
             terminado.innerText = 'Terminado'
             terminado.dataset.usuario_id = profesor.id
 
-            terminado.addEventListener('click', () => {
-                socket.emit('terminar-llamado', { 
-                    usuario_id: profesor.id, 
-                    respuesta: "Terminado", 
-                    nombre: nombrePreceptor, 
-                    apellido: apellidoPreceptor 
-                })
-                document.querySelector(`.llamado[data-usuario_id="${profesor.id}"]`).remove()
+            terminado.addEventListener('click', async () => {
+                await terminarLlamado({ profesor, llamado })
             })
 
             const llamadoRespuestas = document.querySelector(`.llamado[data-usuario_id="${profesor.id}"] .llamado-respuestas`) 
@@ -100,10 +145,89 @@
 
         /* ////////////////////////////////////////////////////////////////// */
 
-        socket.on('cancelar-llamado', (data) => {
+        async function responderLlamado({ botonRespuesta, profesorId, llamadoId, textoRespuesta }) {
+            botonRespuesta.addEventListener('click', async () => {
+                const resultado = await peticion({
+                    url: '/api/respuestas/crear',
+                    metodo: 'POST',
+                    cuerpo: {
+                        llamadoId: llamadoId,
+                        preceptorId: idPreceptor,
+                        mensaje: textoRespuesta,
+                    }
+                })
+
+                socket.emit('respuesta-llamado', { 
+                    usuario_id: profesorId, 
+                    respuesta: textoRespuesta, 
+                    nombre: nombrePreceptor, 
+                    apellido: apellidoPreceptor 
+                })
+
+                mostrarBotonesFinales({ 
+                    profesor: {
+                        id: profesorId
+                    }, 
+                    llamado: {
+                        id: llamadoId
+                    } 
+                })
+            })
+        }
+
+        /**
+         * @param {Object} profesor
+         * @param {Object} llamado
+         * @returns {void}
+         */
+        async function terminarLlamado({ profesor, llamado }) {
+            const resultado = await peticion({
+                url: '/api/llamados/actualizar/' + llamado.id,
+                metodo: 'PUT',
+                cuerpo: {
+                    id_llamado: llamado.id,
+                    finalizado: true
+                }
+            })
+
+            if(!resultado.ok) {
+                console.log(resultado)
+                alert('ERROR GARRAFAL')
+            }
+
+            // ! TERMINAR LLAMADO
+            socket.emit('terminar-llamado', { 
+                usuario_id: profesor.id, 
+                respuesta: "Terminado", 
+                nombre: nombrePreceptor, 
+                apellido: apellidoPreceptor 
+            })
+
+            location.reload()
+        }
+
+        /* ////////////////////////////////////////////////////////////////// */
+
+        // ! CANCELAR LLAMADO
+        socket.on('cancelar-llamado', async (data) => {
             const { usuario_id: idProfesorLlamado } = data
 
             const llamado = document.querySelector('.llamado[data-usuario_id="' + idProfesorLlamado + '"]')
+
+            // Marcar como finalizado y cancelado en la base de datos
+            const llamadoId = llamado.dataset.llamado_id
+
+            const resultado = await peticion({
+                url: '/api/llamados/actualizar/' + llamadoId,
+                metodo: 'PUT',
+                cuerpo: {
+                    id_llamado: llamadoId,
+                    finalizado: true,
+                    cancelado: true
+                }
+            })
+
+            // Eliminar de la vista
             if(llamado) llamado.remove()
         })
 
@@ -120,47 +244,83 @@
                 <p class="historial-titulo">Historial de llamados</p>
 
                 <div class="historial-contenedor">
-                    <div class="historial-item">
-                        <div>
-                            <div class="historial-item-cabecera">
-                                <p class="historial-item-titulo">Nombre del emisor</p>
-                                <p class="historial-item-hora">10:45 AM</p>
-                            </div> 
-                            <div class="historial-item-mensaje">
-                                <p class="historial-item-texto">
-                                    Falta un preceptor en el aula 13 fds fdsdf  
-                                </p>
-                            </div>
-                        </div>
-                        <div class="historial-item-pie">
-                            <p class="historial-item-estado">
-                                <span class="historial-item-estado-texto">Finalizado</span>
-                            </p>
-                        </div>
-                    </div>
+
+                    <% if(llamados !== null) { %>
+                        <% for(let i = 0; i < llamados.length && i < 6; i++) { %>
+                            <% if(llamados[i].finalizado == 1) { %>
+
+                                <div class="historial-item">
+                                    <div>
+                                        <div class="historial-item-cabecera">
+                                            <p class="historial-item-titulo">
+                                                <%= llamados[i].nombre %>
+                                            </p>
+                                            <p class="historial-item-hora">
+                                                <%= formatoHora(llamados[i].fecha_envio) %>
+                                            </p>
+                                        </div> 
+                                        <div class="historial-item-mensaje">
+                                            <p class="historial-item-texto">
+                                                <%= llamados[i].mensaje %>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="historial-item-pie">
+                                        <p class="historial-item-estado <%= llamados[i].cancelado == 1 ? 'historial-estado-cancelado' : 'historial-estado-finalizado' %>">
+                                            <span class="historial-item-estado-texto">
+
+                                                <% if(llamados[i].cancelado == 1) { %>
+                                                    Cancelado
+                                                <% } else { %>
+                                                    Finalizado
+                                                <% } %>
+
+                                            </span>
+                                        </p>
+                                    </div>
+                                </div>
+
+                            <% } %>
+                        <% } %>
+                    <% } %>
+
                 </div>
             </div>
         </div>
         <div class="llamados">
-            <!-- <div class="no-hay-llamados">
-                <h1>No hay llamados pendientes</h1>
-            </div> -->
-
-            <div class="llamado">
-                <div class="llamado-cabecera">
-                    <p class="llamado-titulo">Nombre del emisor</p>
-                    <p class="llamado-mensaje">Falta un preceptor en el aula 13 fds fdsdf</p>
-                </div>
-                <hr>
-                <div class="llamado-cuerpo">
-                    <p>Llamado - Hace 2 minutos</p>
-                </div>
-                <div class="llamado-respuestas">
-                    <a class="respuesta" href="#">Yendo</a>
-                    <a class="respuesta" href="#">No puedo</a>
-                    <a class="respuesta" href="#">Derivo preceptor</a>
-                </div>
-            </div>
+            <% if(llamados !== null) { %>
+                <% llamados.forEach(llamado => { %>
+                    <% if(llamado.finalizado == 0) { %>
+                        <div class="llamado" data-llamado_id="<%= llamado.id_llamado %>" data-usuario_id="<%= llamado.id_emisor %>">
+                            <div class="llamado-cabecera">
+                                <p class="llamado-titulo"><%= llamado.nombre %> <%= llamado.apellido %></p>
+                                <p class="llamado-mensaje"><%= llamado.mensaje %></p>
+                            </div>
+                            <hr>
+                            <div class="llamado-cuerpo">
+                                <p>Llamado -<span class="fecha-envio" datetime="<%= llamado.fecha_envio %>"><%= formato(llamado.fecha_envio) %></span></p>
+                            </div>
+                            <% if(llamado.id_preceptor === null || typeof llamado.id_preceptor == 'undefined') { %>
+                                <div class="llamado-respuestas">
+                                    <p class="respuesta" data-usuario_id="<%= llamado.id_emisor %>">Yendo</p>
+                                    <p class="respuesta" data-usuario_id="<%= llamado.id_emisor %>">No puedo</p>
+                                    <p class="respuesta" data-usuario_id="<%= llamado.id_emisor %>">Derivo preceptor</p>
+                                </div>
+                            <% } else { %> 
+                                <% if(llamado.id_preceptor == usuario.id_usuario) { %>
+                                    <div class="llamado-respuestas">
+                                        <p class="respuesta respuesta-terminado">Terminado</p>
+                                    </div>
+                                <% } %>
+                            <% } %> 
+                        </div>
+                    <% } %>
+                <% }) %>
+            <% } else { %>
+                <!-- <div class="no-hay-llamados">
+                    <h1>No hay llamados pendientes.</h1>
+                </div> -->
+            <% } %>
         </div>
         <div class="columna columna-derecha">
             <div class="preceptores">
