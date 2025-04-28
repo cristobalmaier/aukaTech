@@ -1,12 +1,6 @@
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
-
 CREATE DATABASE IF NOT EXISTS `auka` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 USE `auka`;
 
@@ -48,9 +42,11 @@ CREATE TABLE `llamados` (
   `id_preceptor` int(11) DEFAULT NULL,
   `id_emisor` int(11) NOT NULL,
   `id_curso` int(11) NOT NULL,
-  `numero_nivel` int(11) NOT NULL,
+  `numero_nivel` int(11) NOT NULL DEFAULT 1,
   `mensaje` varchar(300) NOT NULL,
-  `fecha_envio` timestamp NOT NULL DEFAULT current_timestamp()
+  `fecha_envio` timestamp NOT NULL DEFAULT current_timestamp(),
+  `finalizado` tinyint(1) NOT NULL DEFAULT 0,
+  `cancelado` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `niveles` (
@@ -66,6 +62,14 @@ INSERT INTO `niveles` (`numero_nivel`, `nombre_nivel`, `descripcion`) VALUES
 (4, 'Grave', 'Situaciones de alto riesgo que requieren asistencia de profesionales o servicios de emergencia. Ejemplo: desmayo prolongado, convulsiones, heridas serias con sangrado considerable, agresión física con daño evidente.'),
 (5, 'Critico', 'Situaciones extremas con riesgo de vida. Ejemplo: paro cardíaco, traumatismo severo, pérdida del conocimiento prolongada, fallecimiento.');
 
+CREATE TABLE `respuestas_llamados` (
+  `id_respuesta` int(11) NOT NULL,
+  `id_llamado` int(11) NOT NULL,
+  `mensaje` varchar(500) NOT NULL,
+  `id_preceptor` int(11) NOT NULL,
+  `fecha_respuesta` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 CREATE TABLE `usuarios` (
   `id_usuario` int(11) NOT NULL,
   `nombre` varchar(64) NOT NULL,
@@ -77,11 +81,8 @@ CREATE TABLE `usuarios` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 INSERT INTO `usuarios` (`id_usuario`, `nombre`, `apellido`, `email`, `contrasena`, `tipo_usuario`, `autorizado`) VALUES
-(1, 'Alejandro', 'Del Caño', 'alejadro.cano@gmail.com', '$2a$10$p.ODN3lLj5E3KcMzykKTaezvv', 'preceptor', 0),
-(2, 'Ezequiel', 'Torres', 'ezequiel.torres@gmail.com', '$2a$10$4NqshlvJ7W6Nu3eU.8SCU.xZrOPpad65CnG7bFgX0.gAvRwKnY/kq', 'directivo', 0),
-(3, 'Carlos Alberto', 'Robello', 'carlos.robello@gmail.com', '$2a$10$1ZeU/sArc.2fUtZ.QCWs/ep3YZ6yO.9u6jEa9vpHmBPcGzqZo6HSS', 'profesor', 0),
-(6, 'Julian', 'Grippaldi', 'juliangrippaldi@gmail.com', '$2b$05$zLQZzxR1p.iEDy59ENQ8KesMltgcMp2V2bc8mstBEwNXkSjJa8toy', 'profesor', 1),
-(7, 'elpepe', 'ponardo', 'elpepe@gmail.com', '$2b$05$F5WNqz9aBPIlWK9g7vNuv.AGJrLEqDfFb5eSVvfHBx4MmW8v2xDeK', 'profesor', 0);
+(8, 'Alejandro', 'Del Caño', 'alejandro@gmail.com', '$2b$05$j007.4grrUBOvurQc4tpBu86J6XjG09flrwfTA1xlwNUjewZx/Fjq', 'preceptor', 1),
+(9, 'Carlos Alberto', 'Robello', 'robello@gmail.com', '$2b$05$FHPuGgstOyFL6LLtP/829e./zEEx4agJNoRsh1YMIj6zxDh3GFaT.', 'profesor', 1);
 
 
 ALTER TABLE `cursos`
@@ -89,13 +90,19 @@ ALTER TABLE `cursos`
 
 ALTER TABLE `llamados`
   ADD PRIMARY KEY (`id_llamado`),
-  ADD KEY `id_profesor` (`id_preceptor`,`id_emisor`,`id_curso`),
+  ADD KEY `id_profesor` (`id_emisor`,`id_curso`),
   ADD KEY `id_emisor` (`id_emisor`),
   ADD KEY `id_curso` (`id_curso`),
-  ADD KEY `numero_nivel` (`numero_nivel`);
+  ADD KEY `numero_nivel` (`numero_nivel`),
+  ADD KEY `id_preceptor` (`id_preceptor`);
 
 ALTER TABLE `niveles`
   ADD PRIMARY KEY (`numero_nivel`);
+
+ALTER TABLE `respuestas_llamados`
+  ADD PRIMARY KEY (`id_respuesta`),
+  ADD KEY `id_llamado` (`id_preceptor`),
+  ADD KEY `id_llamado_2` (`id_llamado`);
 
 ALTER TABLE `usuarios`
   ADD PRIMARY KEY (`id_usuario`);
@@ -105,19 +112,18 @@ ALTER TABLE `cursos`
   MODIFY `id_curso` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 ALTER TABLE `llamados`
-  MODIFY `id_llamado` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_llamado` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=73;
+
+ALTER TABLE `respuestas_llamados`
+  MODIFY `id_respuesta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 ALTER TABLE `usuarios`
-  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 
 ALTER TABLE `llamados`
-  ADD CONSTRAINT `llamados_ibfk_1` FOREIGN KEY (`id_preceptor`) REFERENCES `usuarios` (`id_usuario`),
   ADD CONSTRAINT `llamados_ibfk_2` FOREIGN KEY (`id_emisor`) REFERENCES `usuarios` (`id_usuario`),
   ADD CONSTRAINT `llamados_ibfk_3` FOREIGN KEY (`id_curso`) REFERENCES `cursos` (`id_curso`),
-  ADD CONSTRAINT `llamados_ibfk_4` FOREIGN KEY (`numero_nivel`) REFERENCES `niveles` (`numero_nivel`);
+  ADD CONSTRAINT `llamados_ibfk_4` FOREIGN KEY (`numero_nivel`) REFERENCES `niveles` (`numero_nivel`),
+  ADD CONSTRAINT `llamados_ibfk_5` FOREIGN KEY (`id_preceptor`) REFERENCES `usuarios` (`id_usuario`);
 COMMIT;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
