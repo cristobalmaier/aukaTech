@@ -23,6 +23,7 @@
     <script type="module">
         import { peticion } from './js/peticion.js'
         import { formatearHora } from './js/formatearHora.js'
+        import { formato } from './js/renderizarTiempo.js'
 
         const socket = io();
 
@@ -39,6 +40,7 @@
         // Elementos HTML
         const llamadosContenedor = document.querySelector('.llamados')
         const historialContenedor = document.querySelector('.historial-contenedor')
+        const noHayLlamados = document.querySelector('.no-hay-llamados')
 
         /* ////////////////////////////////////////////////////////////////// */
 
@@ -61,7 +63,7 @@
                 </div>
                 <hr>
                 <div class="llamado-cuerpo">
-                    <p>Llamado - Hace 2 minutos</p>
+                    <p>Llamado - <span class="fecha-envio" datetime="${llamado.fecha_envio}"></span></p>   
                 </div>
                 `
 
@@ -79,9 +81,16 @@
                 llamadoRespuestas.appendChild(respuesta)
             }
             
-            nuevoLlamado.appendChild(llamadoRespuestas)
-                
-            llamadosContenedor.appendChild(nuevoLlamado)
+            nuevoLlamado.appendChild(llamadoRespuestas) 
+            llamadosContenedor.prepend(nuevoLlamado)
+
+            // Eliminar texto de que no hay llamados
+            if(!noHayLlamados.classList.contains('esconder')) {
+                noHayLlamados.classList.add('esconder')
+            }  
+
+            // Renderizar tiempo de envio en la vista del panel
+            timeago.render(nuevoLlamado.querySelector('.fecha-envio'))
         })
 
         /* ////////////////////////////////////////////////////////////////// */
@@ -213,6 +222,14 @@
             location.reload()
         }
 
+        function siNoHayLlamados() {
+            const llamados = document.querySelectorAll('.llamado')
+
+            if(llamados.length === 0) {
+                noHayLlamados.classList.remove('esconder')
+            }       
+        }
+
         /* ////////////////////////////////////////////////////////////////// */
 
         // ! CANCELAR LLAMADO
@@ -236,6 +253,9 @@
 
             // Eliminar de la vista
             if(llamado) llamado.remove()
+
+            // Mostrar texto si no hay llamados pendientes
+            siNoHayLlamados()
         })
 
         /* ////////////////////////////////////////////////////////////////// */
@@ -295,7 +315,7 @@
             </div>
         </div>
         <div class="llamados">
-            <% if(llamados !== null) { %>
+            <% if(llamados !== null && llamados.filter(llamado => llamado.finalizado == 0).length > 0) { %>
                 <% llamados.forEach(llamado => { %>
                     <% if(llamado.finalizado == 0) { %>
                         <div class="llamado" data-llamado_id="<%= llamado.id_llamado %>" data-usuario_id="<%= llamado.id_emisor %>">
@@ -324,9 +344,9 @@
                     <% } %>
                 <% }) %>
             <% } else { %>
-                <!-- <div class="no-hay-llamados">
+                <div class="no-hay-llamados">
                     <h1>No hay llamados pendientes.</h1>
-                </div> -->
+                </div>
             <% } %>
         </div>
         <div class="columna columna-derecha">
