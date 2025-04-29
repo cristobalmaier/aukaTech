@@ -77,7 +77,7 @@ CREATE TABLE `usuarios` (
   `email` varchar(64) NOT NULL,
   `contrasena` varchar(255) NOT NULL,
   `tipo_usuario` enum('preceptor','profesor','directivo','') NOT NULL DEFAULT 'profesor',
-  `autorizado` tinyint(1) NOT NULL
+  `autorizado` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 INSERT INTO `usuarios` (`id_usuario`, `nombre`, `apellido`, `email`, `contrasena`, `tipo_usuario`, `autorizado`) VALUES
@@ -112,13 +112,13 @@ ALTER TABLE `cursos`
   MODIFY `id_curso` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 ALTER TABLE `llamados`
-  MODIFY `id_llamado` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=73;
+  MODIFY `id_llamado` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=103;
 
 ALTER TABLE `respuestas_llamados`
-  MODIFY `id_respuesta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `id_respuesta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 
 ALTER TABLE `usuarios`
-  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 
 ALTER TABLE `llamados`
