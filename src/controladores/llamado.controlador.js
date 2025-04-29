@@ -29,10 +29,10 @@ class LlamadoControlador {
     }
 
     crearLlamado = async (req, res, next) => {
-        const { id_preceptor, id_emisor, id_curso, numero_nivel, mensaje, fecha_envio } = req.body || {}
+        const { id_preceptor, id_emisor, id_curso, numero_nivel, mensaje } = req.body || {}
 
         try {
-            const resultado = await this.llamadoServicio.crearLlamado({ id_preceptor, id_emisor, id_curso, numero_nivel, mensaje, fecha_envio })
+            const resultado = await this.llamadoServicio.crearLlamado({ id_preceptor, id_emisor, id_curso, numero_nivel, mensaje })
             res.status(200).json({ mensaje: 'llamado creado', data: { id: resultado.insertId } }) 
         } catch(err) {
             next(err)

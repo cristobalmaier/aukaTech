@@ -7,6 +7,9 @@
     <!-- ICONOS (Font Awesome) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
+    <!-- ANIMACIONES (Animate.css) -->
+    <link rel="stylesheet"href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    
     <!-- SOCKET.IO -->
     <script type="module" src="/socket.io/socket.io.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/timeago.js@4.0.2/dist/timeago.min.js"></script>
@@ -44,6 +47,10 @@
             const { usuario: profesor, llamado } = data
 
             const nuevoLlamado = document.createElement('div');
+
+            // Animacion
+            nuevoLlamado.classList.add('animate__animated', 'animate__fadeInDown')
+
             nuevoLlamado.classList.add('llamado');
             nuevoLlamado.dataset.usuario_id = profesor.id
             nuevoLlamado.dataset.llamado_id = llamado.id
@@ -253,7 +260,7 @@
                                     <div>
                                         <div class="historial-item-cabecera">
                                             <p class="historial-item-titulo">
-                                                <%= llamados[i].nombre %>
+                                                <%= llamados[i].nombre %> <%= llamados[i].apellido %>
                                             </p>
                                             <p class="historial-item-hora">
                                                 <%= formatoHora(llamados[i].fecha_envio) %>

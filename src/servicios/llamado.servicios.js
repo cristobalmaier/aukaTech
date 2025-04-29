@@ -18,8 +18,8 @@ class LlamadoServicio {
         return resultado
     }
 
-    static async crearLlamado({ id_preceptor, id_emisor, id_curso, numero_nivel, mensaje, fecha_envio }) {
-        const { valido, errores } = validarLlamado({ id_preceptor, id_emisor, id_curso, numero_nivel, mensaje, fecha_envio })
+    static async crearLlamado({ id_preceptor, id_emisor, id_curso, numero_nivel, mensaje }) {
+        const { valido, errores } = validarLlamado({ id_preceptor, id_emisor, id_curso, numero_nivel, mensaje })
         if (!valido) {
             const mensaje = Object.values(errores)[0]
             throw new ErrorCliente(mensaje, 400)
@@ -36,7 +36,7 @@ class LlamadoServicio {
         const cursoExiste = await query('SELECT * FROM cursos WHERE id_curso = ?', id_curso)
         if (!cursoExiste) throw new ErrorCliente('El curso no existe', 400)
 
-        const resultado = await query(`INSERT INTO llamados (id_preceptor, id_emisor, id_curso, numero_nivel, mensaje, fecha_envio) VALUES (?, ?, ?, ?, ?, ?)`, [id_preceptor, id_emisor, id_curso, numero_nivel, mensaje, fecha_envio])
+        const resultado = await query(`INSERT INTO llamados (id_preceptor, id_emisor, id_curso, numero_nivel, mensaje) VALUES (?, ?, ?, ?, ?)`, [id_preceptor, id_emisor, id_curso, numero_nivel, mensaje])
         return resultado
     }
 
@@ -45,14 +45,13 @@ class LlamadoServicio {
         return resultado
     }
 
-    static async actualizarLlamado({ id_llamado, id_preceptor, id_emisor, id_curso, numero_nivel, mensaje, fecha_envio, finalizado, cancelado }) {
+    static async actualizarLlamado({ id_llamado, id_preceptor, id_emisor, id_curso, numero_nivel, mensaje, finalizado, cancelado }) {
         let llamado = {
             id_preceptor,
             id_emisor,
             id_curso,
             numero_nivel,
             mensaje,
-            fecha_envio,
             finalizado,
             cancelado 
         };

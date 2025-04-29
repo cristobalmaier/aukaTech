@@ -85,7 +85,7 @@ hr {
 .historial {
     padding: 20px;
     max-height: 850px;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 .historial-contenedor {
