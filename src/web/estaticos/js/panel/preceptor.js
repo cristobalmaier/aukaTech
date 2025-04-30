@@ -78,7 +78,13 @@ socket.on('nuevo-llamado', async (data) => {
 
 // ! CANCELAR LLAMADO
 socket.on('cancelar-llamado', async (data) => {
-    const { usuario_id: idProfesorLlamado } = data
+    const { 
+        usuario_id: idProfesorLlamado,
+        nombre: nombreProfesor,
+        apellido: apellidoProfesor,
+        fecha_envio: fechaLlamado,
+        mensaje
+     } = data
 
     const llamado = document.querySelector('.llamado[data-usuario_id="' + idProfesorLlamado + '"]')
 
@@ -97,6 +103,38 @@ socket.on('cancelar-llamado', async (data) => {
 
     // Eliminar de la vista
     if (llamado) llamado.remove()
+
+    // Agregar al historial
+    const historialItem = document.createElement('div')
+    historialItem.classList.add('historial-item')
+    historialItem.classList.add('animate__animated', 'animate__fadeInDown') // Animacion
+
+    historialItem.innerHTML = `
+        <div>
+            <div class="historial-item-cabecera">
+                <p class="historial-item-titulo">
+                    ${nombreProfesor} ${apellidoProfesor}
+                </p>
+                <p class="historial-item-hora">
+                    ${formatearHora(fechaLlamado)}
+                </p>
+            </div> 
+            <div class="historial-item-mensaje">
+                <p class="historial-item-texto">
+                    ${mensaje}
+                </p>
+            </div>
+        </div>
+        <div class="historial-item-pie">
+            <p class="historial-item-estado historial-estado-cancelado">
+                <span class="historial-item-estado-texto">
+                    Cancelado
+                </span>
+            </p>
+        </div>
+    `
+
+    historialContenedor.prepend(historialItem)
 
     // Mostrar texto si no hay llamados pendientes
     siNoHayLlamados({ noHayLlamados })

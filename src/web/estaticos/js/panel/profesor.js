@@ -18,6 +18,8 @@ const estadoLlamadoTexto = document.querySelector('.estado-llamado-texto')
 
 /* ////////////////////////////////////////////////////////////////// */
 
+// ! RESPUESTA DE LLAMADO (BOTONES DE RESPUESTA DE LOS PRECEPTORES)
+
 socket.on('respuesta-llamado', (data) => {
     const {
         nombre: nombrePreceptor,
@@ -37,6 +39,8 @@ socket.on('respuesta-llamado', (data) => {
 
 /* ////////////////////////////////////////////////////////////////// */
 
+// ! TERMINAR LLAMADO (BOTON DE TERMINAR DE LOS PRECEPTORES)
+
 socket.on('terminar-llamado', (data) => {
     const {
         nombre: nombrePreceptor,
@@ -48,6 +52,7 @@ socket.on('terminar-llamado', (data) => {
     // Si el llamado es del mismo profesor, no se muestra la respuesta
     if (idProfesorLlamado != idProfesor) return
 
+    formulario.dataset.mensaje = ''
     estadoLlamado.classList.add('esconder')
     estadoLlamadoTitulo.innerText = 'Estado de tu llamado'
     estadoLlamadoTexto.innerText = 'Pendiente...'
@@ -55,10 +60,21 @@ socket.on('terminar-llamado', (data) => {
 })
 
 /* ////////////////////////////////////////////////////////////////// */
+
+// ! CANCELAR LLAMADO (BOTON DE CANCELAR)
 
 botonCancelarLlamado.addEventListener('click', () => {
-    socket.emit('cancelar-llamado', { usuario_id: idProfesor })
+    const mensaje = formulario.dataset.mensaje
 
+    socket.emit('cancelar-llamado', { 
+        usuario_id: idProfesor,
+        nombre: nombreProfesor,
+        apellido: apellidoProfesor,
+        fecha_envio: new Date(),
+        mensaje
+    })
+
+    formulario.dataset.mensaje = ''
     estadoLlamado.classList.add('esconder')
     estadoLlamadoTitulo.innerText = 'Estado de tu llamado'
     estadoLlamadoTexto.innerText = 'Pendiente...'
@@ -66,11 +82,15 @@ botonCancelarLlamado.addEventListener('click', () => {
 })
 
 /* ////////////////////////////////////////////////////////////////// */
+
+// ! LLAMADO (BOTON DE LLAMAR)
 
 botonLlamado.addEventListener('click', async () => {
     const mensaje = formulario.mensaje.value
 
+    formulario.dataset.mensaje = mensaje
     estadoLlamado.classList.remove('esconder')
+
     botonLlamado.disabled = true
 
     const resultado = await peticion({
