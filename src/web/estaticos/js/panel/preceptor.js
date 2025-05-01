@@ -10,6 +10,9 @@ const nombrePreceptor = document.documentElement.dataset.nombre
 const apellidoPreceptor = document.documentElement.dataset.apellido
 const tipoUsuario = document.documentElement.dataset.tipo_usuario
 
+const niveles = [
+    'leve', 'moderado', 'urgente'
+]
 const respuestas = [
     "Yendo", "No puedo", "Derivo otro preceptor"
 ]
@@ -28,13 +31,14 @@ renderizarTiempos();
 socket.on('nuevo-llamado', async (data) => {
     const { usuario: profesor, llamado } = data
 
+    const nivelImportancia = niveles[llamado.numero_nivel - 1]
     const nuevoLlamado = document.createElement('div');
 
     // Animacion
     nuevoLlamado.classList.add('animate__animated', 'animate__fadeInDown')
 
     // Agregar clases al div
-    nuevoLlamado.classList.add('llamado');
+    nuevoLlamado.classList.add('llamado', nivelImportancia);
     nuevoLlamado.dataset.usuario_id = profesor.id
     nuevoLlamado.dataset.llamado_id = llamado.id
     nuevoLlamado.innerHTML = `
@@ -44,7 +48,7 @@ socket.on('nuevo-llamado', async (data) => {
                 </div>
                 <hr>
                 <div class="llamado-cuerpo">
-                    <p>Llamado - <span class="fecha-envio" datetime="${llamado.fecha_envio}"></span></p>   
+                    <p><span class="llamado-cuerpo-texto">Llamado - <span class="fecha-envio" datetime="${llamado.fecha_envio}"></span></span></p>   
                 </div>
                 `
 
@@ -71,7 +75,7 @@ socket.on('nuevo-llamado', async (data) => {
     }
 
     // Renderizar tiempo de envio en la vista del panel
-    timeago.render(nuevoLlamado.querySelector('.fecha-envio'))
+    timeago.render(nuevoLlamado.querySelector('.fecha-envio'), 'es')
 })
 
 /* ////////////////////////////////////////////////////////////////// */
@@ -278,6 +282,27 @@ function siNoHayLlamados({ noHayLlamados }) {
 }
 
 function renderizarTiempos() {
+    const local = (numero, index) => {
+        return [
+            ['justo ahora', 'en un rato'],
+            ['hace %s segundos', 'en %s segundos'],
+            ['hace 1 minuto', 'en 1 minuto'],
+            ['hace %s minutos', 'en %s minutos'],
+            ['hace 1 hora', 'en 1 hora'],
+            ['hace %s horas', 'en %s horas'],
+            ['hace 1 día', 'en 1 día'],
+            ['hace %s días', 'en %s días'],
+            ['hace 1 semana', 'en 1 semana'],
+            ['hace %s semanas', 'en %s semanas'],
+            ['hace 1 mes', 'en 1 mes'],
+            ['hace %s meses', 'en %s meses'],
+            ['hace 1 año', 'en 1 año'],
+            ['hace %s años', 'en %s años'],
+          ][index];
+    }
+
+    timeago.register('es', local);
+
     const nodos = document.querySelectorAll('.fecha-envio')
-    if(nodos.length > 0) timeago.render(nodos)
+    if(nodos.length > 0) timeago.render(nodos, 'es')
 }

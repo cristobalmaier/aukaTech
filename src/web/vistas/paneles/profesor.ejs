@@ -3,9 +3,13 @@
 <head>
     <%- include('../parciales/head.html') %>
     <link rel="stylesheet" href="panel.css">
+    <link rel="stylesheet" href="alertas.css">
 
     <!-- ICONOS (Font Awesome) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- ANIMACIONES (Animate.css) -->
+    <link rel="stylesheet"href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 
     <!-- SOCKET.IO -->
     <script type="module" src="/socket.io/socket.io.js"></script>
@@ -25,20 +29,30 @@
                     <div class="formulario-cabecera">
                         <h2>Realizar llamado</h2>
                     </div>
-                    <label for="">Seleccionar preceptor</label>
+                    <!-- <label for="">Seleccionar preceptor</label>
                     <select name="preceptor" id="">
                         <option value="0">Enviar a todos</option>
                         <option value="1">Alejandro</option>
                         <option value="2">Noemi</option>
-                    </select>
-                    <label for="">Mensaje</label>
-                    <textarea name="mensaje" placeholder="Necesito un preceptor en L1..." name="mensaje"></textarea>
-                    <label for="">Nivel de importancia</label>
-                    <select name="nivel" id="">
-                        <option value="0">Alta</option>
-                        <option value="1">Medio</option>
-                        <option value="2">Baja</option>
-                    </select>
+                    </select> -->
+                    <div class="formulario-columna">
+                        <label for="mensaje">Mensaje</label>
+                        <textarea name="mensaje" id="mensaje" placeholder="Necesito un preceptor en L1..." name="mensaje"></textarea>
+                        <p class="limite-caracteres">
+                            <span id="caracteres-restantes">0</span>
+                            <span>/</span>
+                            <span id="caracteres-maximos">300</span>
+                        </p>
+                    </div>
+                    <div class="formulario-columna">
+                        <label for="nivel">Nivel de importancia</label>
+                        <div class="botones-niveles">
+                            <button <%= typeof llamado !== 'undefined' && llamado.data.finalizado == 0 ? 'disabled' : '' %> type="button" class="boton-select nivel-leve selected" data-nivel="1">Leve</button>
+                            <button <%= typeof llamado !== 'undefined' && llamado.data.finalizado == 0 ? 'disabled' : '' %> type="button" class="boton-select nivel-moderado" data-nivel="2">Moderado</button>
+                            <button <%= typeof llamado !== 'undefined' && llamado.data.finalizado == 0 ? 'disabled' : '' %> type="button" class="boton-select nivel-urgente" data-nivel="3">Urgente</button>
+                            <input type="hidden" name="nivel" id="nivel-input" value="1">
+                        </div>
+                    </div>
 
                     <% if(typeof llamado !== 'undefined' && llamado.data.finalizado == 0) { %>
                         <button type="button" id="boton-llamado" disabled>Llamar preceptor</button>

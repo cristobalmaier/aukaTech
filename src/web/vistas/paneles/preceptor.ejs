@@ -30,7 +30,7 @@
                     <% if(llamados !== null) { %>
                         <% for(let i = 0; i < llamados.length && i < 6; i++) { %>
                             <% if(llamados[i].finalizado == 1) { %>
-
+        
                                 <div class="historial-item">
                                     <div>
                                         <div class="historial-item-cabecera">
@@ -73,14 +73,18 @@
             <% if(llamados !== null && llamados.filter(llamado => llamado.finalizado == 0).length > 0) { %>
                 <% llamados.forEach(llamado => { %>
                     <% if(llamado.finalizado == 0) { %>
-                        <div class="llamado" data-llamado_id="<%= llamado.id_llamado %>" data-usuario_id="<%= llamado.id_emisor %>">
+
+                        <% const niveles = ['leve', 'moderado', 'urgente'] %>
+                        <% const nivel = niveles[llamado.numero_nivel - 1] %>
+
+                        <div class="llamado <%= nivel %>" data-llamado_id="<%= llamado.id_llamado %>" data-usuario_id="<%= llamado.id_emisor %>">
                             <div class="llamado-cabecera">
                                 <p class="llamado-titulo"><%= llamado.nombre %> <%= llamado.apellido %></p>
                                 <p class="llamado-mensaje"><%= llamado.mensaje %></p>
                             </div>
                             <hr>
                             <div class="llamado-cuerpo">
-                                <p>Llamado -<span class="fecha-envio" datetime="<%= llamado.fecha_envio %>"><%= formato(llamado.fecha_envio) %></span></p>
+                                <p><span class="llamado-cuerpo-texto">Llamado - <span class="fecha-envio" datetime="<%= llamado.fecha_envio %>"><%= formato(llamado.fecha_envio) %></span></span></p>
                             </div>
                             <% if(llamado.id_preceptor === null || typeof llamado.id_preceptor == 'undefined') { %>
                                 <div class="llamado-respuestas">

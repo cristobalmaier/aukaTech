@@ -12,8 +12,12 @@
     --color-estado-cancelado: #FF0000;
     --color-estado-derivado: #FFA515;
 
-    --color-fondo-llamado: #ffffff;
-    --color-primario-llamado: #4DE04D;
+    --color-fondo-llamado: #ffffff; /* COLOR LEVE */
+    --color-primario-llamado: #4DE04D; 
+    --color-fondo-llamado-moderado: #F87943;
+    --color-primario-llamado-moderado: #FFAE3D;
+    --color-fondo-llamado-urgente: #FF5959;
+    --color-primario-llamado-urgente: #FF0000;
 
     --color-fondo-respuesta: #DBEAFE;
     --color-texto-respuesta: #4F63EB;
@@ -25,6 +29,12 @@
     --color-boton-secundario: #F0F0F0;
     --color-boton-hover-secundario: #E0E0E0;
     --color-boton-texto-secundario: #969696;
+
+    --color-fondo-boton-select: rgb(228 228 231 / 50%); 
+    --color-borde-boton-select:  #E4E4E7;
+    --color-leve-boton-select: #45D945;
+    --color-moderado-boton-select: #F87943;
+    --color-urgente-boton-select: #E93939;
 
     --color-texto-siglas: #B776FF;
     --color-fondo-siglas: #F3E8FF;
@@ -217,13 +227,55 @@ hr {
     flex-direction: column;
     gap: 25px;
     width: 100%;
-    max-width: 407px;
+    max-width: 415px;
     height: 100%;
     border-radius: 15px;
     box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.25);
-    background-color: var(--color-fondo-llamado);
     padding: 25px;
 }
+
+.llamado-cuerpo p::before {
+    content: '';
+    width: 30px;
+    height: 30px;
+    display: inline-block;
+    border-radius: 50%;
+}
+
+/* ///////// COLORES DE LLAMADO ///////// */
+
+.llamado.leve {
+    background-color: var(--color-fondo-llamado);
+}
+.llamado.leve .llamado-cuerpo p::before {
+    background-color: var(--color-primario-llamado);
+}
+
+.llamado.moderado {
+    background-color: var(--color-fondo-llamado-moderado);
+    color: #fff;
+}
+.llamado.moderado .llamado-cuerpo p::before {
+    background-color: var(--color-primario-llamado-moderado);
+}
+.llamado.moderado .respuesta {
+    color: var(--color-fondo-llamado-moderado);
+    background-color: #fff;
+}
+
+.llamado.urgente {
+    background-color: var(--color-fondo-llamado-urgente);
+    color: #fff;
+}
+.llamado.urgente .llamado-cuerpo p::before {
+    background-color: var(--color-primario-llamado-urgente);
+}
+.llamado.urgente .respuesta {
+    color: var(--color-fondo-llamado-urgente);
+    background-color: #fff;
+}
+
+/* //////////////////////////////////// */
 
 .llamado-titulo {
     font-size: 30px;
@@ -244,15 +296,6 @@ hr {
     display: flex;
     align-items: center;
     gap: 15px;
-}
-
-.llamado-cuerpo p::before {
-    content: '';
-    width: 30px;
-    height: 30px;
-    display: inline-block;
-    border-radius: 50%;
-    background-color: var(--color-primario-llamado);
 }
 
 .llamado-respuestas {
@@ -284,6 +327,12 @@ hr {
     margin: 20px 320px 20px 20px;
 }
 
+.formulario-llamado .formulario-columna {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 25px;
+}
+
 .formulario-llamado h2 {
     font-size: 24px;
     font-weight: 500;
@@ -299,6 +348,7 @@ hr {
     width: 100%;
     max-height: 700px;
     padding: 20px;
+    transition: 0.3s ease all;
 }
 
 .formulario-llamado label {
@@ -314,11 +364,18 @@ hr {
     border: 2px solid var(--color-borde);
     padding: 10px 16px;
     outline: none;
-    margin-bottom: 25px;
 }
 
 .formulario-llamado textarea {
     resize: vertical;
+    min-height: 100px;
+    max-height: 300px;
+    margin-bottom: 10px;
+}
+
+.formulario-llamado .limite-caracteres {
+    text-align: right;
+    color: var(--color-texto-secundario);
 }
 
 .formulario-llamado button {
@@ -339,6 +396,48 @@ hr {
     background-color: #aaa; /* o usa un --color-boton-disabled si tienes uno definido */
     cursor: not-allowed;
     opacity: 0.6;
+}
+
+.formulario-llamado .botones-niveles {
+    display: flex;
+    gap: 10px;
+}
+
+.formulario-llamado .boton-select {
+    all: unset;
+    cursor: pointer;
+    box-shadow: inset 0 0 0 2px var(--color-borde-boton-select);
+    background-color: var(--color-fondo-boton-select);
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 5px;
+    flex-grow: 1;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.formulario-llamado .nivel-leve.selected {
+    box-shadow: inset 0 0 0 2px var(--color-leve-boton-select);
+    color: var(--color-leve-boton-select);
+}
+
+.formulario-llamado .nivel-moderado.selected {
+    box-shadow: inset 0 0 0 2px var(--color-moderado-boton-select);
+    color: var(--color-moderado-boton-select);
+}
+
+.formulario-llamado .nivel-urgente.selected {
+    box-shadow: inset 0 0 0 2px var(--color-urgente-boton-select);
+    color: var(--color-urgente-boton-select);
+}
+
+.formulario-llamado .boton-select:disabled {
+    box-shadow: inset 0 0 0 2px var(--color-borde-boton-select);
+    background-color: var(--color-fondo-boton-select);
+    color: var(--color-texto-secundario);
+    cursor: not-allowed;
 }
 
 .formulario-llamado .boton-cancelar {

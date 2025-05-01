@@ -1,3 +1,4 @@
+import { alerta } from '../alerta.js';
 import { peticion } from '../peticion.js'
 
 const socket = io();
@@ -12,9 +13,18 @@ const tipoUsuario = document.documentElement.dataset.tipo_usuario
 const formulario = document.getElementById('formulario')
 const botonLlamado = document.getElementById('boton-llamado')
 const botonCancelarLlamado = document.querySelector('.boton-cancelar')
+
+const botonesNiveles = document.querySelectorAll('.boton-select')
+const inputNivel = document.getElementById('nivel-input')
+const inputMensaje = document.getElementById('mensaje')
+const limiteCaracteres = document.querySelector('.limite-caracteres')
+const textoCaracteresRestantes = document.getElementById('caracteres-restantes')
+const textoCaracteresMaximos = document.getElementById('caracteres-maximos')
+
 const estadoLlamado = document.querySelector('.estado-llamado')
 const estadoLlamadoTitulo = document.querySelector('.estado-llamado-titulo')
 const estadoLlamadoTexto = document.querySelector('.estado-llamado-texto')
+
 
 /* ////////////////////////////////////////////////////////////////// */
 
@@ -52,11 +62,7 @@ socket.on('terminar-llamado', (data) => {
     // Si el llamado es del mismo profesor, no se muestra la respuesta
     if (idProfesorLlamado != idProfesor) return
 
-    formulario.dataset.mensaje = ''
-    estadoLlamado.classList.add('esconder')
-    estadoLlamadoTitulo.innerText = 'Estado de tu llamado'
-    estadoLlamadoTexto.innerText = 'Pendiente...'
-    botonLlamado.disabled = false
+    desbloquearFormulario()
 })
 
 /* ////////////////////////////////////////////////////////////////// */
@@ -66,7 +72,7 @@ socket.on('terminar-llamado', (data) => {
 botonCancelarLlamado.addEventListener('click', () => {
     const mensaje = formulario.dataset.mensaje
 
-    socket.emit('cancelar-llamado', { 
+    socket.emit('cancelar-llamado', {
         usuario_id: idProfesor,
         nombre: nombreProfesor,
         apellido: apellidoProfesor,
@@ -74,11 +80,7 @@ botonCancelarLlamado.addEventListener('click', () => {
         mensaje
     })
 
-    formulario.dataset.mensaje = ''
-    estadoLlamado.classList.add('esconder')
-    estadoLlamadoTitulo.innerText = 'Estado de tu llamado'
-    estadoLlamadoTexto.innerText = 'Pendiente...'
-    botonLlamado.disabled = false
+    desbloquearFormulario()
 })
 
 /* ////////////////////////////////////////////////////////////////// */
@@ -87,11 +89,23 @@ botonCancelarLlamado.addEventListener('click', () => {
 
 botonLlamado.addEventListener('click', async () => {
     const mensaje = formulario.mensaje.value
+    const nivel = parseInt(formulario.nivel.value)
 
-    formulario.dataset.mensaje = mensaje
-    estadoLlamado.classList.remove('esconder')
+    // Validaciones
+    if(!mensaje || mensaje.length === 0) {
+        formulario.mensaje.focus()
+        formulario.mensaje.style.borderColor = '#FF0000'
+        return alerta({ mensaje: 'Por favor, escribe tu mensaje', tipo: 'error' })
+    }
 
-    botonLlamado.disabled = true
+    if(mensaje.length > 300) {
+        formulario.mensaje.focus()
+        formulario.mensaje.style.borderColor = '#FF0000'
+        return alerta({ mensaje: 'Estas sobrepasando el limite de caracteres', tipo: 'error' })
+    }
+
+    // Desactivar botones
+    bloquearFormulario({ mensaje })
 
     const resultado = await peticion({
         url: '/api/llamados/crear',
@@ -100,7 +114,7 @@ botonLlamado.addEventListener('click', async () => {
             id_preceptor: null,
             id_emisor: idProfesor,
             id_curso: 12,
-            numero_nivel: 1,
+            numero_nivel: nivel,
             mensaje
         }
     })
@@ -122,7 +136,62 @@ botonLlamado.addEventListener('click', async () => {
         llamado: {
             id: llamadoInfo.data.id,
             fecha_envio: new Date(),
+            numero_nivel: nivel,
             mensaje
         }
     })
 })
+
+/* ////////////////////////////////////////////////////////////////// */
+
+// ! SELECCION DE NIVEL DE IMPPORTANCIA DEL LLAMADO
+
+botonesNiveles.forEach(boton => {
+    boton.addEventListener('click', () => {
+        botonesNiveles.forEach(btn => btn.classList.remove('selected'));
+        boton.classList.add('selected');
+        inputNivel.value = boton.dataset.nivel;
+    });
+});
+
+/* ////////////////////////////////////////////////////////////////// */
+
+// ! CARACTERES RESTANTES
+
+inputMensaje.addEventListener('input', () => {
+    calcularCaracteres()
+})
+
+function calcularCaracteres() {
+    const caracteres = inputMensaje.value.length
+    const maximo = textoCaracteresMaximos.innerText
+
+    textoCaracteresRestantes.innerText = caracteres
+
+    if(caracteres > maximo) {
+        inputMensaje.style.borderColor = '#FF0000'
+        limiteCaracteres.style.color = '#FF0000'
+        return
+    }
+
+    inputMensaje.style.borderColor = 'var(--color-borde)'
+    limiteCaracteres.style.color = 'var(--color-texto-secundario)'
+}
+
+/* ////////////////////////////////////////////////////////////////// */
+
+function bloquearFormulario({ mensaje }) {
+    formulario.dataset.mensaje = mensaje
+    estadoLlamado.classList.remove('esconder')
+    botonLlamado.disabled = true
+    botonesNiveles.forEach(boton => boton.disabled = true)
+}
+
+function desbloquearFormulario() {
+    formulario.dataset.mensaje = ''
+    estadoLlamado.classList.add('esconder')
+    estadoLlamadoTitulo.innerText = 'Estado de tu llamado'
+    estadoLlamadoTexto.innerText = 'Pendiente...'
+    botonLlamado.disabled = false
+    botonesNiveles.forEach(boton => boton.disabled = false)
+}
