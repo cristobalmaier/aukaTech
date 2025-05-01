@@ -1,6 +1,7 @@
 import { peticion } from '../peticion.js'
 import { formatearHora } from '../formatearHora.js'
 import { formato } from '../renderizarTiempo.js'
+import { alerta } from '../alerta.js'
 
 const socket = io();
 
@@ -14,13 +15,14 @@ const niveles = [
     'leve', 'moderado', 'urgente'
 ]
 const respuestas = [
-    "Yendo", "No puedo", "Derivo otro preceptor"
+    "Yendo", "En camino", "Enseguida", "Voy para allá"
 ]
 
 // Elementos HTML
 const llamadosContenedor = document.querySelector('.llamados')
 const historialContenedor = document.querySelector('.historial-contenedor')
 const noHayLlamados = document.querySelector('.no-hay-llamados')
+const notificacion = document.getElementById('notificacion')
 
 // timeago.js (para los minutos pasados en tiempo real)
 renderizarTiempos();
@@ -61,7 +63,14 @@ socket.on('nuevo-llamado', async (data) => {
         respuesta.innerText = textoRespuesta
         respuesta.dataset.usuario_id = profesor.id
 
-        await responderLlamado({ botonRespuesta: respuesta, llamadoId: llamado.id, profesorId: profesor.id, textoRespuesta })
+        await responderLlamado({ 
+            botonRespuesta: respuesta, 
+            llamadoId: llamado.id, 
+            profesorId: profesor.id, 
+            profesorNombre: profesor.nombre, 
+            profesorApellido: profesor.apellido,
+            textoRespuesta 
+        })
 
         llamadoRespuestas.appendChild(respuesta)
     }
@@ -76,6 +85,9 @@ socket.on('nuevo-llamado', async (data) => {
 
     // Renderizar tiempo de envio en la vista del panel
     timeago.render(nuevoLlamado.querySelector('.fecha-envio'), 'es')
+
+    // Reproducir sonido de notificacion
+    notificacion.play().catch(err => console.warn('Error al reproducir sonido:', err));
 })
 
 /* ////////////////////////////////////////////////////////////////// */
@@ -212,8 +224,9 @@ function mostrarBotonesFinales({ profesor, socket, llamado }) {
 
 /* ////////////////////////////////////////////////////////////////// */
 
-async function responderLlamado({ botonRespuesta, profesorId, llamadoId, textoRespuesta }) {
+async function responderLlamado({ botonRespuesta, profesorId, profesorNombre, profesorApellido, llamadoId, textoRespuesta }) {
     botonRespuesta.addEventListener('click', async () => {
+        // Guardar respuesta en la base de datos
         const resultado = await peticion({
             url: '/api/respuestas/crear',
             metodo: 'POST',
@@ -224,6 +237,7 @@ async function responderLlamado({ botonRespuesta, profesorId, llamadoId, textoRe
             }
         })
 
+        // Enviar respuesta al profesor
         socket.emit('respuesta-llamado', {
             usuario_id: profesorId,
             respuesta: textoRespuesta,
@@ -231,6 +245,10 @@ async function responderLlamado({ botonRespuesta, profesorId, llamadoId, textoRe
             apellido: apellidoPreceptor
         })
 
+        // Mostrar alerta de enviado al preceptor
+        alerta({ mensaje: `Respuesta enviada a ${profesorNombre} ${profesorApellido}`, tipo: 'exito' })
+
+        // Mostrar botones de finalización
         mostrarBotonesFinales({
             profesor: {
                 id: profesorId

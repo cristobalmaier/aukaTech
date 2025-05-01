@@ -3,6 +3,7 @@
 <head>
     <%- include('../parciales/head.html') %>
     <link rel="stylesheet" href="panel.css">
+    <link rel="stylesheet" href="alertas.css">
 
     <!-- ICONOS (Font Awesome) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -17,6 +18,8 @@
     <script type="module" src="js/panel/preceptor.js"></script>
 </head>
 <body>
+    <audio id="notificacion" src="sonidos/noti.wav" preload="auto"></audio>
+
     <div class="panel-contenedor">
         <div class="columna columna-izquierda">
             <div class="titulo">
@@ -89,8 +92,9 @@
                             <% if(llamado.id_preceptor === null || typeof llamado.id_preceptor == 'undefined') { %>
                                 <div class="llamado-respuestas">
                                     <p class="respuesta" data-usuario_id="<%= llamado.id_emisor %>">Yendo</p>
-                                    <p class="respuesta" data-usuario_id="<%= llamado.id_emisor %>">No puedo</p>
-                                    <p class="respuesta" data-usuario_id="<%= llamado.id_emisor %>">Derivo preceptor</p>
+                                    <p class="respuesta" data-usuario_id="<%= llamado.id_emisor %>">En camino</p>
+                                    <p class="respuesta" data-usuario_id="<%= llamado.id_emisor %>">Enseguida</p>
+                                    <p class="respuesta" data-id_usuario="<%= llamado.id_emisor %>">Voy para allá</p>
                                 </div>
                             <% } else { %> 
                                 <% if(llamado.id_preceptor == usuario.id_usuario) { %>

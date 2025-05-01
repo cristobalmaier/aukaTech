@@ -10,3 +10,4 @@ A MEJORAR:
 4. Validaciones de formularios en el frontend y backend
 5. Agregar sonidos a las notificaciones
 6. Cambiar los preceptores disponibles al cambio de turno en tiempo real
+7. Poder elegir el curso al realizar un llamado 
