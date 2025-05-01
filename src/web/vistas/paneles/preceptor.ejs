@@ -110,21 +110,17 @@
         </div>
         <div class="columna columna-derecha">
             <div class="preceptores">
-                <p class="preceptores-titulo">Preceptores activos</p>
+                <p class="preceptores-titulo">Preceptores disponibles</p>
 
                 <div class="preceptores-contenedor">
-                    <div class="preceptores-item">
-                        <img src="img/user.png" alt="">
-                        <p>Nombre del preceptor</p>
-                    </div>
-                    <div class="preceptores-item">
-                        <img src="img/user.png" alt="">
-                        <p>Nombre del preceptor</p>
-                    </div>
-                    <div class="preceptores-item">
-                        <img src="img/user.png" alt="">
-                        <p>Nombre del preceptor</p>
-                    </div>
+                    <% if(typeof turnos !== 'undefined' && turnos.length > 0) { %>
+                        <% turnos.forEach(turno => { %>
+                            <div class="preceptores-item">
+                                <img src="img/user.png" alt="">
+                                <p><%= turno.nombre_usuario %> <%= turno.apellido_usuario %></p>
+                            </div>
+                        <% }) %>
+                    <% } %>
                 </div>
             </div>
             <div class="perfil">

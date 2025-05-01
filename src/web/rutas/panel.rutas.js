@@ -3,21 +3,32 @@ const panelRutas = new Router()
 
 const API_URL = process.env.API_URL
 
+import { config } from '../../web/config.js'
 import { peticion } from '../utiles/peticion.js'
+import { tiempo } from '../utiles/tiempo.js'
 import { obtenerDatosToken } from '../utiles/obtenerDatosToken.js'
 import { esProfesor, esPreceptor, estaLogeado } from '../utiles/auth.js'
 
 panelRutas.get('/panel/preceptor', [estaLogeado, esPreceptor], async (req, res) => {
+    const hora_actual = tiempo({ fecha: new Date() })
+
     const usuario = obtenerDatosToken(req)
 
     const llamadosResultado = await peticion({ url: `${API_URL}/llamados`, metodo: 'GET' })
     const llamados = await llamadosResultado.json()
 
-    res.render('paneles/preceptor', { titulo: 'AUKA - Panel', usuario, llamados })
+    const turnosResultado = await peticion({ url: `${API_URL}/turnos/hora/${hora_actual}`, metodo: 'GET' })
+    const turnos = await turnosResultado.json()
+
+    res.render('paneles/preceptor', { titulo: 'AUKA - Panel', usuario, llamados, turnos })
 })
 
 panelRutas.get('/panel/profesor', [estaLogeado, esProfesor], async (req, res) => {
+    const hora_actual = tiempo({ fecha: new Date() })
     const usuario = obtenerDatosToken(req)
+
+    const turnosResultado = await peticion({ url: `${API_URL}/turnos/hora/${hora_actual}`, metodo: 'GET' })
+    const turnos = await turnosResultado.json()
     
     const resultadoLlamado = await peticion({ url: `${API_URL}/llamados?usuarioId=${usuario.id_usuario}`, metodo: 'GET' })
     let llamado = await resultadoLlamado.json()
@@ -49,7 +60,7 @@ panelRutas.get('/panel/profesor', [estaLogeado, esProfesor], async (req, res) =>
         }
     }
 
-    res.render('paneles/profesor', { titulo: 'AUKA - Panel', usuario, llamado: objetoLlamado })
+    res.render('paneles/profesor', { titulo: 'AUKA - Panel', usuario, llamado: objetoLlamado, turnos })
 })
 
 export default panelRutas
