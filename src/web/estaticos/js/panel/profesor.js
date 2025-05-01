@@ -62,6 +62,7 @@ socket.on('terminar-llamado', (data) => {
     // Si el llamado es del mismo profesor, no se muestra la respuesta
     if (idProfesorLlamado != idProfesor) return
 
+    botonCancelarLlamado.classList.remove('esconder')
     desbloquearFormulario()
 })
 

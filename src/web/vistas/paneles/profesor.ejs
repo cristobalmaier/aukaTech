@@ -25,7 +25,7 @@
             </div>
         </div>
             <div class="formulario-llamado">
-                <form action="" method="GET" id="formulario">
+                <form action="" method="GET" id="formulario" data-mensaje="<%= typeof llamado !== 'undefined' && llamado.data.finalizado == 0 ? llamado.data.mensaje : '' %>">
                     <div class="formulario-cabecera">
                         <h2>Realizar llamado</h2>
                     </div>
