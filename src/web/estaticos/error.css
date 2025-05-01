@@ -1,0 +1,19 @@
+/*
+    EL QUE HIZO ESTO LO VAMOS A MATAR
+*/
+
+@import url('global.css');
+
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+img {
+    background-color: #fff;
+    border-radius: 15px;
+}
+
+p {
+    margin-bottom: 1rem;
+}

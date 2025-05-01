@@ -2,9 +2,21 @@
 <html lang="es">
 <head>
     <%- include('parciales/head.html') %>
+    <link rel="stylesheet" href="error.css">
+    <link rel="stylesheet" href="logeo.css">
 </head>
 <body>
-    <h1>Pagina no encontrada.</h1>
-    <a href="/">Volver a la página principal</a>
+    <div class="login-contenedor">
+        <div class="izquierda">
+            <img src="img/404.webp" alt="Error 404">
+        </div>
+        <div class="derecha formulario">
+            <h1>Pagina no encontrada.</h1>
+            <p>La página que estas buscando no existe.</p>
+            <a href="/">
+                <button>Volver a la página de inicio</button>
+            </a>
+        </div>
+    </div>
 </body>
 </html>
