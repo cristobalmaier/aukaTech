@@ -1,7 +1,9 @@
 import { Router } from 'express'
 const router = new Router()
 
-router.get('/', (req, res) => {
+import { estaLogeado } from '../utiles/auth.js'
+
+router.get('/', [estaLogeado], (req, res) => {
     res.redirect('/login')
 })
 

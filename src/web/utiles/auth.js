@@ -1,8 +1,12 @@
 import { obtenerDatosToken as obtenerDatos } from './obtenerDatosToken.js'
 
 export const estaLogeado = (req, res, next) => {
+    const ruta = req.path
     const usuario = obtenerDatos(req)
     
+    if(ruta === '/' && usuario)
+        return res.redirect(`/panel/${usuario.tipo_usuario}`)
+
     if(usuario)
         return next()
 
