@@ -21,3 +21,14 @@ export async function query(sql, valores) {
         throw new Error('No se pudo conectar con la base de datos.')
     }
 }
+
+export async function pruebaConexion() {
+    try {
+        const conexion = await mysql.createConnection(CONFIGURACION)
+        await conexion.query('SELECT 1')
+        await conexion.end()
+        return true
+    } catch(err) {
+        throw new Error(err.message)
+    }
+}

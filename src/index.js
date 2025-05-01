@@ -3,8 +3,10 @@ import morgan from 'morgan'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import server from 'node:http'
+import chalk from 'chalk'
 import { Server } from 'socket.io'
 import { formato, formatoHora } from './web/utiles/formato.js'
+import { pruebaConexion } from './bd.js'
 
 const app = express()
 const serverApp = server.createServer(app)
@@ -81,8 +83,18 @@ io.on('connection', (socket) => {
 })
 
 // Iniciar servidor
-serverApp.listen(PUERTO, () => {
-    console.log('API: http://localhost:' + PUERTO)
+serverApp.listen(PUERTO, async () => {
+    try {
+        await pruebaConexion()
+    } catch(err) {
+        console.error(chalk.redBright('ADVERTENCIA:') + ' NO HAY CONEXION A LA BASE DE DATOS, '+ chalk.underline('REVISAR CREDENCIALES') +' (.env) Y SI LA BASE DE DATOS ESTA EN FUNCIONAMIENTO') 
+        console.error(chalk.blue('MENSAJE DE ERROR:'), err.message ? err.message : '...')
+        console.error('\n')
+    }
+
+    console.log(chalk.bold('Aplicación en funcionamiento.'))
+    console.log('Web: http://localhost:' + PUERTO)
+    console.log('API: http://localhost:' + PUERTO + '/api')
 })
 
 export default app
