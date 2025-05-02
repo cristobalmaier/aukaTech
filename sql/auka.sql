@@ -70,6 +70,28 @@ CREATE TABLE `respuestas_llamados` (
   `fecha_respuesta` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+CREATE TABLE `turnos` (
+  `id_turno` int(11) NOT NULL,
+  `nombre_turno` enum('mañana','tarde','vespertino') NOT NULL,
+  `hora_inicio` time NOT NULL,
+  `hora_final` time NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+INSERT INTO `turnos` (`id_turno`, `nombre_turno`, `hora_inicio`, `hora_final`) VALUES
+(1, 'mañana', '07:35:00', '11:55:00'),
+(2, 'tarde', '12:55:00', '17:15:00'),
+(3, 'vespertino', '17:35:00', '21:45:00');
+
+CREATE TABLE `turnos_asignaciones` (
+  `id_asignacion` int(11) NOT NULL,
+  `id_turno` int(11) NOT NULL,
+  `id_preceptor` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+INSERT INTO `turnos_asignaciones` (`id_asignacion`, `id_turno`, `id_preceptor`) VALUES
+(3, 2, 8),
+(4, 3, 8);
+
 CREATE TABLE `usuarios` (
   `id_usuario` int(11) NOT NULL,
   `nombre` varchar(64) NOT NULL,
@@ -81,7 +103,7 @@ CREATE TABLE `usuarios` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 INSERT INTO `usuarios` (`id_usuario`, `nombre`, `apellido`, `email`, `contrasena`, `tipo_usuario`, `autorizado`) VALUES
-(8, 'Alejandro', 'Del Caño', 'alejandro@gmail.com', '$2b$05$j007.4grrUBOvurQc4tpBu86J6XjG09flrwfTA1xlwNUjewZx/Fjq', 'preceptor', 1),
+(8, 'Alejandro Ariel', 'Manrique', 'alejandro@gmail.com', '$2b$05$j007.4grrUBOvurQc4tpBu86J6XjG09flrwfTA1xlwNUjewZx/Fjq', 'preceptor', 1),
 (9, 'Carlos Alberto', 'Robello', 'robello@gmail.com', '$2b$05$FHPuGgstOyFL6LLtP/829e./zEEx4agJNoRsh1YMIj6zxDh3GFaT.', 'profesor', 1);
 
 
@@ -104,6 +126,14 @@ ALTER TABLE `respuestas_llamados`
   ADD KEY `id_llamado` (`id_preceptor`),
   ADD KEY `id_llamado_2` (`id_llamado`);
 
+ALTER TABLE `turnos`
+  ADD PRIMARY KEY (`id_turno`);
+
+ALTER TABLE `turnos_asignaciones`
+  ADD PRIMARY KEY (`id_asignacion`),
+  ADD KEY `id_turno` (`id_turno`),
+  ADD KEY `id_preceptor` (`id_preceptor`);
+
 ALTER TABLE `usuarios`
   ADD PRIMARY KEY (`id_usuario`);
 
@@ -112,13 +142,19 @@ ALTER TABLE `cursos`
   MODIFY `id_curso` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 ALTER TABLE `llamados`
-  MODIFY `id_llamado` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=103;
+  MODIFY `id_llamado` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=213;
 
 ALTER TABLE `respuestas_llamados`
-  MODIFY `id_respuesta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
+  MODIFY `id_respuesta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=156;
+
+ALTER TABLE `turnos`
+  MODIFY `id_turno` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+ALTER TABLE `turnos_asignaciones`
+  MODIFY `id_asignacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 ALTER TABLE `usuarios`
-  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 
 ALTER TABLE `llamados`
@@ -126,4 +162,12 @@ ALTER TABLE `llamados`
   ADD CONSTRAINT `llamados_ibfk_3` FOREIGN KEY (`id_curso`) REFERENCES `cursos` (`id_curso`),
   ADD CONSTRAINT `llamados_ibfk_4` FOREIGN KEY (`numero_nivel`) REFERENCES `niveles` (`numero_nivel`),
   ADD CONSTRAINT `llamados_ibfk_5` FOREIGN KEY (`id_preceptor`) REFERENCES `usuarios` (`id_usuario`);
+
+ALTER TABLE `respuestas_llamados`
+  ADD CONSTRAINT `respuestas_llamados_ibfk_1` FOREIGN KEY (`id_preceptor`) REFERENCES `usuarios` (`id_usuario`),
+  ADD CONSTRAINT `respuestas_llamados_ibfk_2` FOREIGN KEY (`id_llamado`) REFERENCES `llamados` (`id_llamado`);
+
+ALTER TABLE `turnos_asignaciones`
+  ADD CONSTRAINT `turnos_asignaciones_ibfk_1` FOREIGN KEY (`id_turno`) REFERENCES `turnos` (`id_turno`),
+  ADD CONSTRAINT `turnos_asignaciones_ibfk_2` FOREIGN KEY (`id_preceptor`) REFERENCES `usuarios` (`id_usuario`);
 COMMIT;
