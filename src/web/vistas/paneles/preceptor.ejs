@@ -117,13 +117,15 @@
                 <p class="preceptores-titulo">Preceptores disponibles</p>
 
                 <div class="preceptores-contenedor">
-                    <% if(typeof turnos !== 'undefined' && turnos.length > 0) { %>
+                    <% if((typeof turnos !== 'undefined' && turnos !== null) && turnos.length > 0) { %>
                         <% turnos.forEach(turno => { %>
                             <div class="preceptores-item">
                                 <img src="img/user.png" alt="">
                                 <p><%= turno.nombre_usuario %> <%= turno.apellido_usuario %></p>
                             </div>
                         <% }) %>
+                    <% } else { %>
+                        <p class="no-hay-preceptores">No hay preceptores disponibles.</p>
                     <% } %>
                 </div>
             </div>

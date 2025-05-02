@@ -206,6 +206,14 @@ hr {
     font-size: 15px;
 }
 
+.no-hay-preceptores {
+    color: var(--color-texto-secundario);
+    border: 1px solid var(--color-borde);
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
 .no-hay-llamados {
     color: var(--color-texto-secundario);
 }
