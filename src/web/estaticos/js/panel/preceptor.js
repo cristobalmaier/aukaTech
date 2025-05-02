@@ -245,6 +245,11 @@ async function responderLlamado({ botonRespuesta, profesorId, profesorNombre, pr
             apellido: apellidoPreceptor
         })
 
+        // Eliminar botones de respuesta a los demas preceptores
+        socket.emit('eliminar-respuesta-llamado', {
+            llamado_id: llamadoId
+        })
+
         // Mostrar alerta de enviado al preceptor
         alerta({ mensaje: `Respuesta enviada a ${profesorNombre} ${profesorApellido}`, tipo: 'exito' })
 

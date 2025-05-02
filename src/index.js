@@ -80,6 +80,10 @@ io.on('connection', (socket) => {
     socket.on('cancelar-llamado', (data) => {
         io.emit('cancelar-llamado', data)
     })
+
+    socket.on('eliminar-respuesta-llamado', (data) => {
+        io.emit('eliminar-respuesta-llamado', data)
+    })
 })
 
 // Iniciar servidor

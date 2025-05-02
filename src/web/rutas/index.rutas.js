@@ -3,7 +3,7 @@ const router = new Router()
 
 import { estaLogeado } from '../utiles/auth.js'
 
-router.get('/', [estaLogeado], (req, res) => {
+router.get('/', (req, res) => {
     res.redirect('/login')
 })
 
