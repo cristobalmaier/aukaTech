@@ -80,7 +80,7 @@
                         <% const niveles = ['leve', 'moderado', 'urgente'] %>
                         <% const nivel = niveles[llamado.numero_nivel - 1] %>
 
-                        <div class="llamado <%= nivel %>" data-llamado_id="<%= llamado.id_llamado %>" data-usuario_id="<%= llamado.id_emisor %>">
+                        <div class="llamado <%= nivel %>" data-llamado_id="<%= llamado.id_llamado %>" data-usuario_id="<%= llamado.id_emisor %>" data-usuario_nombre="<%= llamado.nombre %>" data-usuario_apellido="<%= llamado.apellido %>">  
                             <div class="llamado-cabecera">
                                 <p class="llamado-titulo"><%= llamado.nombre %> <%= llamado.apellido %></p>
                                 <p class="llamado-mensaje"><%= llamado.mensaje %></p>
@@ -94,7 +94,7 @@
                                     <p class="respuesta" data-usuario_id="<%= llamado.id_emisor %>">Yendo</p>
                                     <p class="respuesta" data-usuario_id="<%= llamado.id_emisor %>">En camino</p>
                                     <p class="respuesta" data-usuario_id="<%= llamado.id_emisor %>">Enseguida</p>
-                                    <p class="respuesta" data-id_usuario="<%= llamado.id_emisor %>">Voy para allá</p>
+                                    <p class="respuesta" data-usuario_id="<%= llamado.id_emisor %>">Voy para allá</p>
                                 </div>
                             <% } else { %> 
                                 <% if(llamado.id_preceptor == usuario.id_usuario) { %>

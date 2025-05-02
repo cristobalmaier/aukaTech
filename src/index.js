@@ -84,6 +84,10 @@ io.on('connection', (socket) => {
     socket.on('eliminar-respuesta-llamado', (data) => {
         io.emit('eliminar-respuesta-llamado', data)
     })
+
+    socket.on('agregar-historial', (data) => {
+        io.emit('agregar-historial', data)
+    })
 })
 
 // Iniciar servidor

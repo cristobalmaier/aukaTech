@@ -29,6 +29,59 @@ renderizarTiempos();
 
 /* ////////////////////////////////////////////////////////////////// */
 
+const botonesRespuesta = document.querySelectorAll('.respuesta')
+
+for (const botonRespuesta of botonesRespuesta) {
+    const llamado = botonRespuesta.parentElement.parentElement
+
+    const llamadoId = llamado.dataset.llamado_id
+    const llamadoMensaje = llamado.dataset.mensaje
+    const profesorId = botonRespuesta.dataset.usuario_id
+    const textoRespuesta = botonRespuesta.innerText
+    const profesorNombre = llamado.dataset.usuario_nombre
+    const profesorApellido = llamado.dataset.usuario_apellido
+
+    await responderLlamado({
+        profesorId,
+        textoRespuesta,
+        botonRespuesta,
+        profesorNombre,
+        llamadoMensaje,
+        profesorApellido,
+        llamadoId
+    })
+}
+
+/* ////////////////////////////////////////////////////////////////// */
+
+const botonesTerminado = document.querySelectorAll('.respuesta-terminado')
+
+for (const botonTerminado of botonesTerminado) {
+    botonTerminado.addEventListener('click', async () => {
+        const llamado = botonTerminado.parentElement.parentElement
+
+        const llamadoId = llamado.dataset.llamado_id
+        const mensaje = llamado.dataset.mensaje
+        const profesorId = llamado.dataset.usuario_id
+        const profesorNombre = llamado.dataset.usuario_nombre
+        const profesorApellido = llamado.dataset.usuario_apellido
+
+        await terminarLlamado({
+            profesor: {
+                id: profesorId, 
+                nombre: profesorNombre, 
+                apellido: profesorApellido
+            },
+            llamado: {
+                id: llamadoId,
+                mensaje
+            }
+        })
+    })
+}
+
+/* ////////////////////////////////////////////////////////////////// */
+
 // ! NUEVO LLAMADO
 socket.on('nuevo-llamado', async (data) => {
     const { usuario: profesor, llamado } = data
@@ -43,6 +96,7 @@ socket.on('nuevo-llamado', async (data) => {
     nuevoLlamado.classList.add('llamado', nivelImportancia);
     nuevoLlamado.dataset.usuario_id = profesor.id
     nuevoLlamado.dataset.llamado_id = llamado.id
+    nuevoLlamado.dataset.mensaje = llamado.mensaje
     nuevoLlamado.innerHTML = `
                 <div class="llamado-cabecera">
                     <p class="llamado-titulo">${profesor.nombre} ${profesor.apellido}</p>
@@ -66,6 +120,7 @@ socket.on('nuevo-llamado', async (data) => {
         await responderLlamado({ 
             botonRespuesta: respuesta, 
             llamadoId: llamado.id, 
+            llamadoMensaje: llamado.mensaje,
             profesorId: profesor.id, 
             profesorNombre: profesor.nombre, 
             profesorApellido: profesor.apellido,
@@ -121,36 +176,13 @@ socket.on('cancelar-llamado', async (data) => {
     if (llamado) llamado.remove()
 
     // Agregar al historial
-    const historialItem = document.createElement('div')
-    historialItem.classList.add('historial-item')
-    historialItem.classList.add('animate__animated', 'animate__fadeInDown') // Animacion
-
-    historialItem.innerHTML = `
-        <div>
-            <div class="historial-item-cabecera">
-                <p class="historial-item-titulo">
-                    ${nombreProfesor} ${apellidoProfesor}
-                </p>
-                <p class="historial-item-hora">
-                    ${formatearHora(fechaLlamado)}
-                </p>
-            </div> 
-            <div class="historial-item-mensaje">
-                <p class="historial-item-texto">
-                    ${mensaje}
-                </p>
-            </div>
-        </div>
-        <div class="historial-item-pie">
-            <p class="historial-item-estado historial-estado-cancelado">
-                <span class="historial-item-estado-texto">
-                    Cancelado
-                </span>
-            </p>
-        </div>
-    `
-
-    historialContenedor.prepend(historialItem)
+    agregarHistorial({
+        nombre: nombreProfesor,
+        apellido: apellidoProfesor,
+        mensaje: mensaje,
+        estado: 'cancelado',
+        fecha: new Date()
+    })
 
     // Mostrar texto si no hay llamados pendientes
     siNoHayLlamados({ noHayLlamados })
@@ -158,42 +190,45 @@ socket.on('cancelar-llamado', async (data) => {
 
 /* ////////////////////////////////////////////////////////////////// */
 
-const botonesRespuesta = document.querySelectorAll('.respuesta')
+// ! ELIMINAR LAS RESPUESTAS DE LOS DEMAS PRECEPTORES
+// ? Esta funcion elimina las respuestas del llamado
+// ? de los demas preceptores cuando responde un llamado 
+// ? para que no puedan responder el mismo llamado 
+// ? dos preceptores a la vez
+socket.on('eliminar-respuesta-llamado', (data) => {
+    const { preceptor_id, llamado_id } = data
 
-for (const botonRespuesta of botonesRespuesta) {
-    const llamado = botonRespuesta.parentElement.parentElement
+    // Solo elimina respuestas de los otros preceptores
+    if(preceptor_id == idPreceptor) return
 
-    const llamadoId = llamado.dataset.llamado_id
+    const llamado = document.querySelector(`.llamado[data-llamado_id="${llamado_id}"`)
 
-    await responderLlamado({
-        botonRespuesta,
-        profesorId: botonRespuesta.dataset.usuario_id,
-        llamadoId,
-        textoRespuesta: botonRespuesta.innerText
-    })
-}
+    if (llamado) {
+        const respuestas = llamado.querySelector(`.llamado-respuestas`) 
+        respuestas.classList.add('esconder')
+    }
+})
 
 /* ////////////////////////////////////////////////////////////////// */
 
-const botonesTerminado = document.querySelectorAll('.respuesta-terminado')
+// ! AGREGAR AL HISTORIAL DE LLAMADOS
+socket.on('agregar-historial', (data) => {
+    const { llamado_id, nombre, apellido, mensaje, fecha } = data
 
-for (const botonTerminado of botonesTerminado) {
-    botonTerminado.addEventListener('click', async () => {
-        const llamado = botonTerminado.parentElement.parentElement
+    const llamado = document.querySelector(`.llamado[data-llamado_id="${llamado_id}"`)
+    if(llamado) llamado.remove()
 
-        const llamadoId = llamado.dataset.llamado_id
-        const profesorId = llamado.dataset.usuario_id
-
-        await terminarLlamado({
-            profesor: {
-                id: profesorId
-            },
-            llamado: {
-                id: llamadoId
-            }
-        })
+    // Agregar al historial
+    agregarHistorial({
+        nombre,
+        apellido,
+        mensaje,
+        fecha
     })
-}
+
+    // Mostrar texto si no hay llamados pendientes
+    siNoHayLlamados({ noHayLlamados })
+})
 
 /* ////////////////////////////////////////////////////////////////// */
 
@@ -203,7 +238,7 @@ for (const botonTerminado of botonesTerminado) {
  * @returns {void}
  */
 function mostrarBotonesFinales({ profesor, socket, llamado }) {
-    const respuestas = document.querySelectorAll(`.llamado[data-usuario_id="${profesor.id}"] .respuesta`)
+    const respuestas = document.querySelectorAll(`.llamado[data-usuario_id="${profesor.id}"][data-llamado_id="${llamado.id}"] .respuesta`)
 
     for (const respuesta of respuestas) {
         respuesta.remove()
@@ -218,13 +253,62 @@ function mostrarBotonesFinales({ profesor, socket, llamado }) {
         await terminarLlamado({ profesor, llamado })
     })
 
-    const llamadoRespuestas = document.querySelector(`.llamado[data-usuario_id="${profesor.id}"] .llamado-respuestas`)
+    const llamadoRespuestas = document.querySelector(`.llamado[data-usuario_id="${profesor.id}"][data-llamado_id="${llamado.id}"] .llamado-respuestas`)
     llamadoRespuestas.appendChild(terminado)
 }
 
 /* ////////////////////////////////////////////////////////////////// */
 
-async function responderLlamado({ botonRespuesta, profesorId, profesorNombre, profesorApellido, llamadoId, textoRespuesta }) {
+function agregarHistorial({ nombre, apellido, mensaje, estado, fecha }) {
+    estado = estado ? estado : 'finalizado'
+
+    const historialItem = document.createElement('div')
+    historialItem.classList.add('historial-item')
+    historialItem.classList.add('animate__animated', 'animate__fadeInDown') // Animacion
+
+    historialItem.innerHTML = `
+        <div>
+            <div class="historial-item-cabecera">
+                <p class="historial-item-titulo">
+                    ${nombre} ${apellido}
+                </p>
+                <p class="historial-item-hora">
+                    ${formatearHora(fecha)}
+                </p>
+            </div> 
+            <div class="historial-item-mensaje">
+                <p class="historial-item-texto">
+                    ${mensaje}
+                </p>
+            </div>
+        </div>
+        <div class="historial-item-pie">
+            <p class="historial-item-estado historial-estado-${estado}">
+                <span class="historial-item-estado-texto">
+                    ${estado[0].toUpperCase() + estado.slice(1)}
+                </span>
+            </p>
+        </div>
+    `
+
+    historialContenedor.prepend(historialItem)
+}
+
+/* ////////////////////////////////////////////////////////////////// */
+
+/**
+ * Responde a un llamado actualizando la base de datos y enviando datos al cliente
+ * 
+ * @param {Object} botonRespuesta
+ * @param {Number} profesorId
+ * @param {String} profesorNombre
+ * @param {String} profesorApellido
+ * @param {Number} llamadoId
+ * @param {String} llamadoMensaje
+ * @param {String} textoRespuesta
+ * @returns {void}
+ */
+async function responderLlamado({ botonRespuesta, profesorId, profesorNombre, profesorApellido, llamadoId, llamadoMensaje, textoRespuesta }) {
     botonRespuesta.addEventListener('click', async () => {
         // Guardar respuesta en la base de datos
         const resultado = await peticion({
@@ -247,6 +331,7 @@ async function responderLlamado({ botonRespuesta, profesorId, profesorNombre, pr
 
         // Eliminar botones de respuesta a los demas preceptores
         socket.emit('eliminar-respuesta-llamado', {
+            preceptor_id: idPreceptor,
             llamado_id: llamadoId
         })
 
@@ -256,21 +341,28 @@ async function responderLlamado({ botonRespuesta, profesorId, profesorNombre, pr
         // Mostrar botones de finalización
         mostrarBotonesFinales({
             profesor: {
-                id: profesorId
+                id: profesorId,
+                nombre: profesorNombre,
+                apellido: profesorApellido
             },
             llamado: {
-                id: llamadoId
+                id: llamadoId,
+                mensaje: llamadoMensaje
             }
         })
     })
 }
 
 /**
+ * Finaliza un llamado actualizando la base de datos y enviando datos al cliente
+ * 
  * @param {Object} profesor
  * @param {Object} llamado
  * @returns {void}
  */
 async function terminarLlamado({ profesor, llamado }) {
+    const htmlLlamado = document.querySelector(`.llamado[data-llamado_id="${llamado.id}"`)
+
     const resultado = await peticion({
         url: '/api/llamados/actualizar/' + llamado.id,
         metodo: 'PUT',
@@ -290,20 +382,44 @@ async function terminarLlamado({ profesor, llamado }) {
         usuario_id: profesor.id,
         respuesta: "Terminado",
         nombre: nombrePreceptor,
-        apellido: apellidoPreceptor
+        apellido: apellidoPreceptor,
     })
 
-    location.reload()
+    socket.emit('agregar-historial', {
+        usuario_id: profesor.id,
+        llamado_id: llamado.id,
+        nombre: profesor.nombre,
+        apellido: profesor.apellido,
+        mensaje: llamado.mensaje,
+        fecha: new Date()
+    })
+
+    // Eliminar de la vista
+    htmlLlamado.remove()
+
+    // Mostrar texto si no hay llamados pendientes
+    siNoHayLlamados({ noHayLlamados })
 }
 
+/**
+ * Si no hay llamados pendientes muestra el texto "No hay llamados pendientes"
+ * 
+ * @param {HTMLElement} noHayLlamados
+ * @returns {void}
+ */
 function siNoHayLlamados({ noHayLlamados }) {
     const llamados = document.querySelectorAll('.llamado')
 
-    if (llamados.length === 0) {
+    if (llamados.length == 0) {
         noHayLlamados.classList.remove('esconder')
     }
 }
 
+/**
+ * Renderiza el tiempo pasado en tiempo real de cada llamado
+ * 
+ * @returns {void}
+ */
 function renderizarTiempos() {
     const local = (numero, index) => {
         return [
