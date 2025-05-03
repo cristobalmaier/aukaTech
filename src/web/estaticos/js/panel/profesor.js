@@ -25,6 +25,7 @@ const estadoLlamado = document.querySelector('.estado-llamado')
 const estadoLlamadoTitulo = document.querySelector('.estado-llamado-titulo')
 const estadoLlamadoTexto = document.querySelector('.estado-llamado-texto')
 
+const notificacion = document.getElementById('notificacion')
 
 /* ////////////////////////////////////////////////////////////////// */
 
@@ -42,9 +43,11 @@ socket.on('respuesta-llamado', (data) => {
     // Si el llamado no es del mismo profesor, no se muestra la respuesta
     if (idProfesorLlamado != idProfesor) return
 
+    // Mostrar notificacion
     estadoLlamadoTitulo.innerText = nombrePreceptor + " " + apellidoPreceptor
     estadoLlamadoTexto.innerText = respuesta
     botonCancelarLlamado.classList.add('esconder')
+    notificacion.play() // Sonido de notificacion
 })
 
 /* ////////////////////////////////////////////////////////////////// */
