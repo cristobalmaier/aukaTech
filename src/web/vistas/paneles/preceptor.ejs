@@ -73,6 +73,7 @@
             </div>
         </div>
         <div class="llamados">
+            <%= console.log(llamados) %>
             <% if(llamados !== null && llamados.filter(llamado => llamado.finalizado == 0).length > 0) { %>
                 <% llamados.forEach(llamado => { %>
                     <% if(llamado.finalizado == 0) { %>
@@ -80,7 +81,7 @@
                         <% const niveles = ['leve', 'moderado', 'urgente'] %>
                         <% const nivel = niveles[llamado.numero_nivel - 1] %>
 
-                        <div class="llamado <%= nivel %>" data-llamado_id="<%= llamado.id_llamado %>" data-usuario_id="<%= llamado.id_emisor %>" data-usuario_nombre="<%= llamado.nombre %>" data-usuario_apellido="<%= llamado.apellido %>">  
+                        <div class="llamado <%= nivel %>" data-llamado_id="<%= llamado.id_llamado %>" data-usuario_id="<%= llamado.id_emisor %>" data-usuario_nombre="<%= llamado.nombre %>" data-usuario_apellido="<%= llamado.apellido %>" data-mensaje="<%= llamado.mensaje %>">  
                             <div class="llamado-cabecera">
                                 <p class="llamado-titulo"><%= llamado.nombre %> <%= llamado.apellido %></p>
                                 <p class="llamado-mensaje"><%= llamado.mensaje %></p>
@@ -95,6 +96,14 @@
                                     <p class="respuesta" data-usuario_id="<%= llamado.id_emisor %>">En camino</p>
                                     <p class="respuesta" data-usuario_id="<%= llamado.id_emisor %>">Enseguida</p>
                                     <p class="respuesta" data-usuario_id="<%= llamado.id_emisor %>">Voy para allá</p>
+                                    <p class="respuesta-personalizada">Respuesta personalizada</p>
+                                </div>
+                                <div data-usuario_id="<%= llamado.id_emisor %>" class="esconder respuesta-personalizada-contenedor">
+                                    <input type="text" name="respuesta-personalizada" class="respuesta-personalizada-input" placeholder="Escribe aquí tu respuesta..." maxlength="150">
+                                    <div class="botones">
+                                        <button type="button" class="boton-respuesta-personalizada">Enviar</button>
+                                        <button type="button" class="boton-cancelar-respuesta-personalizada">Cancelar</button>
+                                    </div>
                                 </div>
                             <% } else { %> 
                                 <% if(llamado.id_preceptor == usuario.id_usuario) { %>
@@ -106,6 +115,9 @@
                         </div>
                     <% } %>
                 <% }) %>
+                <div class="no-hay-llamados esconder">
+                    <h1>No hay llamados pendientes.</h1>
+                </div>
             <% } else { %>
                 <div class="no-hay-llamados">
                     <h1>No hay llamados pendientes.</h1>

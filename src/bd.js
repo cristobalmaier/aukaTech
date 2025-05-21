@@ -4,7 +4,6 @@ const CONFIGURACION = {
     user: process.env.BD_USUARIO,
     database: process.env.BD_BASE,
     password: process.env.BD_CONTRASENA,
-    port: process.env.BD_PUERTO,
     host: process.env.BD_HOST
 }
 

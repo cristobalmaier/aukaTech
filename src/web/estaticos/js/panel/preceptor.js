@@ -54,6 +54,74 @@ for (const botonRespuesta of botonesRespuesta) {
 
 /* ////////////////////////////////////////////////////////////////// */
 
+const botonesRespuestaPersonalizada = document.querySelectorAll('.respuesta-personalizada')
+
+for (const botonRespuestaPersonalizada of botonesRespuestaPersonalizada) {
+    botonRespuestaPersonalizada.addEventListener('click', async () => {
+        const llamado = botonRespuestaPersonalizada.parentElement.parentElement
+
+        llamado.querySelector('.respuesta-personalizada').classList.add('esconder')
+        llamado.querySelector('.respuesta-personalizada-contenedor').classList.remove('esconder')
+        llamado.querySelector('.llamado-respuestas').classList.add('esconder')
+
+        llamado.querySelector('.respuesta-personalizada-contenedor input').focus()
+    })
+}
+
+const botonesCancelarRespuestaPersonalizada = document.querySelectorAll('.boton-cancelar-respuesta-personalizada')
+
+for (const boton of botonesCancelarRespuestaPersonalizada) {
+    boton.addEventListener('click', async () => {
+        const llamado = boton.parentElement.parentElement.parentElement
+
+        llamado.querySelector('.respuesta-personalizada').classList.remove('esconder')
+        llamado.querySelector('.respuesta-personalizada-contenedor').classList.add('esconder')
+        llamado.querySelector('.llamado-respuestas').classList.remove('esconder')
+    })
+}
+
+const botonesEnviar = document.querySelectorAll('.boton-respuesta-personalizada')
+
+for (const boton of botonesEnviar) {
+    boton.addEventListener('click', async () => {
+        const llamado = boton.parentElement.parentElement.parentElement
+
+        await enviarRespuestaPersonalizada({ boton, llamado })
+    })
+}
+
+/* ////////////////////////////////////////////////////////////////// */
+
+async function enviarRespuestaPersonalizada({ boton }) {
+    const llamado = boton.parentElement.parentElement.parentElement
+
+    const llamadoId = llamado.dataset.llamado_id
+    const mensaje = llamado.dataset.mensaje
+    const profesorId = llamado.dataset.usuario_id
+    const profesorNombre = llamado.dataset.usuario_nombre
+    const profesorApellido = llamado.dataset.usuario_apellido
+    const nombrePreceptor = document.documentElement.dataset.nombre
+    const apellidoPreceptor = document.documentElement.dataset.apellido
+    const textoRespuesta = llamado.querySelector('.respuesta-personalizada-input').value
+
+    await procesarLlamado({
+        profesorId,
+        llamadoId,
+        llamadoMensaje: mensaje,
+        textoRespuesta,
+        nombrePreceptor,
+        apellidoPreceptor,
+        profesorNombre,
+        profesorApellido
+    })
+
+    llamado.querySelector('.respuesta-personalizada').classList.add('esconder')
+    llamado.querySelector('.respuesta-personalizada-contenedor').classList.add('esconder')
+    llamado.querySelector('.llamado-respuestas').classList.remove('esconder')
+}
+
+/* ////////////////////////////////////////////////////////////////// */
+
 const botonesTerminado = document.querySelectorAll('.respuesta-terminado')
 
 for (const botonTerminado of botonesTerminado) {
@@ -68,8 +136,8 @@ for (const botonTerminado of botonesTerminado) {
 
         await terminarLlamado({
             profesor: {
-                id: profesorId, 
-                nombre: profesorNombre, 
+                id: profesorId,
+                nombre: profesorNombre,
                 apellido: profesorApellido
             },
             llamado: {
@@ -96,6 +164,8 @@ socket.on('nuevo-llamado', async (data) => {
     nuevoLlamado.classList.add('llamado', nivelImportancia);
     nuevoLlamado.dataset.usuario_id = profesor.id
     nuevoLlamado.dataset.llamado_id = llamado.id
+    nuevoLlamado.dataset.usuario_nombre = profesor.nombre
+    nuevoLlamado.dataset.usuario_apellido = profesor.apellido
     nuevoLlamado.dataset.mensaje = llamado.mensaje
     nuevoLlamado.innerHTML = `
                 <div class="llamado-cabecera">
@@ -117,18 +187,52 @@ socket.on('nuevo-llamado', async (data) => {
         respuesta.innerText = textoRespuesta
         respuesta.dataset.usuario_id = profesor.id
 
-        await responderLlamado({ 
-            botonRespuesta: respuesta, 
-            llamadoId: llamado.id, 
+        await responderLlamado({
+            botonRespuesta: respuesta,
+            llamadoId: llamado.id,
             llamadoMensaje: llamado.mensaje,
-            profesorId: profesor.id, 
-            profesorNombre: profesor.nombre, 
+            profesorId: profesor.id,
+            profesorNombre: profesor.nombre,
             profesorApellido: profesor.apellido,
-            textoRespuesta 
+            textoRespuesta
         })
 
         llamadoRespuestas.appendChild(respuesta)
     }
+
+    // respuesta personalizada
+    const botonRespuestaPersonalizada = document.createElement('p')
+    botonRespuestaPersonalizada.classList.add('respuesta-personalizada')
+    botonRespuestaPersonalizada.innerText = 'Respuesta personalizada'
+    botonRespuestaPersonalizada.dataset.usuario_id = profesor.id
+
+    const respuestaPersonalizadaContenedor = document.createElement('div')
+    respuestaPersonalizadaContenedor.classList.add('respuesta-personalizada-contenedor', 'esconder')
+
+    respuestaPersonalizadaContenedor.innerHTML = `
+        <input type="text" name="respuesta-personalizada" class="respuesta-personalizada-input" placeholder="Escribe aquí tu respuesta personalizada...">
+        <div class="botones">
+            <button type="button" class="boton-respuesta-personalizada">Enviar</button>
+            <button type="button" class="boton-cancelar-respuesta-personalizada">Cancelar</button>
+        </div>
+    `
+
+    const botonEnviarRespuesta = respuestaPersonalizadaContenedor.querySelector('.boton-respuesta-personalizada')
+    botonEnviarRespuesta.addEventListener('click', async () => {
+        await enviarRespuestaPersonalizada({ boton: botonEnviarRespuesta, llamado: llamado })
+    })
+
+
+    llamadoRespuestas.appendChild(botonRespuestaPersonalizada)
+    nuevoLlamado.appendChild(respuestaPersonalizadaContenedor)
+
+    botonRespuestaPersonalizada.addEventListener('click', async () => {
+        const llamado = botonRespuestaPersonalizada.parentElement.parentElement
+
+        llamado.querySelector('.respuesta-personalizada').classList.add('esconder')
+        llamado.querySelector('.respuesta-personalizada-contenedor').classList.remove('esconder')
+        llamado.querySelector('.llamado-respuestas').classList.add('esconder')
+    })
 
     nuevoLlamado.appendChild(llamadoRespuestas)
     llamadosContenedor.prepend(nuevoLlamado)
@@ -149,13 +253,13 @@ socket.on('nuevo-llamado', async (data) => {
 
 // ! CANCELAR LLAMADO
 socket.on('cancelar-llamado', async (data) => {
-    const { 
+    const {
         usuario_id: idProfesorLlamado,
         nombre: nombreProfesor,
         apellido: apellidoProfesor,
         fecha_envio: fechaLlamado,
         mensaje
-     } = data
+    } = data
 
     const llamado = document.querySelector('.llamado[data-usuario_id="' + idProfesorLlamado + '"]')
 
@@ -199,12 +303,12 @@ socket.on('eliminar-respuesta-llamado', (data) => {
     const { preceptor_id, llamado_id } = data
 
     // Solo elimina respuestas de los otros preceptores
-    if(preceptor_id == idPreceptor) return
+    if (preceptor_id == idPreceptor) return
 
     const llamado = document.querySelector(`.llamado[data-llamado_id="${llamado_id}"`)
 
     if (llamado) {
-        const respuestas = llamado.querySelector(`.llamado-respuestas`) 
+        const respuestas = llamado.querySelector(`.llamado-respuestas`)
         respuestas.classList.add('esconder')
     }
 })
@@ -216,7 +320,7 @@ socket.on('agregar-historial', (data) => {
     const { llamado_id, nombre, apellido, mensaje, fecha } = data
 
     const llamado = document.querySelector(`.llamado[data-llamado_id="${llamado_id}"`)
-    if(llamado) llamado.remove()
+    if (llamado) llamado.remove()
 
     // Agregar al historial
     agregarHistorial({
@@ -239,6 +343,10 @@ socket.on('agregar-historial', (data) => {
  */
 function mostrarBotonesFinales({ profesor, socket, llamado }) {
     const respuestas = document.querySelectorAll(`.llamado[data-usuario_id="${profesor.id}"][data-llamado_id="${llamado.id}"] .respuesta`)
+    const respuestaPersonalizada = document.querySelector(`.llamado[data-usuario_id="${profesor.id}"][data-llamado_id="${llamado.id}"] .respuesta-personalizada`)
+
+    if(respuestaPersonalizada)
+        respuestaPersonalizada.classList.add('esconder')
 
     for (const respuesta of respuestas) {
         respuesta.remove()
@@ -353,6 +461,49 @@ async function responderLlamado({ botonRespuesta, profesorId, profesorNombre, pr
     })
 }
 
+async function procesarLlamado({ profesorId, profesorNombre, profesorApellido, llamadoId, llamadoMensaje, textoRespuesta, nombrePreceptor, apellidoPreceptor }) {
+    // Guardar respuesta en la base de datos
+    const resultado = await peticion({
+        url: '/api/respuestas/crear',
+        metodo: 'POST',
+        cuerpo: {
+            llamadoId: llamadoId,
+            preceptorId: idPreceptor,
+            mensaje: textoRespuesta,
+        }
+    })
+
+    // Enviar respuesta al profesor
+    socket.emit('respuesta-llamado', {
+        usuario_id: profesorId,
+        respuesta: textoRespuesta,
+        nombre: nombrePreceptor,
+        apellido: apellidoPreceptor
+    })
+
+    // Eliminar botones de respuesta a los demas preceptores
+    socket.emit('eliminar-respuesta-llamado', {
+        preceptor_id: idPreceptor,
+        llamado_id: llamadoId
+    })
+
+    // Mostrar alerta de enviado al preceptor
+    alerta({ mensaje: `Respuesta enviada a ${profesorNombre} ${profesorApellido}`, tipo: 'exito' })
+
+    // Mostrar botones de finalización
+    mostrarBotonesFinales({
+        profesor: {
+            id: profesorId,
+            nombre: profesorNombre,
+            apellido: profesorApellido
+        },
+        llamado: {
+            id: llamadoId,
+            mensaje: llamadoMensaje
+        }
+    })
+}
+
 /**
  * Finaliza un llamado actualizando la base de datos y enviando datos al cliente
  * 
@@ -437,11 +588,11 @@ function renderizarTiempos() {
             ['hace %s meses', 'en %s meses'],
             ['hace 1 año', 'en 1 año'],
             ['hace %s años', 'en %s años'],
-          ][index];
+        ][index];
     }
 
     timeago.register('es', local);
 
     const nodos = document.querySelectorAll('.fecha-envio')
-    if(nodos.length > 0) timeago.render(nodos, 'es')
+    if (nodos.length > 0) timeago.render(nodos, 'es')
 }

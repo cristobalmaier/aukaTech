@@ -266,7 +266,7 @@ hr {
 .llamado.moderado .llamado-cuerpo p::before {
     background-color: var(--color-primario-llamado-moderado);
 }
-.llamado.moderado .respuesta {
+.llamado.moderado .respuesta, .llamado.moderado .respuesta-personalizada {
     color: var(--color-fondo-llamado-moderado);
     background-color: #fff;
 }
@@ -278,7 +278,7 @@ hr {
 .llamado.urgente .llamado-cuerpo p::before {
     background-color: var(--color-primario-llamado-urgente);
 }
-.llamado.urgente .respuesta {
+.llamado.urgente .respuesta, .llamado.urgente .respuesta-personalizada {
     color: var(--color-fondo-llamado-urgente);
     background-color: #fff;
 }
@@ -312,7 +312,7 @@ hr {
     gap: 10px;
 }
 
-.llamado-respuestas .respuesta {
+.llamado-respuestas .respuesta, .llamado-respuestas .respuesta-personalizada {
     text-decoration: none;
     background-color: var(--color-fondo-respuesta);
     color: var(--color-texto-respuesta);
@@ -320,6 +320,35 @@ hr {
     padding: 5px 12px;
     font-weight: 800;
     font-size: 15px;
+    cursor: pointer;
+}
+
+.respuesta-personalizada-contenedor {
+    display: flex;
+    flex-direction: column;
+}
+
+.respuesta-personalizada-contenedor .botones {
+    display: flex;
+    text-align: center;
+    flex-direction: row-reverse;
+    gap: 10px;
+    margin-top: 25px;
+}
+
+.respuesta-personalizada-contenedor input {
+    border: 1px solid var(--color-borde);
+    padding: 15px;
+    border-radius: 5px;
+    outline: none;
+}
+
+.respuesta-personalizada-contenedor button {
+    padding: 12px 0;
+    border-radius: 7px;
+    width: 100%;
+    font-weight: 600;
+    font-size: 17px;
     cursor: pointer;
 }
 
