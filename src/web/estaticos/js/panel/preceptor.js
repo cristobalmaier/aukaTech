@@ -276,6 +276,11 @@ socket.on('cancelar-llamado', async (data) => {
         }
     })
 
+    // Si ocurrio un error en la api se muestra una alerta
+    if(!resultado.ok) {
+        return alerta({ mensaje: 'No se pudo cancelar tu llamado.', tipo: 'error' })
+    }
+
     // Eliminar de la vista
     if (llamado) llamado.remove()
 
@@ -429,6 +434,11 @@ async function responderLlamado({ botonRespuesta, profesorId, profesorNombre, pr
             }
         })
 
+        // Si ocurrio un error en la api se muestra una alerta
+        if(!resultado.ok) {
+            return alerta({ mensaje: 'No se pudo responder al llamado.', tipo: 'error' })
+        }
+
         // Enviar respuesta al profesor
         socket.emit('respuesta-llamado', {
             usuario_id: profesorId,
@@ -472,6 +482,11 @@ async function procesarLlamado({ profesorId, profesorNombre, profesorApellido, l
             mensaje: textoRespuesta,
         }
     })
+
+    // Si ocurrio un error en la api se muestra una alerta
+    if(!resultado.ok) {
+        return alerta({ mensaje: 'No se pudo responder al llamado.', tipo: 'error' })
+    }
 
     // Enviar respuesta al profesor
     socket.emit('respuesta-llamado', {
@@ -524,8 +539,7 @@ async function terminarLlamado({ profesor, llamado }) {
     })
 
     if (!resultado.ok) {
-        console.log(resultado)
-        alert('ERROR GARRAFAL')
+        return alerta({ mensaje: 'No se pudo finalizar el llamado.', tipo: 'error' })
     }
 
     // ! TERMINAR LLAMADO

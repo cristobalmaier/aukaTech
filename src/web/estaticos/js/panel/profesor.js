@@ -146,9 +146,9 @@ botonLlamado.addEventListener('click', async () => {
         }
     })
 
+    // Si ocurrio un error en la api se muestra una alerta
     if (!resultado.ok) {
-        console.log(resultado)
-        alert('ERROR GARRAFAL')
+        return alerta({ mensaje: 'No se realizar el llamado, intente de nuevo mas tarde.', tipo: 'error' }) 
     }
 
     const llamadoInfo = await resultado.json()
