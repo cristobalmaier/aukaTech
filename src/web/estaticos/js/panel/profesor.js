@@ -13,6 +13,7 @@ const tipoUsuario = document.documentElement.dataset.tipo_usuario
 const formulario = document.getElementById('formulario')
 const botonLlamado = document.getElementById('boton-llamado')
 const botonCancelarLlamado = document.querySelector('.boton-cancelar')
+const botonCerrar = document.querySelector('.boton-cerrar')
 
 const botonesNiveles = document.querySelectorAll('.boton-select')
 const inputNivel = document.getElementById('nivel-input')
@@ -21,9 +22,15 @@ const limiteCaracteres = document.querySelector('.limite-caracteres')
 const textoCaracteresRestantes = document.getElementById('caracteres-restantes')
 const textoCaracteresMaximos = document.getElementById('caracteres-maximos')
 
+const primerTitulo = document.querySelector('.estado-llamado-titulo h3')
 const estadoLlamado = document.querySelector('.estado-llamado')
-const estadoLlamadoTitulo = document.querySelector('.estado-llamado-titulo')
-const estadoLlamadoTexto = document.querySelector('.estado-llamado-texto')
+const estadoPreceptor = document.querySelector('.estado-llamado-preceptor')
+const estadoLlamadoTitulo = document.querySelector('.estado-preceptor-nombre')
+const estadoLlamadoTexto = document.querySelector('.preceptor-mensaje-texto')
+const estadoProgresoTodos = document.querySelectorAll('.estado-progreso-item')
+
+const hora_recibido = document.querySelector('.hora_recibido')
+const hora_respuesta = document.querySelector('.hora_respuesta')
 
 const notificacion = document.getElementById('notificacion')
 
@@ -44,9 +51,17 @@ socket.on('respuesta-llamado', (data) => {
     if (idProfesorLlamado != idProfesor) return
 
     // Mostrar notificacion
+    primerTitulo.innerText = 'Respuesta del preceptor'
+    estadoPreceptor.classList.remove('esconder')
     estadoLlamadoTitulo.innerText = nombrePreceptor + " " + apellidoPreceptor
     estadoLlamadoTexto.innerText = respuesta
+    estadoProgresoTodos[1].classList.replace('estado-progreso-idle', 'estado-progreso-encamino')
+    estadoProgresoTodos[1].querySelector('.fa-circle').classList.replace('fa-circle', 'fa-arrow-right')
     botonCancelarLlamado.classList.add('esconder')
+
+    const hora = new Date()
+    hora_respuesta.innerText = `${hora.getHours()}:${hora.getMinutes()}`
+    
     notificacion.play() // Sonido de notificacion
 })
 
@@ -65,7 +80,15 @@ socket.on('terminar-llamado', (data) => {
     // Si el llamado es del mismo profesor, no se muestra la respuesta
     if (idProfesorLlamado != idProfesor) return
 
-    botonCancelarLlamado.classList.remove('esconder')
+    botonCerrar.classList.remove('esconder')
+    estadoProgresoTodos[2].querySelector('.fa-circle').classList.replace('fa-circle', 'fa-face-smile')
+    estadoProgresoTodos[2].classList.replace('estado-progreso-idle', 'estado-progreso-finalizado')
+    // desbloquearFormulario()
+})
+
+/* ////////////////////////////////////////////////////////////////// */
+
+botonCerrar.addEventListener('click', () => {
     desbloquearFormulario()
 })
 
@@ -144,6 +167,33 @@ botonLlamado.addEventListener('click', async () => {
             mensaje
         }
     })
+
+    formulario.dataset.mensaje = mensaje
+    estadoLlamado.classList.remove('esconder')
+    botonLlamado.disabled = true
+    botonesNiveles.forEach(boton => boton.disabled = true)
+
+    primerTitulo.innerText = 'Esperando respuesta...'
+    estadoPreceptor.classList.add('esconder')
+    estadoLlamadoTitulo.innerText = ''
+
+    const faSelector = estadoProgresoTodos[1].querySelector('.fa-arrow-right')
+    if(faSelector) faSelector.classList.replace('fa-arrow-right', 'fa-circle')
+
+    const faSelector2 = estadoProgresoTodos[2].querySelector('.fa-face-smile')
+    if(faSelector2) faSelector2.classList.replace('fa-face-smile', 'fa-circle')
+
+    botonCerrar.classList.add('esconder')
+    botonCancelarLlamado.classList.remove('esconder')
+
+    const hora = new Date()
+    hora_recibido.innerText = `${hora.getHours()}:${hora.getMinutes()}`
+    hora_respuesta.innerText = ``
+
+    for(const estado of estadoProgresoTodos) {
+        estado.classList.replace('estado-progreso-encamino', 'estado-progreso-idle') 
+        estado.classList.replace('estado-progreso-finalizado', 'estado-progreso-idle')
+    }
 })
 
 /* ////////////////////////////////////////////////////////////////// */
@@ -193,9 +243,25 @@ function bloquearFormulario({ mensaje }) {
 
 function desbloquearFormulario() {
     formulario.dataset.mensaje = ''
-    estadoLlamado.classList.add('esconder')
-    estadoLlamadoTitulo.innerText = 'Estado de tu llamado'
+
+    primerTitulo.innerText = 'Esperando respuesta...'
+    estadoPreceptor.classList.add('esconder')
+    estadoLlamadoTitulo.innerText = ''
     estadoLlamadoTexto.innerText = 'Pendiente...'
     botonLlamado.disabled = false
     botonesNiveles.forEach(boton => boton.disabled = false)
+
+    const faSelector = estadoProgresoTodos[1].querySelector('.fa-arrow-right')
+    if(faSelector) faSelector.classList.replace('fa-arrow-right', 'fa-circle')
+
+    const faSelector2 = estadoProgresoTodos[2].querySelector('.fa-face-smile')
+    if(faSelector2) faSelector2.classList.replace('fa-face-smile', 'fa-circle')
+
+    botonCerrar.classList.add('esconder')
+    estadoLlamado.classList.add('esconder')
+
+    for(const estado of estadoProgresoTodos) {
+        estado.classList.replace('estado-progreso-encamino', 'estado-progreso-idle') 
+        estado.classList.replace('estado-progreso-finalizado', 'estado-progreso-idle')
+    }
 }
