@@ -5,11 +5,11 @@ import ErrorCliente from "../utiles/error.js";
 class LlamadoServicio {
     static async obtenerTodos({ usuarioId }) {
         if(usuarioId) {
-            const resultado = await query("SELECT * FROM llamados WHERE id_emisor = ? ORDER BY fecha_envio DESC", usuarioId)
+            const resultado = await query("SELECT * FROM llamados l JOIN cursos c ON c.id_curso = l.id_curso WHERE l.id_emisor = ? ORDER BY l.fecha_envio DESC", usuarioId)
             return resultado
         }
 
-        const resultado = await query("SELECT l.*, u.nombre, u.apellido FROM llamados l JOIN usuarios u ON l.id_emisor = u.id_usuario ORDER BY l.fecha_envio DESC") 
+        const resultado = await query("SELECT l.*, u.nombre, u.apellido, c.curso FROM llamados l JOIN usuarios u ON l.id_emisor = u.id_usuario JOIN cursos c ON c.id_curso = l.id_curso ORDER BY l.fecha_envio DESC") 
         return resultado
     }
 
