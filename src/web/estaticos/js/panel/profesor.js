@@ -117,6 +117,7 @@ botonCancelarLlamado.addEventListener('click', () => {
 botonLlamado.addEventListener('click', async () => {
     const mensaje = formulario.mensaje.value
     const nivel = parseInt(formulario.nivel.value)
+    const curso = parseInt(formulario.curso.value)
 
     // Validaciones
     if(!mensaje || mensaje.length === 0) {
@@ -140,7 +141,7 @@ botonLlamado.addEventListener('click', async () => {
         cuerpo: {
             id_preceptor: null,
             id_emisor: idProfesor,
-            id_curso: 12,
+            id_curso: curso,
             numero_nivel: nivel,
             mensaje
         }

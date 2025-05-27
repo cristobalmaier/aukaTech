@@ -49,7 +49,9 @@
                     <div class="formulario-curso">
                         <label for="curso">Curso</label>
                         <select name="curso" id="curso">
-                            
+                            <% llamado.cursos.forEach(curso => { %>
+                                <option value="<%= curso.id_curso %>"><%= curso.curso %></option>
+                            <% }) %>
                         </select>
                     </div>
                     <div class="formulario-columna">
