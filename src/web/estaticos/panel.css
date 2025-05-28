@@ -730,10 +730,13 @@ hr {
   box-sizing: border-box;
 }
 
-.menu-icon i {
+.menu-icon img {
+  display: block;
   font-size: 18px;
   color: #374151;
-  cursor: pointer;
+  width: 20px;
+  height: 20px;
+  
 }
 
 .logo1 {
@@ -763,7 +766,7 @@ hr {
 
 /* ===== Sidebar Styles ===== */
 .sidebar {
-  width: 280px;
+  width: 230px;
   height: 100vh;
   background-color: #ffffff;
   border-right: 1px solid #e5e7eb;
@@ -829,7 +832,6 @@ hr {
   font-size: 12px;
   font-weight: 600;
   color: #6b7280;
-  text-transform: uppercase;
   letter-spacing: 0.5px;
   margin-bottom: 16px;
   padding: 0 8px;
@@ -907,7 +909,7 @@ hr {
 
 /* Main Content */
 .main-content {
-  margin-left: 280px;
+  margin-left: 220px;
   padding: 0;
   min-height: 100vh;
   background-color: #f9fafb;
