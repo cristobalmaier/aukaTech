@@ -8,4 +8,3 @@ A MEJORAR:
 2. Manejar errores al utilizar fetch
 3. Validaciones de formularios en el frontend y backend
 4. Cambiar los preceptores disponibles al cambio de turno en tiempo real
-5. Poder elegir el curso al realizar un llamado 
