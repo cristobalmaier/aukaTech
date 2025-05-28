@@ -46,6 +46,17 @@
                             <span id="caracteres-maximos">300</span>
                         </p>
                     </div>
+<<<<<<< HEAD
+=======
+                    <div class="formulario-curso">
+                        <label for="curso">Curso</label>
+                        <select name="curso" id="curso">
+                            <% llamado.cursos.forEach(curso => { %>
+                                <option value="<%= curso.id_curso %>"><%= curso.curso %></option>
+                            <% }) %>
+                        </select>
+                    </div>
+>>>>>>> be6fe1802b2629df6045bdd4fe682e7be1d1adfe
                     <div class="formulario-columna">
                         <label for="nivel">Nivel de importancia</label>
                         <div class="botones-niveles">

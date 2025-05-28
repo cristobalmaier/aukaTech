@@ -30,6 +30,9 @@ panelRutas.get('/panel/profesor', [estaLogeado, esProfesor], async (req, res) =>
     const turnosResultado = await peticion({ url: `${API_URL}/turnos/hora/${hora_actual}`, metodo: 'GET' })
     const turnos = await turnosResultado.json()
     
+    const cursosResultado = await peticion({ url: `${API_URL}/cursos`, metodo: 'GET' })
+    const cursos = await cursosResultado.json()
+
     const resultadoLlamado = await peticion({ url: `${API_URL}/llamados?usuarioId=${usuario.id_usuario}`, metodo: 'GET' })
     let llamado = await resultadoLlamado.json()
 
@@ -57,7 +60,8 @@ panelRutas.get('/panel/profesor', [estaLogeado, esProfesor], async (req, res) =>
                 nombre: respuesta[0]?.nombre_usuario,
                 apellido: respuesta[0]?.apellido_usuario
             }
-        }
+        },
+        cursos
     }
 
     res.render('paneles/profesor', { titulo: 'AUKA - Panel', usuario, llamado: objetoLlamado, turnos })
