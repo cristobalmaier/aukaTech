@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es" data-id_usuario="<%- usuario.id_usuario %>" data-nombre="<%- usuario.nombre %>"
+    data-apellido="<%- usuario.apellido %>" data-tipo_usuario="<%- usuario.tipo_usuario %>">
+
+<head>
+    <%- include('../parciales/head.html') %>
+        <link rel="stylesheet" href="panel.css">
+        <link rel="stylesheet" href="alertas.css">
+
+        <!-- ICONOS (Font Awesome) -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+        <!-- ANIMACIONES (Animate.css) -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+        <!-- SOCKET.IO -->
+        <script type="module" src="/socket.io/socket.io.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/timeago.js@4.0.2/dist/timeago.min.js"></script>
+
+        <script type="module" src="js/panel/directivos.js"></script>
+</head>
+
+<body>
+    <div class="layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <div class="logo-icon">A</div>
+                <div class="logo-text">
+                    <h1>Auka</h1>
+                    <span>Panel de Monitoreo</span>
+                </div>
+            </div>
+
+            <nav class="nav">
+                <span>Navegación</span>
+                <ul class="nav-list">
+                    <li class="active"><i class="fas fa-home"></i> <span>Dashboard</span></li>
+                    <li><i class="fas fa-phone-alt"></i> <span>Llamados</span></li>
+                    <li><i class="fa-solid fa-gear"></i> <span>Administracion</span></li>
+                    <li><i class="fa-solid fa-chart-column"></i> <span>Análisis</span></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Contenido principal -->
+        <div class="main-content">
+            <header class="header">
+                <div class="menu-icon">
+                    <i class="fas fa-bars"></i>
+                </div>
+
+                <div class="logo1">
+                    <div class="logo-icon1">A</div>
+                    <span class="logo-text1">Auka</span>
+                </div>
+            </header>
+
+            <main class="main-panel">
+                <h2>Gestión de Llamados</h2>
+
+                <div class="search-filters">
+                    <h3><i class="fas fa-filter"></i> Filtros de Búsqueda</h3>
+                    <div class="filters-row">
+                        <div class="filter">
+                            <i class="fas fa-search"></i>
+                            <input type="text" placeholder="Buscar por profesor, mensaje, curso">
+                        </div>
+
+                        <div class="filter">
+                            <select>
+                                <option value="">Estado</option>
+                                <option value="pendiente">Pendiente</option>
+                                <option value="tendente">Tendente</option>
+                                <option value="tradizado">Tradizado</option>
+                                <option value="concesion">Concesión</option>
+                            </select>
+                        </div>
+
+                        <div class="filter">
+                            <input type="date" placeholder="dd/mm/aaaa">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="calls-container">
+                    <div class="calls-header">
+                        <h3>Listado de llamados</h3>
+                        <span>4 llamados encontrados</span>
+                    </div>
+
+                    <div class="calls-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Fecha/Nota</th>
+                                    <th>Cursa/Nivel</th>
+                                    <th>Emisor</th>
+                                    <th>Mensaje</th>
+                                    <th>Estado</th>
+                                    <th>Prioridad</th>
+                                    <th>Preceptor</th>
+                                    <th>Tempo fixe.</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="call-date">2024-01-15</div>
+                                        <div class="call-time">14:32</div>
+                                    </td>
+                                    <td>
+                                        <div class="call-grade">5° A</div>
+                                        <div class="call-level">Primaria</div>
+                                    </td>
+                                    <td>Ana Martín</td>
+                                    <td class="call-message">Estudiante con malestar en clase, necesita atención...</td>
+                                    <td>
+                                        <span class="status-badge status-tendente">Tendente</span>
+                                    </td>
+                                    <td>
+                                        <div class="priority-high">Alta</div>
+                                    </td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>
+                                        <button class="action-btn"><i class="fa-solid fa-eye"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="call-date">2024-01-15</div>
+                                        <div class="call-time">14:28</div>
+                                    </td>
+                                    <td>
+                                        <div class="call-grade">2° B</div>
+                                        <div class="call-level">Secundaria</div>
+                                    </td>
+                                    <td>Carlos López</td>
+                                    <td class="call-message">Solicitud de material didáctico para clase de matemáticas...</td>
+                                    <td>
+                                        <span class="status-badge status-tradizado">Tradizado</span>
+                                    </td>
+                                    <td>
+                                        <div class="priority-low">Baja</div>
+                                    </td>
+                                    <td>Maria González</td>
+                                    <td>2.5 min</td>
+                                    <td>
+                                        <button class="action-btn"><i class="fa-solid fa-eye"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="call-date">2024-01-15</div>
+                                        <div class="call-time">14:15</div>
+                                    </td>
+                                    <td>
+                                        <div class="call-grade">1° C</div>
+                                        <div class="call-level">Primaria</div>
+                                    </td>
+                                    <td>Laura Pérez</td>
+                                    <td class="call-message">Problema de disciplina en aula, estudiante no respeta...</td>
+                                    <td>
+                                        <span class="status-badge status-tradizado">Tradizado</span>
+                                    </td>
+                                    <td>
+                                        <div class="priority-medium">Media</div>
+                                    </td>
+                                    <td>Roberto Silva</td>
+                                    <td>4.2 min</td>
+                                    <td>
+                                        <button class="action-btn"><i class="fa-solid fa-eye"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="call-date">2024-01-15</div>
+                                        <div class="call-time">14:10</div>
+                                    </td>
+                                    <td>
+                                        <div class="call-grade">3° A</div>
+                                        <div class="call-level">Secundaria</div>
+                                    </td>
+                                    <td>Diego Morales</td>
+                                    <td class="call-message">Estudiante se siente mal, posible fiebre</td>
+                                    <td>
+                                        <span class="status-badge status-concesion">Concesión</span>
+                                    </td>
+                                    <td>
+                                        <div class="priority-high">Alta</div>
+                                    </td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>
+                                        <button class="action-btn"><i class="fa-solid fa-eye"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+</body>
+
+</html>

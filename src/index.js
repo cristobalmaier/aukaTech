@@ -54,9 +54,11 @@ app.use((err, req, res, next) => {
 import indexRutas from './web/rutas/index.rutas.js'
 import loginRutas from './web/rutas/login.rutas.js'
 import panelRutas from './web/rutas/panel.rutas.js'
+import directivosRutas from './web/rutas/directivos.rutas.js'
 
 app.use(indexRutas)
 app.use(loginRutas)
+app.use(directivosRutas)
 app.use(panelRutas)
 
 // Estaticos
