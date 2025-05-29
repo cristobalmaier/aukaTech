@@ -710,7 +710,7 @@ hr {
   margin-top: 20px;
 }
 
-/* ////////////////////// Directivos ////////////////////// */
+/* ////////////////////// Directivos LLAMADOS ////////////////////// */
 /* Layout principal */
 .layout {
   display: flex;
@@ -1034,6 +1034,7 @@ a{
   border-radius: 8px;
   padding: 8px 12px;
   flex: 1;
+  cursor: pointer;
 }
 
 .filter i {
@@ -1317,3 +1318,7 @@ a{
   color: #374151;
   font-size: 15px;
 }
+
+
+/* ////////////////////// Directivos ADMINISTRACION ////////////////////// */
+
