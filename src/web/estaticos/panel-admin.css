@@ -144,6 +144,15 @@
     flex-direction: column;
     gap: 0.75rem;
   }
+  .card-wide h3 i{
+    margin-right: 8px;
+    color: #6b7280;
+  }
+  .limpieza-estadisticas > label{
+    font-weight: 600;
+    color: #374151;
+    font-size: 0.95rem;
+  }
   
   .estadistica {
     background-color: #f3f4f6;
