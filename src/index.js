@@ -55,11 +55,13 @@ import indexRutas from './web/rutas/index.rutas.js'
 import loginRutas from './web/rutas/login.rutas.js'
 import panelRutas from './web/rutas/panel.rutas.js'
 import directivosRutas from './web/rutas/directivos.rutas.js'
+import administracionRutas from './web/rutas/administracion.rutas.js'
 
 app.use(indexRutas)
 app.use(loginRutas)
 app.use(directivosRutas)
 app.use(panelRutas)
+app.use(administracionRutas)
 
 // Estaticos
 app.use('/', express.static(process.cwd() + '/src/web/estaticos'))
