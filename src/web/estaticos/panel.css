@@ -216,7 +216,11 @@ hr {
 }
 
 .no-hay-llamados {
-  color: var(--color-texto-secundario);
+  text-align: center;
+  margin: 2rem 0;
+  color: #6b7280;
+  font-size: 1.3rem;
+  font-weight: 600;
 }
 
 .llamados {
@@ -736,7 +740,7 @@ hr {
   color: #374151;
   width: 20px;
   height: 20px;
-  
+
 }
 
 .logo1 {
@@ -827,7 +831,7 @@ hr {
   padding: 0 8px;
 }
 
-.nav > span {
+.nav>span {
   display: block;
   font-size: 12px;
   font-weight: 600;
@@ -907,6 +911,28 @@ hr {
   background: #9ca3af;
 }
 
+.boton-exportar {
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 4px;
+  margin-left: 10px;
+  margin-top: 10px;
+  transition: background 0.2s ease;
+}
+
+.boton-exportar:hover {
+  background-color: #1d4ed8;
+}
+
 /* Main Content */
 .main-content {
   margin-left: 220px;
@@ -917,21 +943,19 @@ hr {
 }
 
 .main-panel {
-  padding: 24px 32px;
-  max-width: 1400px;
-  margin: 0 auto;
+  max-width: 85vw;
   width: 100%;
+  padding: 24px 16px;
   box-sizing: border-box;
+  margin: 0 auto;
 }
 
 .main-panel h2 {
-  font-size: 24px;
-  font-weight: 700;
-  margin: 0 0 24px 0;
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 1.5rem;
   color: #111827;
-  display: flex;
-  align-items: center;
-  gap: 12px;
+  line-height: 1.1;
 }
 
 .main-panel h2 i {
@@ -962,6 +986,13 @@ hr {
   color: #6b7280;
 }
 
+.header-llamados {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
 .boton-limpiar {
   padding: 6px 12px;
   font-size: 12px;
@@ -973,6 +1004,7 @@ hr {
   display: flex;
   align-items: center;
 }
+
 .filters-row {
   display: flex;
   gap: 10px;
@@ -1017,6 +1049,9 @@ hr {
   border-radius: 10px;
   padding: 16px;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
 }
 
 .calls-header {
@@ -1027,9 +1062,10 @@ hr {
 }
 
 .calls-header h3 {
-  font-size: 24px;
+  font-size: 1.5rem;
+  font-weight: 700;
   color: #111827;
-  margin: 0;
+  margin-bottom: 0.5rem;
 }
 
 .calls-header span {
@@ -1038,13 +1074,19 @@ hr {
 }
 
 .calls-table {
-  width: 100%;
   overflow-x: auto;
+  width: 100%;
+  display: block;
+  /* Elimina cualquier centrado */
 }
 
 .calls-table table {
+  margin: 0;
   width: 100%;
-  border-collapse: collapse;
+  /* Elimina min-width y max-width para ocupar todo el espacio */
+  min-width: unset;
+  max-width: unset;
+  overflow-x: auto;
 }
 
 .calls-table th {
@@ -1086,7 +1128,7 @@ hr {
 
 .status-badge {
   display: inline-block;
-  padding: 4px 8px;
+  padding: 4px 10px;
   border-radius: 12px;
   font-size: 12px;
   font-weight: 500;
@@ -1112,15 +1154,11 @@ hr {
 
 /* Estilos para los botones de prioridad */
 .priority-badge {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: inline-block;
   padding: 4px 10px;
   border-radius: 12px;
   font-size: 12px;
   font-weight: 500;
-  border: 1px solid #e5e7eb;
-  cursor: default;
 }
 
 .priority-high {
@@ -1137,6 +1175,7 @@ hr {
   background-color: rgb(233, 233, 233);
   color: #000000;
 }
+
 .action-btn {
   background-color: #f3f4f6;
   border: none;
@@ -1157,4 +1196,111 @@ hr {
 
 .action-btn i {
   font-size: 14px;
+}
+
+/* Responsive para pantallas chicas */
+@media (max-width: 900px) {
+  .main-panel {
+    padding: 12px 4px;
+  }
+  .main-panel h2 {
+    font-size: 1.5rem;
+  }
+  .calls-header h3 {
+    font-size: 1.1rem;
+  }
+  .calls-table table, .calls-table th, .calls-table td {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .main-panel {
+    max-width: 98vw;
+  }
+  .calls-table table {
+    min-width: 600px;
+    max-width: 98vw;
+  }
+}
+
+.modal-llamado {
+  position: fixed;
+  z-index: 9999;
+  left: 0; top: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.modal-llamado-content {
+  background: #fff;
+  border-radius: 12px;
+  max-width: 800px;
+  width: 95vw;
+  padding: 40px 40px 32px 40px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+  position: relative;
+}
+.modal-llamado-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: #f3f4f6;
+  border: none;
+  border-radius: 50%;
+  width: 32px; height: 32px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #374151;
+  transition: background 0.2s ease;
+}
+.modal-llamado-close:hover {
+  background: #e5e7eb;
+}
+@media (max-width: 700px) {
+  .modal-llamado-content { padding: 12px 4px; }
+}
+
+/* ===== Detalle Llamado Modal ===== */
+.detalle-llamado-titulo {
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+.detalle-llamado-subtitulo {
+  color: #6b7280;
+  font-size: 15px;
+  margin-bottom: 18px;
+}
+.detalle-llamado-flex {
+  display: flex;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+.detalle-llamado-col {
+  flex: 1;
+  min-width: 180px;
+}
+.detalle-llamado-col div {
+  margin-bottom: 15px;
+}
+.detalle-llamado-col-titulo {
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.detalle-llamado-hr {
+  margin: 18px 0 18px 0;
+  border: none;
+  border-top: 1px solid #e5e7eb;
+}
+.detalle-llamado-label {
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.detalle-llamado-mensaje {
+  background: #f3f6fa;
+  padding: 12px 14px;
+  border-radius: 8px;
+  color: #374151;
+  font-size: 15px;
 }

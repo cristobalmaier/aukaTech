@@ -65,8 +65,13 @@
       </header>
 
       <main class="main-panel">
-        <h2>Gestión de Llamados</h2>
-
+        
+        <div class="header-llamados">
+          <h2>Gestión de Llamados</h2>
+          <div class="exportar">
+            <button id="boton-exportar" class="boton-exportar"><i class="fa-solid fa-file-export"></i> Exportar</button>
+          </div>
+        </div>
         <div class="search-filters">
           <h3><i class="fas fa-filter"></i> Filtros de Búsqueda</h3>
           <div class="filters-row">
@@ -103,7 +108,7 @@
 
             <!-- Botón para limpiar filtros -->
             <button id="clearFilters" class="boton-limpiar">
-              <i class="fas fa-times" style="margin-right: 5px"></i> Limpiar
+              <i class="fa-solid fa-filter-circle-xmark" style="margin-right: 5px"></i>
             </button>
           </div>
         </div>
@@ -125,12 +130,11 @@
                   <th>Estado</th>
                   <th>Prioridad</th>
                   <th>Preceptor</th>
-                  <th>Tempo Resp.</th>
                   <th>Acciones</th>
                 </tr>
               </thead>
               <tbody>
-                <% llamadosResultado.forEach(llamado=> { %>
+                <% (llamadosResultado || []).forEach(llamado => { %>
                   <tr>
                     <td>
                       <div class="call-date">
@@ -155,7 +159,7 @@
                     </td>
                     <td>
                       <div class="emisor">
-                        <%= llamado.nombre_preceptor %>
+                        <%= llamado.nombre %>
                       </div>
                     </td>
                     <td class="call-message">
@@ -180,20 +184,33 @@
                     <td>
                       <%= llamado.nombre %>
                     </td>
-                    <td>-</td>
                     <td>
                       <button class="action-btn">
                         <i class="fa-solid fa-eye"></i>
                       </button>
                     </td>
                   </tr>
-                  <% }) %>
+                <% }) %>
 
               </tbody>
             </table>
           </div>
+          <% if (!(llamadosResultado && llamadosResultado.length > 0)) { %>
+            <div class="no-hay-llamados">
+              No hay llamados.
+            </div>
+          <% } %>
         </div>
       </main>
+    </div>
+  </div>
+
+  <div id="detalleLlamadoModal" class="modal-llamado" style="display:none;">
+    <div class="modal-llamado-content">
+      <button class="modal-llamado-close" id="cerrarDetalleLlamado">&times;</button>
+      <div id="detalleLlamadoContenido">
+        <!-- Aquí se cargará el detalle dinámicamente -->
+      </div>
     </div>
   </div>
 </body>
