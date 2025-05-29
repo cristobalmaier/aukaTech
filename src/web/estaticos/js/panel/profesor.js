@@ -96,8 +96,20 @@ botonCerrar.addEventListener('click', () => {
 
 // ! CANCELAR LLAMADO (BOTON DE CANCELAR)
 
-botonCancelarLlamado.addEventListener('click', () => {
+botonCancelarLlamado.addEventListener('click', async () => {
     const mensaje = formulario.dataset.mensaje
+    const id_llamado = formulario.dataset.id_llamado
+
+    const resultado = await peticion({
+        url: '/api/llamados/actualizar/' + id_llamado,
+        metodo: 'PUT',
+        cuerpo: {
+            finalizado: true,
+            cancelado: true
+        }
+    })
+
+    console.log(resultado)
 
     socket.emit('cancelar-llamado', {
         usuario_id: idProfesor,
