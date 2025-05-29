@@ -6,6 +6,7 @@
   <%- include('../parciales/head.html') %>
     <link rel="stylesheet" href="panel.css" />
     <link rel="stylesheet" href="alertas.css" />
+    <link rel="stylesheet" href="panel-admin.css" />
 
     <!-- ICONOS (Font Awesome) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
@@ -36,16 +37,16 @@
         <span>Navegación</span>
         <ul class="nav-list">
           <li>
-            <i class="fas fa-home"></i> <span>Dashboard</span>
+            <a href="/"><i class="fas fa-home"></i> <span>Dashboard</span></a>
           </li>
           <li class="active">
-            <i class="fas fa-phone-alt"></i> <span>Llamados</span>
+            <a href="/panel/directivos"><i class="fas fa-phone-alt"></i> <span>Llamados</span></a>
           </li>
           <li>
-            <i class="fa-solid fa-gear"></i> <span>Administracion</span>
+            <a href="/panel/administracion"><i class="fa-solid fa-gear"></i> <span>Administración</span></a>
           </li>
           <li>
-            <i class="fa-solid fa-chart-column"></i> <span>Análisis</span>
+            <a href="/panel/analisis"><i class="fa-solid fa-chart-column"></i> <span>Análisis</span></a>
           </li>
         </ul>
       </nav>
