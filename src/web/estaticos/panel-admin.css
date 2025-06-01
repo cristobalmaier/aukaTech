@@ -25,7 +25,7 @@ body {
   display: flex; /* To align icon and text */
   align-items: center;
   font-weight: 600;
-  
+
 }
 
 .card-wide h3 i {
@@ -46,7 +46,7 @@ body {
   margin-bottom: 2rem;
 }
 
-.boton-exportar {
+.botones-exportar {
   flex: 1 1 auto;
   min-width: 200px;
   background-color: #f3f4f6;
@@ -60,9 +60,11 @@ body {
   gap: 0.5rem;
   font-weight: 500;
   transition: background-color 0.2s ease;
+  cursor: pointer;
 }
 
-.boton-exportar:hover {
+
+.botones-exportar:hover {
   background-color: #e5e7eb;
 }
 
@@ -275,7 +277,7 @@ body {
     width: 150px; /* Set a fixed width */
   }
   
-  .boton-limpiar {
+  .botones-limpiar {
     background-color: #ef4444;
     color: white;
     border: none;
@@ -290,7 +292,7 @@ body {
     transition: background-color 0.2s ease;
   }
   
-  .boton-limpiar:hover {
+  .botones-limpiar:hover {
     background-color: #dc2626;
   }
   
