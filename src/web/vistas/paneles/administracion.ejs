@@ -187,7 +187,131 @@
               </div>
             </div>
           </div>
-        
+
+          <!-- Gestión de Usuarios Card -->
+          <div class="card-wide">
+            <h3><i class="fa-solid fa-user-group"></i> Gestión de Usuarios</h3>
+            <p class="subtexto">Autorizar o desautorizar usuarios del sistema</p>
+
+            <div class="users-table">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Usuario</th>
+                    <th>Email</th>
+                    <th>Rol</th>
+                    <th>Curso</th>
+                    <th>Estado</th>
+                    <th>Último Acceso</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% /* Example user data - replace with your actual data loop */ %>
+                  <tr>
+                    <td>Ana Martín</td>
+                    <td>ana.martin@escuela.edu</td>
+                    <td>Profesor</td>
+                    <td>5° A</td>
+                    <td><span class="status-badge status-activo">Activo</span></td>
+                    <td>2024-01-15 14:30</td>
+                    <td>
+                      <button class="action-button"><i class="fas fa-user-check"></i></button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Carlos López</td>
+                    <td>carlos.lopez@escuela.edu</td>
+                    <td>Profesor</td>
+                    <td>2° B</td>
+                    <td><span class="status-badge status-activo">Activo</span></td>
+                    <td>2024-01-15 14:25</td>
+                    <td>
+                      <button class="action-button"><i class="fas fa-user-check"></i></button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>María González</td>
+                    <td>maria.gonzalez@escuela.edu</td>
+                    <td>Preceptor</td>
+                    <td>-</td>
+                    <td><span class="status-badge status-activo">Activo</span></td>
+                    <td>2024-01-15 14:35</td>
+                    <td>
+                      <button class="action-button"><i class="fas fa-user-check"></i></button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Diego Morales</td>
+                    <td>diego.morales@escuela.edu</td>
+                    <td>Profesor</td>
+                    <td>3° A</td>
+                    <td><span class="status-badge status-inactivo">Inactivo</span></td>
+                    <td>2024-01-10 16:20</td>
+                    <td>
+                      <button class="action-button"><i class="fas fa-user-check"></i></button>
+                    </td>
+                  </tr>
+                  <% /* End of example user data */ %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Configuración del Sistema Card -->
+          <div class="card-wide">
+            <h3><i class="fa-solid fa-gear"></i> Configuración del Sistema</h3>
+            <p class="subtexto">Parámetros generales del sistema de monitoreo</p>
+
+            <div class="config-grid">
+              <div class="form-group">
+                <label for="tiempoAlerta">Tiempo de alerta (minutos)</label>
+                <input type="number" id="tiempoAlerta" value="5">
+              </div>
+              <div class="form-group">
+                <label for="copiaSeguridad">Backup automático</label>
+                <select id="copiaSeguridad">
+                  <option value="diario">Diario</option>
+                  <option value="semanal">Semanal</option>
+                  <option value="mensual">Mensual</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="autoAsignacion">Auto-asignación de llamados</label>
+                <select id="autoAsignacion">
+                  <option value="habilitado">Habilitado</option>
+                  <option value="deshabilitado">Deshabilitado</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="retencionLogs">Retención de logs (días)</label>
+                <input type="number" id="retencionLogs" value="90">
+              </div>
+
+              <div class="form-group">
+                <label for="notificacionesEmail">Notificaciones por email</label>
+                <select id="notificacionesEmail">
+                  <option value="importantes">Solo importantes</option>
+                  <option value="todos">Todos</option>
+                  <option value="ninguno">Ninguno</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="nivelLogging">Nivel de logging</label>
+                <select id="nivelLogging">
+                  <option value="info">Info</option>
+                  <option value="debug">Debug</option>
+                  <option value="warn">Warn</option>
+                  <option value="error">Error</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="save-button-container">
+              <button class="save-button">Guardar Configuración</button>
+            </div>
+          </div>
         </main>
       </div>
     </div>

@@ -1,88 +1,241 @@
+body {
+  font-family: sans-serif; /* Assuming a generic sans-serif font */
+  margin: 0;
+}
+
+.container {
+  max-width: 1000px; /* Adjust as needed */
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
 .card-wide {
-    background: #fff;
-    border-radius: 12px;
-    padding: 2rem;
-    margin-top: 2rem;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    width: 100%;
-  }
+  background: #fff;
+  border-radius: 12px;
+  padding: 2rem;
+  margin-bottom: 2rem; /* Added margin-bottom */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  width: 100%;
+}
+
+.card-wide h3 {
+  font-size: 24px;
+  margin-bottom: 0.5rem; /* Adjusted margin-bottom */
+  color: #111827; /* Dark text color */
+  display: flex; /* To align icon and text */
+  align-items: center;
+  font-weight: 600;
   
-  .card-wide h3 {
-    font-size: 1.25rem;
-    margin-bottom: 0.2rem;
-  }
-  
-  .subtexto {
+}
+
+.card-wide h3 i {
+  margin-right: 8px;
+  color: #6b7280; /* Gray color for icons */
+}
+
+.subtexto {
+  font-size: 0.95rem;
+  color: #6b7280; /* Gray color for subtext */
+  margin-bottom: 1.5rem;
+}
+
+.export-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.boton-exportar {
+  flex: 1 1 auto;
+  min-width: 200px;
+  background-color: #f3f4f6;
+  color: #111827;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.boton-exportar:hover {
+  background-color: #e5e7eb;
+}
+
+.filtros-secundarios {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  min-width: 220px;
+  flex: 1;
+}
+
+.filter-group span {
+  font-weight: 600;
+  font-size: 0.85rem;
+  margin-bottom: 0.4rem;
+  color: #374151;
+}
+
+.filter {
+  display: flex;
+  align-items: center;
+  background-color: #f9fafb;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  gap: 0.5rem;
+}
+
+.filter input,
+.filter select {
+  border: none;
+  outline: none;
+  flex: 1;
+  font-size: 0.9rem;
+  background: transparent;
+}
+
+/* Table styles */
+.users-table table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+.users-table th,
+.users-table td {
+  padding: 12px 15px; /* Padding for table cells */
+  text-align: left;
+  border-bottom: 1px solid #e5e7eb; /* Light gray border */
+}
+
+.users-table th {
+  background-color: #f9fafb; /* Light background for headers */
+  color: #374151; /* Darker text for headers */
+  font-weight: 600;
+}
+
+.users-table td {
+    color: #374151; /* Darker text for cells */
     font-size: 0.95rem;
-    color: #6b7280;
-    margin-bottom: 1.5rem;
-  }
-  
-  .export-buttons {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    margin-bottom: 2rem;
-  }
-  
-  .boton-exportar {
-    flex: 1 1 auto;
-    min-width: 200px;
-    background-color: #f3f4f6;
-    color: #111827;
-    padding: 0.75rem 1rem;
-    border-radius: 8px;
-    border: 1px solid #d1d5db;
+}
+
+.users-table tr:last-child td {
+  border-bottom: none; /* No border for the last row */
+}
+
+/* Status badges */
+.status-badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 12px; /* More rounded corners */
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.status-activo {
+  background-color: #2563EB; /* Blue color */
+}
+
+.status-inactivo {
+  background-color: #EF4444; /* Red color */
+}
+
+/* Actions button in table */
+.action-button {
+    background-color: #f3f4f6; /* Light gray background */
+    border: 1px solid #d1d5db; /* Light gray border */
+    border-radius: 6px;
+    padding: 6px 10px; /* Smaller padding */
+    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.5rem;
-    font-weight: 500;
     transition: background-color 0.2s ease;
-  }
-  
-  .boton-exportar:hover {
-    background-color: #e5e7eb;
-  }
-  
-  .filtros-secundarios {
-    display: flex;
-    gap: 2rem;
-    flex-wrap: wrap;
-  }
-  
-  .filter-group {
+    text-align: center;
+}
+
+.action-button:hover {
+    background-color: #e5e7eb; /* Slightly darker on hover */
+}
+
+.action-button i {
+    color: #6b7280; /* Gray color for icon */
+    font-size: 0.9rem;
+}
+
+/* Form styles in Configuración del Sistema */
+.config-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Two columns */
+    gap: 2rem; /* Gap between columns and rows */
+}
+
+.form-group {
     display: flex;
     flex-direction: column;
-    min-width: 220px;
-    flex: 1;
-  }
-  
-  .filter-group span {
+}
+
+.form-group label {
     font-weight: 600;
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     margin-bottom: 0.4rem;
     color: #374151;
-  }
-  
-  .filter {
-    display: flex;
-    align-items: center;
-    background-color: #f9fafb;
+}
+
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group select {
     padding: 0.5rem 0.75rem;
     border-radius: 6px;
     border: 1px solid #d1d5db;
-    gap: 0.5rem;
-  }
-  
-  .filter input,
-  .filter select {
-    border: none;
+    background-color: #f9fafb;
+    font-size: 0.95rem;
     outline: none;
-    flex: 1;
-    font-size: 0.9rem;
-    background: transparent;
-  }
+    width: 100%; /* Make inputs fill their container */
+    box-sizing: border-box; /* Include padding and border in element's total width and height */
+}
+
+/* Save button style */
+.save-button-container {
+    margin-top: 2rem; /* Space above the button */
+    text-align: right; /* Align button to the right */
+}
+
+.save-button {
+    background-color: #2563EB; /* Blue color */
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem; /* Padding */
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.save-button:hover {
+    background-color: #0754fa; /* Darker blue on hover */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .config-grid {
+        grid-template-columns: 1fr; /* Stack columns on smaller screens */
+    }
+}
+
+/* Keeping the previous styles for limpieza-datos and boton-limpiar and limpieza-controles select */
 
   .limpieza-datos {
     margin-top: 2rem;
@@ -98,10 +251,12 @@
   
   .limpieza-controles {
     flex: 1;
-    min-width: 250px;
+    min-width: 200px;
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    width: 100%;
+    
   }
   
   .limpieza-controles label {
@@ -117,6 +272,7 @@
     background-color: #f9fafb;
     font-size: 0.95rem;
     outline: none;
+    width: 150px; /* Set a fixed width */
   }
   
   .boton-limpiar {
@@ -125,6 +281,7 @@
     border: none;
     padding: 0.75rem 1rem;
     border-radius: 8px;
+    width: 150px; /* Set the same fixed width */
     font-weight: 600;
     display: flex;
     align-items: center;
@@ -144,10 +301,7 @@
     flex-direction: column;
     gap: 0.75rem;
   }
-  .card-wide h3 i{
-    margin-right: 8px;
-    color: #6b7280;
-  }
+
   .limpieza-estadisticas > label{
     font-weight: 600;
     color: #374151;

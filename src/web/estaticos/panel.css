@@ -1071,15 +1071,21 @@ a{
 
 .calls-header {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   margin-bottom: 1.5rem;
+  
+}
+
+.calls-header i {
+  margin-right: 8px;
+  color: #6b7280;
 }
 
 .calls-header h3 {
-  font-size: 1.5rem;
-  font-weight: 700;
+  font-size: 24px;
   color: #111827;
+  font-weight: 600;
 }
 
 .calls-header span {
