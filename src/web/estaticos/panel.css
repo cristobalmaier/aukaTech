@@ -1057,7 +1057,9 @@ a{
   color-scheme: light;
 }
 
-/* ////////////////////// Calls Table ////////////////////// */
+/* ////////////////////
+
+// Calls Table ////////////////////// */
 .calls-container {
   background-color: #ffffff;
   border: 1px solid #e5e7eb;

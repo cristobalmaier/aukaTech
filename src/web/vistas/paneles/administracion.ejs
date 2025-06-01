@@ -329,3 +329,67 @@
   </body>
   <script src="./js/panel/directivos.js"></script>
 </html>
+<!DOCTYPE html>
+<html
+  lang="es"
+  data-id_usuario="<%- usuario.id_usuario %>"
+  data-nombre="<%- usuario.nombre %>"
+  data-apellido="<%- usuario.apellido %>"
+  data-tipo_usuario="<%- usuario.tipo_usuario %>"
+>
+  <head>
+    <%- include('../parciales/head.html') %>
+    <link rel="stylesheet" href="panel.css" />
+    <link rel="stylesheet" href="alertas.css" />
+
+    <!-- ICONOS (Font Awesome) -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+
+    <!-- ANIMACIONES (Animate.css) -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+
+    <!-- SOCKET.IO -->
+    <script type="module" src="/socket.io/socket.io.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/timeago.js@4.0.2/dist/timeago.min.js"></script>
+
+    <script type="module" src="js/panel/administracion.js"></script>
+  </head>
+
+  <body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="logo">
+        <div class="logo-icon">A</div>
+        <div class="logo-text">
+          <h1>Auka</h1>
+          <span>Panel de Monitoreo</span>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <span>Navegación</span>
+        <ul class="nav-list">
+          <li class="<%= (rutaActual === '/panel/dashboard') ? 'active' : '' %>">
+            <a href="/panel/dashboard"><i class="fas fa-home"></i> <span>Dashboard</span></a>
+          </li>
+          <li class="<%= (rutaActual === '/panel/directivos') ? 'active' : '' %>">
+            <a href="/panel/directivos"><i class="fas fa-phone-alt"></i> <span>Llamados</span></a>
+          </li>
+          <li class="<%= (rutaActual === '/panel/administracion') ? 'active' : '' %>">
+            <a href="/panel/administracion"><i class="fa-solid fa-gear"></i> <span>Administración</span></a>
+          </li>
+          <li class="<%= (rutaActual === '/panel/analisis') ? 'active' : '' %>">
+            <a href="/panel/analisis"><i class="fa-solid fa-chart-column"></i> <span>Análisis</span></a>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+  </body>
+  <script src="./js/panel/administracion.js"></script>
+</html>
