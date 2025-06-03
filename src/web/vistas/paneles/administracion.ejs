@@ -1,213 +1,194 @@
 <!DOCTYPE html>
-<html
-  lang="es"
-  data-id_usuario="<%- usuario.id_usuario %>"
-  data-nombre="<%- usuario.nombre %>"
-  data-apellido="<%- usuario.apellido %>"
-  data-tipo_usuario="<%- usuario.tipo_usuario %>"
->
-  <head>
-    <%- include('../parciales/head.html') %>
+<html lang="es" data-id_usuario="<%- usuario.id_usuario %>" data-nombre="<%- usuario.nombre %>"
+  data-apellido="<%- usuario.apellido %>" data-tipo_usuario="<%- usuario.tipo_usuario %>">
+
+<head>
+  <%- include('../parciales/head.html') %>
     <link rel="stylesheet" href="panel.css" />
     <link rel="stylesheet" href="alertas.css" />
     <link rel="stylesheet" href="panel-admin.css" />
 
     <!-- ICONOS (Font Awesome) -->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
     <!-- ANIMACIONES (Animate.css) -->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
-    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 
     <!-- SOCKET.IO -->
     <script type="module" src="/socket.io/socket.io.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/timeago.js@4.0.2/dist/timeago.min.js"></script>
 
     <script type="module" src="js/panel/directivos.js"></script>
-  </head>
+</head>
 
-  <body>
-    <div class="layout" id="layout">
-      <!-- Sidebar -->
-      <aside class="sidebar" id="sidebar">
-        <div class="logo">
-          <div class="logo-icon">A</div>
-          <div class="logo-text">
-            <h1>Auka</h1>
-            <span>Panel de Monitoreo</span>
+<body>
+  <div class="layout" id="layout">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="logo">
+        <div class="logo-icon">A</div>
+        <div class="logo-text">
+          <h1>Auka</h1>
+          <span>Panel de Monitoreo</span>
+        </div>
+
+      </div>
+
+      <nav class="nav">
+        <span>Navegación</span>
+        <ul class="nav-list">
+          <li>
+            <a href="/panel/dashboard"><i class="fas fa-home"></i> <span>Dashboard</span></a>
+          </li>
+          <li>
+            <a href="/panel/directivos"><i class="fas fa-phone-alt"></i> <span>Llamados</span></a>
+          </li>
+          <li class="active">
+            <a href="/panel/administracion"><i class="fa-solid fa-gear"></i> <span>Administración</span></a>
+          </li>
+          <li>
+            <a href="/panel/analisis"><i class="fa-solid fa-chart-column"></i>
+              <span>Análisis</span></a>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- Contenido principal -->
+    <div class="main-content" id="mainContent">
+      <header class="header">
+        <div class="menu-icon" id="menuIcon">
+          <img src="img/icon.svg" alt="" />
+        </div>
+
+        <div class="logo1">
+          <div class="logo-icon1">A</div>
+          <span class="logo-text1">Auka</span>
+          
+        </div>
+      </header>
+
+      <main class="main-panel">
+        <div class="header-llamados">
+          <h2>Administracion del sistema</h2>
+        </div>
+        <div class="search-filters card-wide">
+          <h3>
+            <i class="fa-solid fa-file-export"></i> Exportación de Datos
+          </h3>
+          <p class="subtexto">
+            Exportar listados de llamados en diferentes formatos
+          </p>
+
+          <div class="filters-row export-buttons">
+            <button id="boton-exportar-excel" class="botones-exportar">
+              <i class="fa-solid fa-file-excel"></i> Exportar a Excel
+            </button>
+            <button id="boton-exportar-pdf" class="botones-exportar">
+              <i class="fa-solid fa-file-pdf"></i> Exportar a PDF
+            </button>
+            <button id="boton-exportar-csv" class="botones-exportar">
+              <i class="fa-solid fa-file-csv"></i> Exportar a CSV
+            </button>
+            <button id="boton-exportar-reporte-completo" class="botones-exportar">
+              <i class="fa-solid fa-file-lines"></i> Reporte Completo
+            </button>
+          </div>
+
+          <div class="filters-row filtros-secundarios">
+            <div class="filter-group">
+              <span>Fecha de Inicio</span>
+              <div class="filter">
+                <i class="fa-regular fa-calendar"></i>
+                <input type="date" id="fechaInicio" />
+              </div>
+            </div>
+
+            <div class="filter-group">
+              <span>Fecha de Fin</span>
+              <div class="filter">
+                <i class="fa-regular fa-calendar"></i>
+                <input type="date" id="fechaFin" />
+              </div>
+            </div>
+
+            <div class="filter-group">
+              <span>Filtrar por Estado</span>
+              <div class="filter">
+                <i class="fa-solid fa-filter"></i>
+                <select id="filtroEstado">
+                  <option value="">Todos los estados</option>
+                  <option value="pendiente">Pendiente</option>
+                  <option value="completado">Finalizado</option>
+                  <option value="cancelado">Cancelado</option>
+                </select>
+              </div>
+            </div>
           </div>
         </div>
 
-        <nav class="nav">
-          <span>Navegación</span>
-          <ul class="nav-list">
-            <li>
-              <a href="/panel/dashboard"
-                ><i class="fas fa-home"></i> <span>Dashboard</span></a
-              >
-            </li>
-            <li>
-              <a href="/panel/directivos"
-                ><i class="fas fa-phone-alt"></i> <span>Llamados</span></a
-              >
-            </li>
-            <li class="active">
-              <a href="/panel/administracion"
-                ><i class="fa-solid fa-gear"></i> <span>Administración</span></a
-              >
-            </li>
-            <li>
-              <a href="/panel/analisis"
-                ><i class="fa-solid fa-chart-column"></i>
-                <span>Análisis</span></a
-              >
-            </li>
-          </ul>
-        </nav>
-      </aside>
+        <div class="card-wide limpieza-datos">
+          <h3><i class="fa-solid fa-trash-can"></i>Limpieza de Datos Antiguos</h3>
+          <p class="subtexto">Eliminar llamados antiguos para optimizar el rendimiento del sistema</p>
 
-      <!-- Contenido principal -->
-      <div class="main-content" id="mainContent">
-        <header class="header">
-          <div class="menu-icon" id="menuIcon">
-            <img src="img/icon.svg" alt="" />
-          </div>
-
-          <div class="logo1">
-            <div class="logo-icon1">A</div>
-            <span class="logo-text1">Auka</span>
-          </div>
-        </header>
-
-        <main class="main-panel">
-          <div class="header-llamados">
-            <h2>Administracion del sistema</h2>
-          </div>
-          <div class="search-filters card-wide">
-            <h3>
-              <i class="fa-solid fa-file-export"></i> Exportación de Datos
-            </h3>
-            <p class="subtexto">
-              Exportar listados de llamados en diferentes formatos
-            </p>
-
-            <div class="filters-row export-buttons">
-              <button id="boton-exportar-excel" class="botones-exportar">
-                <i class="fa-solid fa-file-excel"></i> Exportar a Excel
-              </button>
-              <button id="boton-exportar-pdf" class="botones-exportar">
-                <i class="fa-solid fa-file-pdf"></i> Exportar a PDF
-              </button>
-              <button id="boton-exportar-csv" class="botones-exportar">
-                <i class="fa-solid fa-file-csv"></i> Exportar a CSV
-              </button>
-              <button
-                id="boton-exportar-reporte-completo"
-                class="botones-exportar"
-              >
-                <i class="fa-solid fa-file-lines"></i> Reporte Completo
+          <div class="limpieza-contenido">
+            <!-- Controles -->
+            <div class="limpieza-controles">
+              <label for="periodoLimpieza">Eliminar llamados anteriores</label>
+              <select id="periodoLimpieza">
+                <option value="3">3 meses</option>
+                <option value="6" selected>6 meses</option>
+                <option value="12">1 año</option>
+                <option value="24">2 años</option>
+              </select>
+              <button class="botones-limpiar">
+                <i class="fa-solid fa-trash"></i> Limpiar Datos
               </button>
             </div>
 
-            <div class="filters-row filtros-secundarios">
-              <div class="filter-group">
-                <span>Fecha de Inicio</span>
-                <div class="filter">
-                  <i class="fa-regular fa-calendar"></i>
-                  <input type="date" id="fechaInicio" />
-                </div>
+            <!-- Estadísticas -->
+            <div class="limpieza-estadisticas">
+              <label for="periodoLimpieza">Estadísticas de limpieza</label>
+              <div class="estadistica">
+                <span class="titulo">Llamados antiguos:</span>
+                <span class="valor">1247</span>
               </div>
-
-              <div class="filter-group">
-                <span>Fecha de Fin</span>
-                <div class="filter">
-                  <i class="fa-regular fa-calendar"></i>
-                  <input type="date" id="fechaFin" />
-                </div>
+              <div class="estadistica">
+                <span class="titulo">Último mes:</span>
+                <span class="valor">89</span>
               </div>
-
-              <div class="filter-group">
-                <span>Filtrar por Estado</span>
-                <div class="filter">
-                  <i class="fa-solid fa-filter"></i>
-                  <select id="filtroEstado">
-                    <option value="">Todos los estados</option>
-                    <option value="pendiente">Pendiente</option>
-                    <option value="completado">Finalizado</option>
-                    <option value="cancelado">Cancelado</option>
-                  </select>
-                </div>
+              <div class="estadistica">
+                <span class="titulo">Espacio a liberar:</span>
+                <span class="valor">2.3 GB</span>
+              </div>
+              <div class="estadistica">
+                <span class="titulo">Última limpieza:</span>
+                <span class="valor">2024-01-01</span>
               </div>
             </div>
           </div>
+        </div>
 
-          <div class="card-wide limpieza-datos">
-            <h3><i class="fa-solid fa-trash-can"></i>Limpieza de Datos Antiguos</h3>
-            <p class="subtexto">Eliminar llamados antiguos para optimizar el rendimiento del sistema</p>
-          
-            <div class="limpieza-contenido">
-              <!-- Controles -->
-              <div class="limpieza-controles">
-                <label for="periodoLimpieza">Eliminar llamados anteriores</label>
-                <select id="periodoLimpieza">
-                  <option value="3">3 meses</option>
-                  <option value="6" selected>6 meses</option>
-                  <option value="12">1 año</option>
-                  <option value="24">2 años</option>
-                </select>
-                <button class="botones-limpiar">
-                  <i class="fa-solid fa-trash"></i> Limpiar Datos
-                </button>
-              </div>
-          
-              <!-- Estadísticas -->
-              <div class="limpieza-estadisticas">
-                <label for="periodoLimpieza">Estadísticas de limpieza</label>
-                <div class="estadistica">
-                  <span class="titulo">Llamados antiguos:</span>
-                  <span class="valor">1247</span>
-                </div>
-                <div class="estadistica">
-                  <span class="titulo">Último mes:</span>
-                  <span class="valor">89</span>
-                </div>
-                <div class="estadistica">
-                  <span class="titulo">Espacio a liberar:</span>
-                  <span class="valor">2.3 GB</span>
-                </div>
-                <div class="estadistica">
-                  <span class="titulo">Última limpieza:</span>
-                  <span class="valor">2024-01-01</span>
-                </div>
-              </div>
-            </div>
-          </div>
+        <!-- Gestión de Usuarios Card -->
+        <div class="card-wide">
+          <h3><i class="fa-solid fa-user-group"></i> Gestión de Usuarios</h3>
+          <p class="subtexto">Autorizar o desautorizar usuarios del sistema</p>
 
-          <!-- Gestión de Usuarios Card -->
-          <div class="card-wide">
-            <h3><i class="fa-solid fa-user-group"></i> Gestión de Usuarios</h3>
-            <p class="subtexto">Autorizar o desautorizar usuarios del sistema</p>
-
-            <div class="users-table">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Usuario</th>
-                    <th>Email</th>
-                    <th>Rol</th>
-                    <th>Curso</th>
-                    <th>Estado</th>
-                    <th>Último Acceso</th>
-                    <th>Acciones</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <% /* Example user data - replace with your actual data loop */ %>
+          <div class="users-table">
+            <table>
+              <thead>
+                <tr>
+                  <th>Usuario</th>
+                  <th>Email</th>
+                  <th>Rol</th>
+                  <th>Curso</th>
+                  <th>Estado</th>
+                  <th>Último Acceso</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% /* Example user data - replace with your actual data loop */ %>
                   <tr>
                     <td>Ana Martín</td>
                     <td>ana.martin@escuela.edu</td>
@@ -216,7 +197,8 @@
                     <td><span class="status-badge status-activo">Activo</span></td>
                     <td>2024-01-15 14:30</td>
                     <td>
-                      <button class="action-button user-action-button" data-user-email="ana.martin@escuela.edu" data-user-status="activo"><i class="fas fa-user-slash"></i></button>
+                      <button class="action-button user-action-button" data-user-email="ana.martin@escuela.edu"
+                        data-user-status="activo"><i class="fas fa-user-slash"></i></button>
                     </td>
                   </tr>
                   <tr>
@@ -227,7 +209,8 @@
                     <td><span class="status-badge status-activo">Activo</span></td>
                     <td>2024-01-15 14:25</td>
                     <td>
-                      <button class="action-button user-action-button" data-user-email="carlos.lopez@escuela.edu" data-user-status="activo"><i class="fas fa-user-slash"></i></button>
+                      <button class="action-button user-action-button" data-user-email="carlos.lopez@escuela.edu"
+                        data-user-status="activo"><i class="fas fa-user-slash"></i></button>
                     </td>
                   </tr>
                   <tr>
@@ -238,7 +221,8 @@
                     <td><span class="status-badge status-activo">Activo</span></td>
                     <td>2024-01-15 14:35</td>
                     <td>
-                      <button class="action-button user-action-button" data-user-email="maria.gonzalez@escuela.edu" data-user-status="activo"><i class="fas fa-user-slash"></i></button>
+                      <button class="action-button user-action-button" data-user-email="maria.gonzalez@escuela.edu"
+                        data-user-status="activo"><i class="fas fa-user-slash"></i></button>
                     </td>
                   </tr>
                   <tr>
@@ -249,89 +233,91 @@
                     <td><span class="status-badge status-inactivo">Inactivo</span></td>
                     <td>2024-01-10 16:20</td>
                     <td>
-                      <button class="action-button user-action-button" data-user-email="diego.morales@escuela.edu" data-user-status="inactivo"><i class="fas fa-user-check"></i></button>
+                      <button class="action-button user-action-button" data-user-email="diego.morales@escuela.edu"
+                        data-user-status="inactivo"><i class="fas fa-user-check"></i></button>
                     </td>
                   </tr>
                   <% /* End of example user data */ %>
-                </tbody>
-              </table>
-            </div>
+              </tbody>
+            </table>
           </div>
-
-          <!-- Configuración del Sistema Card -->
-          <div class="card-wide">
-            <h3><i class="fa-solid fa-gear"></i> Configuración del Sistema</h3>
-            <p class="subtexto">Parámetros generales del sistema de monitoreo</p>
-
-            <div class="config-grid">
-              <div class="form-group">
-                <label for="tiempoAlerta">Tiempo de alerta (minutos)</label>
-                <input type="number" id="tiempoAlerta" value="5">
-              </div>
-              <div class="form-group">
-                <label for="copiaSeguridad">Backup automático</label>
-                <select id="copiaSeguridad">
-                  <option value="diario">Diario</option>
-                  <option value="semanal">Semanal</option>
-                  <option value="mensual">Mensual</option>
-                </select>
-              </div>
-
-              <div class="form-group">
-                <label for="autoAsignacion">Auto-asignación de llamados</label>
-                <select id="autoAsignacion">
-                  <option value="habilitado">Habilitado</option>
-                  <option value="deshabilitado">Deshabilitado</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="retencionLogs">Retención de logs (días)</label>
-                <input type="number" id="retencionLogs" value="90">
-              </div>
-
-              <div class="form-group">
-                <label for="notificacionesEmail">Notificaciones por email</label>
-                <select id="notificacionesEmail">
-                  <option value="importantes">Solo importantes</option>
-                  <option value="todos">Todos</option>
-                  <option value="ninguno">Ninguno</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="nivelLogging">Nivel de logging</label>
-                <select id="nivelLogging">
-                  <option value="info">Info</option>
-                  <option value="debug">Debug</option>
-                  <option value="warn">Warn</option>
-                  <option value="error">Error</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="save-button-container">
-              <button class="save-button">Guardar Configuración</button>
-            </div>
-          </div>
-        </main>
-      </div>
-    </div>
-
-    <div id="notificacion" class="alerta animate__animated animate__fadeInRight" style="display: none;">
-      <i id="notificacionIcono"></i>
-      <span id="notificacionMensaje"></span>
-    </div>
-
-    <div id="detalleLlamadoModal" class="modal-llamado" style="display: none">
-      <div class="modal-llamado-content">
-        <button class="modal-llamado-close" id="cerrarDetalleLlamado">
-          &times;
-        </button>
-        <div id="detalleLlamadoContenido">
-          <!-- Aquí se cargará el detalle dinámicamente -->
         </div>
+
+        <!-- Configuración del Sistema Card -->
+        <div class="card-wide">
+          <h3><i class="fa-solid fa-gear"></i> Configuración del Sistema</h3>
+          <p class="subtexto">Parámetros generales del sistema de monitoreo</p>
+
+          <div class="config-grid">
+            <div class="form-group">
+              <label for="tiempoAlerta">Tiempo de alerta (minutos)</label>
+              <input type="number" id="tiempoAlerta" value="5">
+            </div>
+            <div class="form-group">
+              <label for="copiaSeguridad">Backup automático</label>
+              <select id="copiaSeguridad">
+                <option value="diario">Diario</option>
+                <option value="semanal">Semanal</option>
+                <option value="mensual">Mensual</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="autoAsignacion">Auto-asignación de llamados</label>
+              <select id="autoAsignacion">
+                <option value="habilitado">Habilitado</option>
+                <option value="deshabilitado">Deshabilitado</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="retencionLogs">Retención de logs (días)</label>
+              <input type="number" id="retencionLogs" value="90">
+            </div>
+
+            <div class="form-group">
+              <label for="notificacionesEmail">Notificaciones por email</label>
+              <select id="notificacionesEmail">
+                <option value="importantes">Solo importantes</option>
+                <option value="todos">Todos</option>
+                <option value="ninguno">Ninguno</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="nivelLogging">Nivel de logging</label>
+              <select id="nivelLogging">
+                <option value="info">Info</option>
+                <option value="debug">Debug</option>
+                <option value="warn">Warn</option>
+                <option value="error">Error</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="save-button-container">
+            <button class="save-button">Guardar Configuración</button>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <div id="notificacion" class="alerta animate__animated animate__fadeInRight" style="display: none;">
+    <i id="notificacionIcono"></i>
+    <span id="notificacionMensaje"></span>
+  </div>
+
+  <div id="detalleLlamadoModal" class="modal-llamado" style="display: none">
+    <div class="modal-llamado-content">
+      <button class="modal-llamado-close" id="cerrarDetalleLlamado">
+        &times;
+      </button>
+      <div id="detalleLlamadoContenido">
+        <!-- Aquí se cargará el detalle dinámicamente -->
       </div>
     </div>
-  </body>
-  <script src="./js/panel/directivos.js"></script>
-  <script type="module" src="js/panel/administracion.js"></script>
+  </div>
+</body>
+<script src="./js/panel/directivos.js"></script>
+<script type="module" src="js/panel/administracion.js"></script>
+
 </html>
