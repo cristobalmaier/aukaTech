@@ -42,7 +42,6 @@ body {
   /* To align icon and text */
   align-items: center;
   font-weight: 600;
-
 }
 
 .card-wide h3 i {
@@ -54,8 +53,8 @@ body {
 .subtexto {
   font-size: 0.95rem;
   color: #6b7280;
-  /* Gray color for subtext */
   margin-bottom: 1.5rem;
+  /* Gray color for subtext */
 }
 
 .export-buttons {
@@ -138,7 +137,7 @@ body {
   padding: 12px 15px;
   /* Padding for table cells */
   text-align: left;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid hsl(220, 13%, 91%);
   /* Light gray border */
 }
 
@@ -751,10 +750,11 @@ a {
 .calls-header i {
   margin-right: 8px;
   color: #6b7280;
+  font-size: 22px;
 }
 
 .calls-header h3 {
-  font-size: 24px;
+  font-size: 24px !important;
   color: #111827;
   font-weight: 600;
 }
