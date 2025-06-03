@@ -32,9 +32,9 @@
   </head>
 
   <body>
-    <div class="layout">
+    <div class="layout" id="layout">
       <!-- Sidebar -->
-      <aside class="sidebar">
+      <aside class="sidebar" id="sidebar">
         <div class="logo">
           <div class="logo-icon">A</div>
           <div class="logo-text">
@@ -72,9 +72,9 @@
       </aside>
 
       <!-- Contenido principal -->
-      <div class="main-content">
+      <div class="main-content" id="mainContent">
         <header class="header">
-          <div class="menu-icon">
+          <div class="menu-icon" id="menuIcon">
             <img src="img/icon.svg" alt="" />
           </div>
 
@@ -216,7 +216,7 @@
                     <td><span class="status-badge status-activo">Activo</span></td>
                     <td>2024-01-15 14:30</td>
                     <td>
-                      <button class="action-button"><i class="fas fa-user-check"></i></button>
+                      <button class="action-button user-action-button" data-user-email="ana.martin@escuela.edu" data-user-status="activo"><i class="fas fa-user-slash"></i></button>
                     </td>
                   </tr>
                   <tr>
@@ -227,18 +227,18 @@
                     <td><span class="status-badge status-activo">Activo</span></td>
                     <td>2024-01-15 14:25</td>
                     <td>
-                      <button class="action-button"><i class="fas fa-user-check"></i></button>
+                      <button class="action-button user-action-button" data-user-email="carlos.lopez@escuela.edu" data-user-status="activo"><i class="fas fa-user-slash"></i></button>
                     </td>
                   </tr>
                   <tr>
                     <td>María González</td>
                     <td>maria.gonzalez@escuela.edu</td>
                     <td>Preceptor</td>
-                    <td>-</td>
+                    <td>7°2 A</td>
                     <td><span class="status-badge status-activo">Activo</span></td>
                     <td>2024-01-15 14:35</td>
                     <td>
-                      <button class="action-button"><i class="fas fa-user-check"></i></button>
+                      <button class="action-button user-action-button" data-user-email="maria.gonzalez@escuela.edu" data-user-status="activo"><i class="fas fa-user-slash"></i></button>
                     </td>
                   </tr>
                   <tr>
@@ -249,7 +249,7 @@
                     <td><span class="status-badge status-inactivo">Inactivo</span></td>
                     <td>2024-01-10 16:20</td>
                     <td>
-                      <button class="action-button"><i class="fas fa-user-check"></i></button>
+                      <button class="action-button user-action-button" data-user-email="diego.morales@escuela.edu" data-user-status="inactivo"><i class="fas fa-user-check"></i></button>
                     </td>
                   </tr>
                   <% /* End of example user data */ %>
@@ -316,6 +316,11 @@
       </div>
     </div>
 
+    <div id="notificacion" class="alerta animate__animated animate__fadeInRight" style="display: none;">
+      <i id="notificacionIcono"></i>
+      <span id="notificacionMensaje"></span>
+    </div>
+
     <div id="detalleLlamadoModal" class="modal-llamado" style="display: none">
       <div class="modal-llamado-content">
         <button class="modal-llamado-close" id="cerrarDetalleLlamado">
@@ -328,4 +333,5 @@
     </div>
   </body>
   <script src="./js/panel/directivos.js"></script>
+  <script type="module" src="js/panel/administracion.js"></script>
 </html>

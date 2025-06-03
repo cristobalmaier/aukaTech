@@ -744,9 +744,7 @@ hr {
   transition: all 0.3s ease;
   border-radius: 5px;
   padding: 5px;
-}
-.menu-icon:hover {
-  background-color: #d4d4d4;
+  margin-left: 10px;
 }
 a{
   text-decoration: none;
