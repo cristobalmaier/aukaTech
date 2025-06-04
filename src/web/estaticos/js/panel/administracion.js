@@ -196,6 +196,7 @@ function exportarUsuariosACSV() {
 
 // Configurar el evento de clic para el botón de exportar a CSV
 document.addEventListener('DOMContentLoaded', function() {
+    // Configurar botón de exportar a CSV
     const botonExportarCSV = document.getElementById('boton-exportar-csv');
     
     if (botonExportarCSV) {
@@ -211,5 +212,35 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+
+    // Configurar botón de guardar configuración
+    const botonGuardarConfig = document.getElementById('guardarConfiguracion');
+    if (botonGuardarConfig) {
+        botonGuardarConfig.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            try {
+                // Aquí iría la lógica para guardar la configuración
+                // Por ahora, simulamos una operación exitosa
+                const exito = guardarConfiguracion();
+                
+                if (exito) {
+                    mostrarNotificacion('exito', 'La configuración se ha guardado correctamente');
+                } else {
+                    throw new Error('No se pudo guardar la configuración');
+                }
+            } catch (error) {
+                console.error('Error al guardar la configuración:', error);
+                mostrarNotificacion('error', 'Error al guardar la configuración: ' + (error.message || 'Error desconocido'));
+            }
+        });
+    }
 });
+
+// Función para guardar la configuración (simulación)
+function guardarConfiguracion() {
+    // Aquí iría la lógica real para guardar la configuración
+    // Por ahora, simulamos un guardado exitoso el 90% de las veces
+    return Math.random() > 0.1;
+}
   
