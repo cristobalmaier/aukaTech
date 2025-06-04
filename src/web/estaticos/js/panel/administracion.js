@@ -87,3 +87,129 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 });
+
+// Función para mostrar notificación
+function mostrarNotificacion(tipo, mensaje) {
+    const notificacion = document.getElementById('notificacion');
+    const notificacionIcono = document.getElementById('notificacionIcono');
+    const notificacionMensaje = document.getElementById('notificacionMensaje');
+  
+    if (!notificacion || !notificacionIcono || !notificacionMensaje) return;
+    
+    notificacion.classList.remove('alerta-exito', 'alerta-error');
+    notificacionIcono.className = '';
+  
+    if (tipo === 'exito') {
+        notificacion.classList.add('alerta-exito');
+        notificacionIcono.classList.add('fas', 'fa-check-circle');
+    } else {
+        notificacion.classList.add('alerta-error');
+        notificacionIcono.classList.add('fas', 'fa-times-circle');
+    }
+  
+    notificacionMensaje.textContent = mensaje;
+    notificacion.style.display = 'flex';
+  
+    setTimeout(() => {
+        notificacion.style.display = 'none';
+    }, 3000);
+}
+
+// Función para exportar la tabla de usuarios a CSV
+function exportarUsuariosACSV() {
+    try {
+        const tabla = document.querySelector('.users-table table');
+        if (!tabla) {
+            throw new Error('No se encontró la tabla de usuarios');
+        }
+
+        // Obtener filas de la tabla
+        const filas = tabla.querySelectorAll('tbody tr');
+        if (filas.length === 0) {
+            throw new Error('No hay datos de usuarios para exportar');
+        }
+
+        // Crear array para los datos CSV
+        const csvData = [];
+        
+        // Agregar encabezados
+        const headers = [];
+        tabla.querySelectorAll('thead th').forEach(th => {
+            // Excluir la columna de acciones
+            if (th.textContent.trim() !== 'Acciones') {
+                headers.push(`"${th.textContent.trim().replace(/"/g, '""')}"`);
+            }
+        });
+        csvData.push(headers.join(','));
+
+        // Procesar cada fila de datos
+        filas.forEach(fila => {
+            const celdas = fila.querySelectorAll('td');
+            const filaDatos = [];
+            
+            // Recorrer celdas (excluyendo la última columna de acciones)
+            for (let i = 0; i < celdas.length - 1; i++) {
+                let contenido = '';
+                
+                // Manejar celdas con badges de estado
+                const badge = celdas[i].querySelector('.status-badge');
+                if (badge) {
+                    contenido = badge.textContent.trim();
+                } else {
+                    contenido = celdas[i].textContent.trim();
+                }
+                
+                // Escapar comillas y saltos de línea
+                contenido = contenido.replace(/"/g, '""')
+                                   .replace(/\r?\n|\r/g, ' ')
+                                   .trim();
+                
+                filaDatos.push(`"${contenido}"`);
+            }
+            
+            csvData.push(filaDatos.join(','));
+        });
+
+        // Crear y descargar archivo CSV
+        const csvContent = csvData.join('\n');
+        const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const enlace = document.createElement('a');
+        
+        enlace.setAttribute('href', url);
+        enlace.setAttribute('download', 'usuarios.csv');
+        enlace.style.display = 'none';
+        
+        document.body.appendChild(enlace);
+        enlace.click();
+        
+        // Limpiar
+        document.body.removeChild(enlace);
+        URL.revokeObjectURL(url);
+        
+        return true;
+    } catch (error) {
+        console.error('Error al exportar a CSV:', error);
+        throw error;
+    }
+}
+
+// Configurar el evento de clic para el botón de exportar a CSV
+document.addEventListener('DOMContentLoaded', function() {
+    const botonExportarCSV = document.getElementById('boton-exportar-csv');
+    
+    if (botonExportarCSV) {
+        botonExportarCSV.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            try {
+                exportarUsuariosACSV();
+                mostrarNotificacion('exito', 'Los datos se han exportado correctamente a usuarios.csv');
+            } catch (error) {
+                console.error('Error al exportar:', error);
+                mostrarNotificacion('error', 'Error al exportar los datos: ' + error.message);
+            }
+        });
+    }
+});
+  
