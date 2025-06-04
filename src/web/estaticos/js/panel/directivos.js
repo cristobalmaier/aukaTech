@@ -48,31 +48,87 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
+// Función para mostrar notificación
+function mostrarNotificacion(tipo, mensaje) {
+  const notificacion = document.getElementById('notificacion');
+  const notificacionIcono = document.getElementById('notificacionIcono');
+  const notificacionMensaje = document.getElementById('notificacionMensaje');
+
+  notificacion.classList.remove('alerta-exito', 'alerta-error');
+  notificacionIcono.className = '';
+
+  if (tipo === 'exito') {
+    notificacion.classList.add('alerta-exito');
+    notificacionIcono.classList.add('fas', 'fa-check-circle');
+  } else {
+    notificacion.classList.add('alerta-error');
+    notificacionIcono.classList.add('fas', 'fa-times-circle');
+  }
+
+  notificacionMensaje.textContent = mensaje;
+  notificacion.style.display = 'flex';
+
+  setTimeout(() => {
+    notificacion.style.display = 'none';
+  }, 3000);
+}
+
 // Exportar tabla a CSV
 document.addEventListener('DOMContentLoaded', function () {
-  const exportBtn = document.getElementById('exportarBtn');
+  const exportBtn = document.getElementById('boton-exportar');
   if (exportBtn) {
     exportBtn.addEventListener('click', function () {
-      exportTableToCSV('llamados.csv');
+      try {
+        exportTableToCSV('llamados.csv');
+        mostrarNotificacion('exito', 'Exportación completada exitosamente');
+      } catch (error) {
+        console.error('Error al exportar:', error);
+        mostrarNotificacion('error', 'Error al exportar los datos');
+      }
     });
   }
 });
 
 function exportTableToCSV(filename) {
-  const table = document.querySelector('.calls-table table');
+  const table = document.querySelector('.calls-table');
+  if (!table) return;
+
   let csv = [];
-  for (let row of table.rows) {
-    let rowData = [];
-    for (let cell of row.cells) {
-      // Elimina saltos de línea y comillas dobles
-      let text = cell.innerText.replace(/(\r\n|\n|\r)/gm, '').replace(/"/g, '""');
-      rowData.push('"' + text + '"');
+  
+  // Obtener encabezados
+  const headers = ['Fecha', 'Hora', 'Curso', 'Profesor', 'Mensaje', 'Estado', 'Prioridad'];
+  csv.push(headers.join(','));
+
+  // Obtener filas filtradas
+  const rows = document.querySelectorAll('.calls-table tbody tr');
+  rows.forEach(row => {
+    if (row.style.display !== 'none') { // Solo exportar filas visibles
+      let rowData = [];
+      rowData.push(row.querySelector('.call-date')?.textContent || '');
+      rowData.push(row.querySelector('.call-time')?.textContent || '');
+      rowData.push(row.querySelector('.call-course')?.textContent || '');
+      rowData.push(row.querySelector('.call-professor')?.textContent || '');
+      rowData.push(row.querySelector('.call-message')?.textContent || '');
+      rowData.push(row.querySelector('.status-badge')?.textContent || '');
+      rowData.push(row.querySelector('.priority-badge')?.textContent || '');
+      
+      // Limpiar y formatear datos
+      rowData = rowData.map(value => {
+        return value.replace(/(\r\n|\n|\r)/gm, ' ').replace(/"/g, '""');
+      });
+      
+      csv.push('"' + rowData.join('"","') + '"');
     }
-    csv.push(rowData.join(','));
+  });
+
+  // Verificar si hay datos para exportar
+  if (csv.length <= 1) {
+    throw new Error('No hay datos para exportar');
   }
-  // Descarga el archivo
-  let csvFile = new Blob([csv.join('\n')], { type: 'text/csv' });
-  let downloadLink = document.createElement('a');
+
+  // Descargar archivo
+  const csvFile = new Blob([csv.join('\n')], { type: 'text/csv;charset=utf-8;' });
+  const downloadLink = document.createElement('a');
   downloadLink.download = filename;
   downloadLink.href = window.URL.createObjectURL(csvFile);
   downloadLink.style.display = 'none';

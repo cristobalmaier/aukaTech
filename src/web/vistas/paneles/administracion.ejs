@@ -4,20 +4,23 @@
 
 <head>
   <%- include('../parciales/head.html') %>
-    <link rel="stylesheet" href="alertas.css" />
-    <link rel="stylesheet" href="directivos.css">
+  <link rel="stylesheet" href="alertas.css" />
+  <link rel="stylesheet" href="directivos.css">
 
-    <!-- ICONOS (Font Awesome) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <!-- Dependencias para PDF y Excel -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
-    <!-- ANIMACIONES (Animate.css) -->
+  <!-- ICONOS (Font Awesome) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 
     <!-- SOCKET.IO -->
     <script type="module" src="/socket.io/socket.io.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/timeago.js@4.0.2/dist/timeago.min.js"></script>
 
-    <script type="module" src="js/panel/directivos.js"></script>
+    
 </head>
 
 <body>
@@ -313,8 +316,19 @@
       </div>
     </div>
   </div>
+  <!-- Cargar dependencias primero -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  
+  <!-- Scripts de la aplicación -->
+  <script>
+    // Hacer jsPDF disponible globalmente
+    window.jsPDF = window.jspdf.jsPDF;
+  </script>
+  <script src="/estaticos/js/panel/administracion.js"></script>
+  
+  <!-- Scripts adicionales -->
+  <script src="/estaticos/js/panel/directivos.js"></script>
 </body>
-<script src="./js/panel/directivos.js"></script>
-<script type="module" src="js/panel/administracion.js"></script>
-
 </html>
