@@ -171,7 +171,7 @@ document.addEventListener('DOMContentLoaded', function () {
       let prioridadBadge = `<span class="priority-badge ${detalle.prioridadClass.replace('priority-badge', '').trim()}" style="font-size:13px;">${detalle.prioridad}</span>`;
       document.getElementById('detalleLlamadoContenido').innerHTML = `
         <div>
-          <div class="detalle-llamado-titulo">Detalle del Llamado #1</div>
+          <div class="detalle-llamado-titulo">Detalle del Llamado</div>
           <div class="detalle-llamado-subtitulo">Información completa del llamado</div>
           <div class="detalle-llamado-flex">
             <div class="detalle-llamado-col">
