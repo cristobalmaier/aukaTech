@@ -15,7 +15,6 @@ directivosRutas.get('/panel/directivos', async (req, res) => {
 
 
     res.render('paneles/directivos', { titulo: 'AUKA - Panel', usuario, llamadosResultado: llamadosResultado || []})
-    console.log(llamadosResultado)
 })
 
 export default directivosRutas

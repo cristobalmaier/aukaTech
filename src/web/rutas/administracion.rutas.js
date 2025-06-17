@@ -23,7 +23,6 @@ administracionRutas.get('/panel/administracion', async (req, res) => {
         rutaActual: '/panel/administracion',
         datos: datosResultado
     })
-    console.log(llamadosResultado)
 })
 
 export default administracionRutas
