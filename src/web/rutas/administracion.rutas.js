@@ -13,8 +13,16 @@ administracionRutas.get('/panel/administracion', async (req, res) => {
     const llamados = await peticion ({url: `${process.env.API_URL}/llamados`, metodo:`GET`}) 
     const llamadosResultado = await llamados.json()
 
+    const datos = await peticion ({url: `${process.env.API_URL}/data/database`, metodo:`GET`}) 
+    const datosResultado = await datos.json()
 
-    res.render('paneles/administracion', { titulo: 'AUKA - Panel', usuario, llamadosResultado: llamadosResultado || [], rutaActual: '/panel/administracion' })
+    res.render('paneles/administracion', { 
+        titulo: 'AUKA - Panel', 
+        usuario, 
+        llamadosResultado: llamadosResultado || [], 
+        rutaActual: '/panel/administracion',
+        datos: datosResultado
+    })
     console.log(llamadosResultado)
 })
 
