@@ -73,7 +73,6 @@
             </div>
         </div>
         <div class="llamados">
-            <%= console.log(llamados) %>
             <% if(llamados !== null && llamados.filter(llamado => llamado.finalizado == 0).length > 0) { %>
                 <% llamados.forEach(llamado => { %>
                     <% if(llamado.finalizado == 0) { %>

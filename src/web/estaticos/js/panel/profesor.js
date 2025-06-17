@@ -109,8 +109,6 @@ botonCancelarLlamado.addEventListener('click', async () => {
         }
     })
 
-    console.log(resultado)
-
     socket.emit('cancelar-llamado', {
         usuario_id: idProfesor,
         nombre: nombreProfesor,

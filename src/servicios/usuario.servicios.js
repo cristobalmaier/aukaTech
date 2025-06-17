@@ -23,7 +23,6 @@ class UsuarioServicio {
         // Validacion de datos
         const { valido, errores } = validarUsuario({ nombre, apellido, email, contrasena, tipo_usuario })
         if (!valido) {
-            console.log(errores)
             const mensaje = Object.values(errores)[0]
             throw new ErrorCliente(mensaje, 400)
         }
