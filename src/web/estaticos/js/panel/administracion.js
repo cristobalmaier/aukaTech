@@ -194,15 +194,181 @@ function exportarUsuariosACSV() {
     }
 }
 
-// Configurar el evento de clic para el botón de exportar a CSV
-document.addEventListener('DOMContentLoaded', function() {
-    // Configurar botón de exportar a CSV
-    const botonExportarCSV = document.getElementById('boton-exportar-csv');
-    
-    if (botonExportarCSV) {
-        botonExportarCSV.addEventListener('click', function(e) {
-            e.preventDefault();
+// Función para exportar a Excel
+function exportarAExcel(filename) {
+    try {
+        const tabla = document.querySelector('.users-table table');
+        if (!tabla) {
+            throw new Error('No se encontró la tabla de usuarios');
+        }
+
+        // Obtener filas de la tabla
+        const filas = tabla.querySelectorAll('tbody tr');
+        if (filas.length === 0) {
+            throw new Error('No hay datos de usuarios para exportar');
+        }
+
+        // Crear array para los datos
+        const datos = [];
+        
+        // Agregar encabezados
+        const headers = [];
+        tabla.querySelectorAll('thead th').forEach(th => {
+            // Excluir la columna de acciones
+            if (th.textContent.trim() !== 'Acciones') {
+                headers.push(th.textContent.trim());
+            }
+        });
+        datos.push(headers);
+
+        // Procesar cada fila de datos
+        filas.forEach(fila => {
+            const celdas = fila.querySelectorAll('td');
+            const filaDatos = [];
             
+            // Recorrer celdas (excluyendo la última columna de acciones)
+            for (let i = 0; i < celdas.length - 1; i++) {
+                let contenido = '';
+                
+                // Manejar celdas con badges de estado
+                const badge = celdas[i].querySelector('.status-badge');
+                if (badge) {
+                    contenido = badge.textContent.trim();
+                } else {
+                    contenido = celdas[i].textContent.trim();
+                }
+                
+                filaDatos.push(contenido);
+            }
+            
+            datos.push(filaDatos);
+        });
+
+        // Crear hoja de cálculo
+        const ws = XLSX.utils.aoa_to_sheet(datos);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Usuarios");
+
+        // Descargar archivo
+        XLSX.writeFile(wb, filename);
+        
+        return true;
+    } catch (error) {
+        console.error('Error al exportar a Excel:', error);
+        throw error;
+    }
+}
+
+// Función para exportar a PDF
+function exportarAPDF(filename) {
+    try {
+        const tabla = document.querySelector('.users-table table');
+        if (!tabla) {
+            throw new Error('No se encontró la tabla de usuarios');
+        }
+
+        // Obtener filas de la tabla
+        const filas = tabla.querySelectorAll('tbody tr');
+        if (filas.length === 0) {
+            throw new Error('No hay datos de usuarios para exportar');
+        }
+
+        // Crear documento PDF
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        
+        // Configurar encabezados
+        const headers = [];
+        tabla.querySelectorAll('thead th').forEach(th => {
+            if (th.textContent.trim() !== 'Acciones') {
+                headers.push(th.textContent.trim());
+            }
+        });
+
+        // Preparar datos
+        const datos = [];
+        filas.forEach(fila => {
+            const celdas = fila.querySelectorAll('td');
+            const filaDatos = [];
+            
+            for (let i = 0; i < celdas.length - 1; i++) {
+                let contenido = '';
+                const badge = celdas[i].querySelector('.status-badge');
+                if (badge) {
+                    contenido = badge.textContent.trim();
+                } else {
+                    contenido = celdas[i].textContent.trim();
+                }
+                filaDatos.push(contenido);
+            }
+            
+            datos.push(filaDatos);
+        });
+
+        // Agregar título
+        doc.setFontSize(16);
+        doc.text('Listado de Usuarios', 14, 15);
+        
+        // Agregar tabla
+        doc.autoTable({
+            head: [headers],
+            body: datos,
+            startY: 25,
+            theme: 'grid',
+            styles: {
+                fontSize: 10,
+                cellPadding: 5
+            },
+            headStyles: {
+                fillColor: [37, 99, 235],
+                textColor: 255
+            }
+        });
+
+        // Guardar PDF
+        doc.save(filename);
+        
+        return true;
+    } catch (error) {
+        console.error('Error al exportar a PDF:', error);
+        throw error;
+    }
+}
+
+// Configurar los botones de exportación
+document.addEventListener('DOMContentLoaded', function() {
+    // Botón exportar a Excel
+    const botonExcel = document.getElementById('boton-exportar-excel');
+    if (botonExcel) {
+        botonExcel.addEventListener('click', function() {
+            try {
+                exportarAExcel('usuarios.xlsx');
+                mostrarNotificacion('exito', 'Los datos se han exportado correctamente a usuarios.xlsx');
+            } catch (error) {
+                console.error('Error al exportar:', error);
+                mostrarNotificacion('error', 'Error al exportar los datos: ' + error.message);
+            }
+        });
+    }
+
+    // Botón exportar a PDF
+    const botonPDF = document.getElementById('boton-exportar-pdf');
+    if (botonPDF) {
+        botonPDF.addEventListener('click', function() {
+            try {
+                exportarAPDF('usuarios.pdf');
+                mostrarNotificacion('exito', 'Los datos se han exportado correctamente a usuarios.pdf');
+            } catch (error) {
+                console.error('Error al exportar:', error);
+                mostrarNotificacion('error', 'Error al exportar los datos: ' + error.message);
+            }
+        });
+    }
+
+    // Botón exportar a CSV (ya existente)
+    const botonCSV = document.getElementById('boton-exportar-csv');
+    if (botonCSV) {
+        botonCSV.addEventListener('click', function() {
             try {
                 exportarUsuariosACSV();
                 mostrarNotificacion('exito', 'Los datos se han exportado correctamente a usuarios.csv');
@@ -213,25 +379,19 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Configurar botón de guardar configuración
-    const botonGuardarConfig = document.getElementById('guardarConfiguracion');
-    if (botonGuardarConfig) {
-        botonGuardarConfig.addEventListener('click', function(e) {
-            e.preventDefault();
-            
+    // Botón exportar reporte completo
+    const botonCompleto = document.getElementById('boton-exportar-reporte-completo');
+    if (botonCompleto) {
+        botonCompleto.addEventListener('click', function() {
             try {
-                // Aquí iría la lógica para guardar la configuración
-                // Por ahora, simulamos una operación exitosa
-                const exito = guardarConfiguracion();
-                
-                if (exito) {
-                    mostrarNotificacion('exito', 'La configuración se ha guardado correctamente');
-                } else {
-                    throw new Error('No se pudo guardar la configuración');
-                }
+                // Exportar a todos los formatos
+                exportarAExcel('usuarios.xlsx');
+                exportarAPDF('usuarios.pdf');
+                exportarUsuariosACSV();
+                mostrarNotificacion('exito', 'Se han exportado los datos en todos los formatos disponibles');
             } catch (error) {
-                console.error('Error al guardar la configuración:', error);
-                mostrarNotificacion('error', 'Error al guardar la configuración: ' + (error.message || 'Error desconocido'));
+                console.error('Error al exportar:', error);
+                mostrarNotificacion('error', 'Error al exportar los datos: ' + error.message);
             }
         });
     }

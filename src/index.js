@@ -59,6 +59,7 @@ import panelRutas from './web/rutas/panel.rutas.js'
 import directivosRutas from './web/rutas/directivos.rutas.js'
 import administracionRutas from './web/rutas/administracion.rutas.js'
 
+
 app.use(indexRutas)
 app.use(loginRutas)
 app.use(directivosRutas)
