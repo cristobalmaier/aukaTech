@@ -4,7 +4,10 @@
   "main": "index.js",
   "scripts": {
     "start": "node --env-file=.env src/index.js",
-    "dev": "node --env-file=.env --watch src/index.js"
+    "dev": "node --env-file=.env --watch src/index.js",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "test:watch": "node --experimental-vm-modules node_modules/jest/bin/jest.js --watch",
+    "test:coverage": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage"
   },
   "repository": {
     "type": "git",
@@ -32,5 +35,9 @@
     "socket.io": "^4.8.1",
     "timeago.js": "^4.0.2",
     "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^6.3.3"
   }
 }
