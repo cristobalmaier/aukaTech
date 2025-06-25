@@ -12,9 +12,6 @@
  */
 
 export default {
-    // Extensión de archivos que deben tratarse como ES Modules
-    extensionsToTreatAsEsm: ['.js'],
-    
     // Configuración del entorno de pruebas
     testEnvironment: 'node',
     
@@ -32,13 +29,13 @@ export default {
     },
     
     // Configuración de módulos
-    moduleNameMapping: {
+    moduleNameMapper: {
         // Permite importar archivos .js sin extensión
         '^(\\.{1,2}/.*)\\.js$': '$1'
     },
     
     // Archivos de configuración de pruebas
-    setupFilesAfterEnv: ['<rootDir>/tests/setup.js'],
+    setupFilesAfterEnv: ['<rootDir>/tests/setup.cjs'],
     
     // Patrones de archivos de prueba
     testMatch: [
