@@ -8,6 +8,6 @@ const datosControlador = new DatosControlador({ datosServicio: DatosServicios })
 
 datosRutas.get('/database', datosControlador.todosLosDatos)
 datosRutas.get('/size/database', datosControlador.tablasTamano)
-datosRutas.get('/llamados/database', datosControlador.llamadosDelMes)
+datosRutas.get('/solicitud/database', datosControlador.solicitudDelMes)
 
 export default datosRutas

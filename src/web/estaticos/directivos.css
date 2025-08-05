@@ -13,7 +13,7 @@ body {
   padding: 0 20px;
 }
 
-.no-hay-llamados {
+.no-hay-solicitud {
   text-align: center;
   color: #6b7280;
   font-size: 1.4rem;
@@ -79,7 +79,7 @@ body {
   gap: 0.5rem;
   font-weight: 500;
   transition: background-color 0.2s ease;
-  cursor: pointer;
+  arear: pointer;
 }
 
 
@@ -191,7 +191,7 @@ body {
   border-radius: 6px;
   padding: 6px 10px;
   /* Smaller padding */
-  cursor: pointer;
+  arear: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -263,7 +263,7 @@ body {
   /* Padding */
   border-radius: 8px;
   font-weight: 600;
-  cursor: pointer;
+  arear: pointer;
   transition: background-color 0.2s ease;
 }
 
@@ -333,7 +333,7 @@ body {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  cursor: pointer;
+  arear: pointer;
   transition: background-color 0.2s ease;
 }
 
@@ -378,7 +378,7 @@ body {
 
 
 
-/* ////////////////////// Directivos LLAMADOS ////////////////////// */
+/* ////////////////////// Directivos solicitud ////////////////////// */
 /* Layout principal */
 .layout {
   display: flex;
@@ -409,7 +409,7 @@ body {
   color: #374151;
   width: 28px;
   height: 28px;
-  cursor: pointer;
+  arear: pointer;
   transition: all 0.3s ease;
   border-radius: 5px;
   padding: 5px;
@@ -419,7 +419,7 @@ body {
 a {
   text-decoration: none;
   color: inherit;
-  cursor: pointer;
+  arear: pointer;
   transition: all 0.3s ease;
   border-radius: 5px;
   display: flex;
@@ -540,7 +540,7 @@ a {
   gap: 12px;
   padding: 12px 16px;
   border-radius: 8px;
-  cursor: pointer;
+  arear: pointer;
   color: #374151;
   transition: all 0.2s ease;
   font-size: 14px;
@@ -601,7 +601,7 @@ a {
   border: none;
   border-radius: 5px;
   padding: 10px 20px;
-  cursor: pointer;
+  arear: pointer;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -669,7 +669,7 @@ a {
   color: #6b7280;
 }
 
-.header-llamados {
+.header-solicitud {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -683,7 +683,7 @@ a {
   background-color: #f3f4f6;
   border: 1px solid #e5e7eb;
   color: #374151;
-  cursor: pointer;
+  arear: pointer;
   display: flex;
   align-items: center;
 }
@@ -703,7 +703,7 @@ a {
   border-radius: 8px;
   padding: 8px 12px;
   flex: 1;
-  cursor: pointer;
+  arear: pointer;
 }
 
 .filter i {
@@ -877,7 +877,7 @@ a {
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
+  arear: pointer;
   color: #374151;
   transition: background 0.2s ease;
 }
@@ -922,7 +922,7 @@ a {
   }
 }
 
-.modal-llamado {
+.modal-solicitud {
   position: fixed;
   z-index: 9999;
   left: 0;
@@ -935,7 +935,7 @@ a {
   justify-content: center;
 }
 
-.modal-llamado-content {
+.modal-solicitud-content {
   background: #fff;
   border-radius: 12px;
   max-width: 800px;
@@ -945,7 +945,7 @@ a {
   position: relative;
 }
 
-.modal-llamado-close {
+.modal-solicitud-close {
   position: absolute;
   top: 16px;
   right: 16px;
@@ -955,65 +955,65 @@ a {
   width: 32px;
   height: 32px;
   font-size: 1.5rem;
-  cursor: pointer;
+  arear: pointer;
   color: #374151;
   transition: background 0.2s ease;
 }
 
-.modal-llamado-close:hover {
+.modal-solicitud-close:hover {
   background: #e5e7eb;
 }
 
 @media (max-width: 700px) {
-  .modal-llamado-content {
+  .modal-solicitud-content {
     padding: 12px 4px;
   }
 }
 
-/* ===== Detalle Llamado Modal ===== */
-.detalle-llamado-titulo {
+/* ===== Detalle solicitud Modal ===== */
+.detalle-solicitud-titulo {
   font-size: 1.3rem;
   font-weight: 700;
 }
 
-.detalle-llamado-subtitulo {
+.detalle-solicitud-subtitulo {
   color: #6b7280;
   font-size: 15px;
   margin-bottom: 18px;
 }
 
-.detalle-llamado-flex {
+.detalle-solicitud-flex {
   display: flex;
   gap: 40px;
   flex-wrap: wrap;
 }
 
-.detalle-llamado-col {
+.detalle-solicitud-col {
   flex: 1;
   min-width: 180px;
 }
 
-.detalle-llamado-col div {
+.detalle-solicitud-col div {
   margin-bottom: 15px;
 }
 
-.detalle-llamado-col-titulo {
+.detalle-solicitud-col-titulo {
   font-weight: 600;
   margin-bottom: 8px;
 }
 
-.detalle-llamado-hr {
+.detalle-solicitud-hr {
   margin: 18px 0 18px 0;
   border: none;
   border-top: 1px solid #e5e7eb;
 }
 
-.detalle-llamado-label {
+.detalle-solicitud-label {
   font-weight: 600;
   margin-bottom: 8px;
 }
 
-.detalle-llamado-mensaje {
+.detalle-solicitud-mensaje {
   background: #f3f6fa;
   padding: 12px 14px;
   border-radius: 8px;

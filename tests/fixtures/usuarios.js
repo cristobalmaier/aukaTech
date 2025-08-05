@@ -17,19 +17,19 @@ export const usuarioValido = {
     apellido: 'Pérez',
     email: 'juan.perez@test.com',
     contrasena: 'password123',
-    tipo_usuario: 'profesor'
+    tipo_usuario: 'empleado'
 };
 
 /**
- * Usuario válido tipo preceptor
+ * Usuario válido tipo soporte
  * Para probar diferentes tipos de usuario
  */
-export const usuarioPreceptor = {
+export const usuariosoporte = {
     nombre: 'María',
     apellido: 'García',
     email: 'maria.garcia@test.com',
     contrasena: 'password456',
-    tipo_usuario: 'preceptor'
+    tipo_usuario: 'soporte'
 };
 
 /**
@@ -52,7 +52,7 @@ export const usuarioSinNombre = {
     apellido: 'Pérez',
     email: 'juan.perez@test.com',
     contrasena: 'password123',
-    tipo_usuario: 'profesor'
+    tipo_usuario: 'empleado'
 };
 
 /**
@@ -64,7 +64,7 @@ export const usuarioEmailInvalido = {
     apellido: 'Pérez',
     email: 'email-invalido',
     contrasena: 'password123',
-    tipo_usuario: 'profesor'
+    tipo_usuario: 'empleado'
 };
 
 /**
@@ -76,7 +76,7 @@ export const usuarioContrasenaCorta = {
     apellido: 'Pérez',
     email: 'juan.perez@test.com',
     contrasena: '123', // Solo 3 caracteres (mínimo 6)
-    tipo_usuario: 'profesor'
+    tipo_usuario: 'empleado'
 };
 
 /**
@@ -131,7 +131,7 @@ export const listaUsuarios = [
         nombre: 'Juan',
         apellido: 'Pérez',
         email: 'juan.perez@test.com',
-        tipo_usuario: 'profesor',
+        tipo_usuario: 'empleado',
         fecha_creacion: '2024-01-01 10:00:00'
     },
     {
@@ -139,7 +139,7 @@ export const listaUsuarios = [
         nombre: 'María',
         apellido: 'García',
         email: 'maria.garcia@test.com',
-        tipo_usuario: 'preceptor',
+        tipo_usuario: 'soporte',
         fecha_creacion: '2024-01-02 11:00:00'
     },
     {
@@ -162,7 +162,7 @@ export const usuarioConContrasenaEncriptada = {
     apellido: 'Pérez',
     email: 'juan.perez@test.com',
     contrasena: '$2b$10$hashedPassword123', // Contraseña encriptada simulada
-    tipo_usuario: 'profesor'
+    tipo_usuario: 'empleado'
 };
 
 /**
@@ -199,7 +199,7 @@ export const usuariosValidos = [
         apellido: 'Pérez',
         email: 'juan@test.com',
         contrasena: 'password123',
-        tipo_usuario: 'profesor'
+        tipo_usuario: 'empleado'
     },
     {
         id: 2,
@@ -207,7 +207,7 @@ export const usuariosValidos = [
         apellido: 'García',
         email: 'maria@test.com',
         contrasena: 'password456',
-        tipo_usuario: 'preceptor'
+        tipo_usuario: 'soporte'
     },
     {
         id: 3,
@@ -225,28 +225,28 @@ export const usuariosInvalidos = [
         apellido: 'Pérez',
         email: 'juan@test.com',
         contrasena: 'password123',
-        tipo_usuario: 'profesor'
+        tipo_usuario: 'empleado'
     },
     {
         nombre: 'Juan',
         // Falta apellido
         email: 'juan@test.com',
         contrasena: 'password123',
-        tipo_usuario: 'profesor'
+        tipo_usuario: 'empleado'
     },
     {
         nombre: 'Juan',
         apellido: 'Pérez',
         email: 'email-invalido',
         contrasena: 'password123',
-        tipo_usuario: 'profesor'
+        tipo_usuario: 'empleado'
     },
     {
         nombre: 'Juan',
         apellido: 'Pérez',
         email: 'juan@test.com',
         contrasena: '123', // Muy corta
-        tipo_usuario: 'profesor'
+        tipo_usuario: 'empleado'
     },
     {
         nombre: 'Juan',

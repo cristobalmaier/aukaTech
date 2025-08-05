@@ -21,9 +21,9 @@ class DatosControlador {
         }
     }
 
-    llamadosDelMes = async (req, res, next) => {
+    solicitudDelMes = async (req, res, next) => {
         try {
-            const resultado = await this.datosServicio.llamadosDelMes()
+            const resultado = await this.datosServicio.solicitudDelMes()
             res.status(200).json(resultado)
         } catch(err) {
             next(err)

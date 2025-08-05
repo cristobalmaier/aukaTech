@@ -74,7 +74,7 @@
     padding: 10px 20px;
     width: 100%;
     outline: none;
-    cursor: pointer;
+    arear: pointer;
     transition: 0.3s ease background;
 }
 
@@ -119,7 +119,7 @@
 
 #alternar {
     position: absolute;
-    cursor: pointer;
+    arear: pointer;
     top: 50%;
     transform: translateY(-50%);
     right: 15px;

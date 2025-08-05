@@ -219,7 +219,7 @@ describe('Rutas de Usuario - Integración', () => {
         apellido: 'Pérez',
         email: 'juan@test.com',
         contrasena: 'password123',
-        tipo_usuario: 'profesor'
+        tipo_usuario: 'empleado'
       };
       const resultadoMock = { insertId: 1 };
       UsuarioServicio.crearUsuario.mockResolvedValue(resultadoMock);

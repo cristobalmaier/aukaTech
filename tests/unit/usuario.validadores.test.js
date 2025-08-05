@@ -22,7 +22,7 @@ describe('Validadores de Usuario', () => {
                 apellido: 'Pérez',
                 email: 'juan@test.com',
                 contrasena: 'password123',
-                tipo_usuario: 'profesor'
+                tipo_usuario: 'empleado'
             };
 
             // Act: Validamos el usuario
@@ -33,14 +33,14 @@ describe('Validadores de Usuario', () => {
             expect(resultado.datos).toEqual(usuarioValido);
         });
 
-        test('debe validar usuario tipo preceptor', () => {
-            // Arrange: Probamos con tipo de usuario preceptor
+        test('debe validar usuario tipo soporte', () => {
+            // Arrange: Probamos con tipo de usuario soporte
             const usuario = {
                 nombre: 'María',
                 apellido: 'García',
                 email: 'maria@test.com',
                 contrasena: 'password123',
-                tipo_usuario: 'preceptor'
+                tipo_usuario: 'soporte'
             };
 
             // Act: Validamos el usuario
@@ -73,7 +73,7 @@ describe('Validadores de Usuario', () => {
                 apellido: 'Pérez',
                 email: 'juan@test.com',
                 contrasena: 'password123',
-                tipo_usuario: 'profesor'
+                tipo_usuario: 'empleado'
             };
 
             // Act: Validamos el usuario
@@ -90,7 +90,7 @@ describe('Validadores de Usuario', () => {
                 nombre: 'Juan',
                 email: 'juan@test.com',
                 contrasena: 'password123',
-                tipo_usuario: 'profesor'
+                tipo_usuario: 'empleado'
             };
 
             // Act: Validamos el usuario
@@ -107,7 +107,7 @@ describe('Validadores de Usuario', () => {
                 nombre: 'Juan',
                 apellido: 'Pérez',
                 contrasena: 'password123',
-                tipo_usuario: 'profesor'
+                tipo_usuario: 'empleado'
             };
 
             // Act: Validamos el usuario
@@ -125,7 +125,7 @@ describe('Validadores de Usuario', () => {
                 apellido: 'Pérez',
                 email: 'email-invalido', // Email sin formato correcto
                 contrasena: 'password123',
-                tipo_usuario: 'profesor'
+                tipo_usuario: 'empleado'
             };
 
             // Act: Validamos el usuario
@@ -142,7 +142,7 @@ describe('Validadores de Usuario', () => {
                 nombre: 'Juan',
                 apellido: 'Pérez',
                 email: 'juan@test.com',
-                tipo_usuario: 'profesor'
+                tipo_usuario: 'empleado'
             };
 
             // Act: Validamos el usuario
@@ -160,7 +160,7 @@ describe('Validadores de Usuario', () => {
                 apellido: 'Pérez',
                 email: 'juan@test.com',
                 contrasena: '123', // Solo 3 caracteres
-                tipo_usuario: 'profesor'
+                tipo_usuario: 'empleado'
             };
 
             // Act: Validamos el usuario
@@ -197,7 +197,7 @@ describe('Validadores de Usuario', () => {
                 apellido: 'Pérez',
                 email: 'juan@test.com',
                 contrasena: 'password123',
-                tipo_usuario: 'profesor'
+                tipo_usuario: 'empleado'
             };
 
             // Act: Validamos el usuario
@@ -216,7 +216,7 @@ describe('Validadores de Usuario', () => {
                 apellido: 'Pérez',
                 email: emailLargo,
                 contrasena: 'password123',
-                tipo_usuario: 'profesor'
+                tipo_usuario: 'empleado'
             };
 
             // Act: Validamos el usuario

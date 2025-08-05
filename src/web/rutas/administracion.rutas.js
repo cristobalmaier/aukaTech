@@ -10,8 +10,8 @@ import {peticion} from "../utiles/peticion.js"
 administracionRutas.get('/panel/administracion', async (req, res) => {
     const usuario = obtenerDatosToken(req)
     
-    const llamados = await peticion ({url: `${process.env.API_URL}/llamados`, metodo:`GET`}) 
-    const llamadosResultado = await llamados.json()
+    const solicitud = await peticion ({url: `${process.env.API_URL}/solicitud`, metodo:`GET`}) 
+    const solicitudResultado = await solicitud.json()
 
     const datos = await peticion ({url: `${process.env.API_URL}/data/database`, metodo:`GET`}) 
     const datosResultado = await datos.json()
@@ -19,7 +19,7 @@ administracionRutas.get('/panel/administracion', async (req, res) => {
     res.render('paneles/administracion', { 
         titulo: 'AUKA - Panel', 
         usuario, 
-        llamadosResultado: llamadosResultado || [], 
+        solicitudResultado: solicitudResultado || [], 
         rutaActual: '/panel/administracion',
         datos: datosResultado
     })

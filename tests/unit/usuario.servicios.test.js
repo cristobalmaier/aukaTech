@@ -129,7 +129,7 @@ describe('UsuarioServicio', () => {
             apellido: 'Pérez',
             email: 'juan@test.com',
             contrasena: 'password123',
-            tipo_usuario: 'profesor'
+            tipo_usuario: 'empleado'
         };
 
         test('debe crear un usuario válido', async () => {

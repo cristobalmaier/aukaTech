@@ -38,7 +38,7 @@
             <a href="/panel/dashboard"><i class="fas fa-home"></i> <span>Dashboard</span></a>
           </li>
           <li>
-            <a href="/panel/directivos"><i class="fas fa-phone-alt"></i> <span>Llamados</span></a>
+            <a href="/panel/directivos"><i class="fas fa-phone-alt"></i> <span>solicitud</span></a>
           </li>
           <li class="active">
             <a href="/panel/administracion"><i class="fa-solid fa-gear"></i> <span>Administración</span></a>
@@ -64,7 +64,7 @@
       </header>
 
       <main class="main-panel">
-        <div class="header-llamados">
+        <div class="header-solicitud">
           <h2>Administracion del sistema</h2>
         </div>
         <div class="card-wide">
@@ -72,7 +72,7 @@
             <i class="fa-solid fa-file-export"></i> Exportación de Datos
           </h3>
           <p class="subtexto">
-            Exportar listados de llamados en diferentes formatos
+            Exportar listados de solicitud en diferentes formatos
           </p>
 
           <div class="filters-row export-buttons">
@@ -124,12 +124,12 @@
 
         <div class="card-wide limpieza-datos">
           <h3><i class="fa-solid fa-trash-can"></i>Limpieza de Datos Antiguos</h3>
-          <p class="subtexto">Eliminar llamados antiguos para optimizar el rendimiento del sistema</p>
+          <p class="subtexto">Eliminar solicitud antiguos para optimizar el rendimiento del sistema</p>
 
           <div class="limpieza-contenido">
             <!-- Controles -->
             <div class="limpieza-controles">
-              <label for="periodoLimpieza">Eliminar llamados anteriores</label>
+              <label for="periodoLimpieza">Eliminar solicitud anteriores</label>
               <select id="periodoLimpieza">
                 <option value="3">3 meses</option>
                 <option value="6" selected>6 meses</option>
@@ -145,7 +145,7 @@
             <div class="limpieza-estadisticas">
               <label for="periodoLimpieza">Estadísticas de limpieza</label>
               <div class="estadistica">
-                <span class="titulo">Llamados antiguos:</span>
+                <span class="titulo">solicitud antiguos:</span>
                 <span class="valor">1923</span>
               </div>
               <div class="estadistica">
@@ -176,7 +176,7 @@
                   <th>Usuario</th>
                   <th>Email</th>
                   <th>Rol</th>
-                  <th>Curso</th>
+                  <th>area</th>
                   <th>Estado</th>
                   <th>Último Acceso</th>
                   <th>Acciones</th>
@@ -187,7 +187,7 @@
                   <tr>
                     <td>Ana Martín</td>
                     <td>ana.martin@escuela.edu</td>
-                    <td>Profesor</td>
+                    <td>empleado</td>
                     <td>5° A</td>
                     <td><span class="status-badge status-activo">Activo</span></td>
                     <td>2024-01-15 14:30</td>
@@ -199,7 +199,7 @@
                   <tr>
                     <td>Carlos López</td>
                     <td>carlos.lopez@escuela.edu</td>
-                    <td>Profesor</td>
+                    <td>empleado</td>
                     <td>2° B</td>
                     <td><span class="status-badge status-activo">Activo</span></td>
                     <td>2024-01-15 14:25</td>
@@ -211,7 +211,7 @@
                   <tr>
                     <td>María González</td>
                     <td>maria.gonzalez@escuela.edu</td>
-                    <td>Preceptor</td>
+                    <td>soporte</td>
                     <td>7°2 A</td>
                     <td><span class="status-badge status-activo">Activo</span></td>
                     <td>2024-01-15 14:35</td>
@@ -223,7 +223,7 @@
                   <tr>
                     <td>Diego Morales</td>
                     <td>diego.morales@escuela.edu</td>
-                    <td>Profesor</td>
+                    <td>empleado</td>
                     <td>3° A</td>
                     <td><span class="status-badge status-inactivo">Inactivo</span></td>
                     <td>2024-01-10 16:20</td>
@@ -258,7 +258,7 @@
             </div>
 
             <div class="form-group">
-              <label for="autoAsignacion">Auto-asignación de llamados</label>
+              <label for="autoAsignacion">Auto-asignación de solicitud</label>
               <select id="autoAsignacion">
                 <option value="habilitado">Habilitado</option>
                 <option value="deshabilitado">Deshabilitado</option>
@@ -278,8 +278,8 @@
               </select>
             </div>
             <div class="form-group">
-              <label for="nivelLogging">Nivel de logging</label>
-              <select id="nivelLogging">
+              <label for="prioridadLogging">prioridad de logging</label>
+              <select id="prioridadLogging">
                 <option value="info">Info</option>
                 <option value="debug">Debug</option>
                 <option value="warn">Warn</option>
@@ -301,12 +301,12 @@
     <span id="notificacionMensaje"></span>
   </div>
 
-  <div id="detalleLlamadoModal" class="modal-llamado" style="display: none">
-    <div class="modal-llamado-content">
-      <button class="modal-llamado-close" id="cerrarDetalleLlamado">
+  <div id="detallesolicitudModal" class="modal-solicitud" style="display: none">
+    <div class="modal-solicitud-content">
+      <button class="modal-solicitud-close" id="cerrarDetallesolicitud">
         &times;
       </button>
-      <div id="detalleLlamadoContenido">
+      <div id="detallesolicitudContenido">
         <!-- Aquí se cargará el detalle dinámicamente -->
       </div>
     </div>

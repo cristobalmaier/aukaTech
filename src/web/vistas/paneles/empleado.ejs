@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="es" data-id_usuario="<%- usuario.id_usuario %>" data-nombre="<%- usuario.nombre %>" data-apellido="<%- usuario.apellido %>" data-tipo_usuario="<%- usuario.tipo_usuario %>">
+<head>
+    <%- include('../parciales/head.html') %>
+    <link rel="stylesheet" href="panel.css">
+    <link rel="stylesheet" href="alertas.css">
+
+    <!-- ICONOS (Font Awesome) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- ANIMACIONES (Animate.css) -->
+    <link rel="stylesheet"href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
+    <!-- SOCKET.IO -->
+    <script type="module" src="/socket.io/socket.io.js"></script>
+    <script type="module" src="./js/panel/empleado.js"></script>
+</head>
+<body>
+    <audio id="notificacion" src="sonidos/noti.wav" preload="auto"></audio>
+    
+    <div class="panel-contenedor">
+        <div class="navbar">
+            <h1>AukaTech</h1>
+        </div>
+            <div class="formulario-solicitud">
+                <form action="" method="GET" id="formulario" data-mensaje="<%= typeof solicitud !== 'undefined' && solicitud.data.finalizado == 0 ? solicitud.data.mensaje : '' %>" data-id_solicitud="<%= typeof solicitud !== 'undefined' ? solicitud.data.id : '' %>">
+                    <div class="formulario-cabecera">
+                        <h2>Realizar solicitud</h2>
+                    </div>
+                    <!-- <label for="">Seleccionar soporte</label>
+                    <select name="soporte" id="">
+                        <option value="0">Enviar a todos</option>
+                        <option value="1">Alejandro</option>
+                        <option value="2">Noemi</option>
+                    </select> -->
+                    <div class="formulario-columna">
+                        <label for="mensaje">Mensaje</label>
+                        <textarea name="mensaje" id="mensaje" placeholder="Necesito un soporte en L1..." name="mensaje"></textarea>
+                        <p class="limite-caracteres">
+                            <span id="caracteres-restantes">0</span>
+                            <span>/</span>
+                            <span id="caracteres-maximos">300</span>
+                        </p>
+                    </div>
+                    <div class="formulario-area">
+                        <label for="area">Área</label>
+                        <select name="area" id="area">
+                            <% if (Array.isArray(solicitud?.areas)) { %>
+                              <% solicitud.areas.forEach(area => { %>
+                                <option value="<%= area.id_area %>"><%= area.area %></option>
+                              <% }) %>
+                            <% } else { %>
+                              <option disabled selected>No hay áreas disponibles</option>
+                            <% } %>
+                          </select>
+                    </div>
+                    <div class="formulario-columna">
+                        <label for="prioridad">prioridad de importancia</label>
+                        <div class="botones-prioridades">
+                            <button <%= typeof solicitud !== 'undefined' && solicitud.data.finalizado == 0 ? 'disabled' : '' %> type="button" class="boton-select prioridad-leve selected" data-prioridad="1">Leve</button>
+                            <button <%= typeof solicitud !== 'undefined' && solicitud.data.finalizado == 0 ? 'disabled' : '' %> type="button" class="boton-select prioridad-moderado" data-prioridad="2">Moderado</button>
+                            <button <%= typeof solicitud !== 'undefined' && solicitud.data.finalizado == 0 ? 'disabled' : '' %> type="button" class="boton-select prioridad-urgente" data-prioridad="3">Urgente</button>
+                            <input type="hidden" name="prioridad" id="prioridad-input" value="1">
+                        </div>
+                    </div>
+
+                    <% if(typeof solicitud !== 'undefined' && solicitud.data.finalizado == 0) { %>
+                        <button type="button" id="boton-solicitud" disabled>Llamar soporte</button>
+                    <% } else { %>
+                        <button type="button" id="boton-solicitud">Llamar soporte</button>
+                    <% } %>
+
+		        </form>
+		        <div class="estado-solicitud <%= (typeof solicitud.data.id === 'undefined' || solicitud.data.finalizado == 1) ? 'esconder' : '' %>">  
+                    <div class="estado-solicitud-titulo">
+                        
+                        <% if(typeof solicitud.respuesta.id === 'undefined' || solicitud.data.finalizado == 1) { %>
+                            <h3>Esperando respuesta...</h3>
+                        <% } else { %>
+                            <h3>Respuesta del soporte</h3>
+                        <% } %>
+
+                        <span class="texto-muted">Estado de tu solicitud</span>
+                    </div>
+                    <div class="estado-solicitud-soporte <%= typeof solicitud.respuesta.id == 'undefined' ? 'esconder' : '' %>">
+                        <div class="estado-soporte-info">
+                            <p class="estado-soporte-nombre"><%= solicitud.respuesta.usuario.nombre %> <%= solicitud.respuesta.usuario.apellido %></p>
+                            <p class="estado-soporte-rol texto-muted">soporte - Turno Manana</p>
+                        </div>
+                        <div class="estado-soporte-mensaje">
+                            <span><i class="fa-regular fa-message"></i> Mensaje del soporte</span>
+                            <p class="soporte-mensaje-texto"><%= solicitud.respuesta.mensaje %></p>
+                        </div>
+                    </div>
+                    <div class="estado-solicitud-progreso">
+                        <h3>Progreso</h3>
+                        <div class="estado-progreso-item estado-progreso-recibido">
+                            <div class="svg">
+                                <i class="fa-solid fa-check"></i>
+                            </div>
+                            <div>
+                                <p>Solicitud recibida</p>
+                                <span class="texto-muted hora_recibido">
+                                    <%
+                                        const fecha = new Date(solicitud.data.fecha)
+                                        const hora = fecha.getHours()
+                                        const minutos = fecha.getMinutes()
+                                    %>
+                                    <%= hora %>:<%= minutos %>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="estado-progreso-item estado-progreso-<%= typeof solicitud.respuesta.id !== 'undefined' ? 'encamino' : 'idle' %>">
+                            <div class="svg">
+                                <% if(typeof solicitud.respuesta.id !== 'undefined') { %>
+                                    <i class="fa-solid fa-arrow-right"></i> 
+                                <% } else { %>
+                                    <i class="fa-solid fa-circle"></i>
+                                <% } %>
+                            </div>
+                            <div>
+                                <p>soporte en camino</p>
+                                <span class="texto-muted hora_respuesta">
+                                    <%
+                                        const fecha_respuesta = new Date(solicitud.respuesta.fecha)
+                                        const hora_respuesta = fecha.getHours()
+                                        const minutos_respuesta = fecha.getMinutes()
+                                    %>
+                                    <%= hora_respuesta %>:<%= minutos_respuesta %>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="estado-progreso-item estado-progreso-<%= solicitud.data.finalizado == 1 ? 'finalizado' : 'idle' %>">
+                            <div class="svg">
+                                <% if(typeof solicitud.respuesta.id !== 'undefined' && solicitud.data.finalizado == 1) { %>
+                                    <i class="fa-solid fa-face-smile"></i>
+                                <% } else { %>
+                                    <i class="fa-solid fa-circle"></i>
+                                <% } %>
+                            </div>
+                            <div>
+                                <p>solicitud finalizado</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="boton-cerrar <%= typeof solicitud.respuesta.id != 'undefined' && solicitud.data.finalizado == 1 ? '' : 'esconder' %>">Cerrar solicitud</button>
+                    <button class="boton-cancelar <%= typeof solicitud.respuesta.id == 'undefined' ? '' : 'esconder' %>">Cancelar solicitud</button>
+                </div>
+            </div>    
+            
+            <!-- 
+            div class="estado-solicitud <%= (typeof solicitud.data.id === 'undefined' || solicitud.data.finalizado == 1) ? 'esconder' : '' %>">  
+                    <p class="estado-solicitud-titulo">
+
+                        <% if(typeof solicitud.respuesta.id === 'undefined' || solicitud.data.finalizado == 1) { %>
+                            Estado de tu solicitud
+                        <% } else { %>
+                            <%= solicitud.respuesta.usuario.nombre %> <%= solicitud.respuesta.usuario.apellido %>
+                        <% } %>
+
+                    </p>
+                    <p class="estado-solicitud-texto">
+
+                        <% if(typeof solicitud.respuesta.id === 'undefined' || solicitud.data.finalizado == 1) { %>
+                            Pendiente...
+                        <% } else { %>
+                            <%= solicitud.respuesta.mensaje %>
+                        <% } %>
+
+                    </p>
+
+                    <button class="boton-cancelar <%= typeof solicitud.respuesta.id == 'undefined' ? '' : 'esconder' %>">Cancelar solicitud</button>
+                </div>
+            -->
+        <div class="columna columna-derecha">
+            <div class="soportees">
+                <p class="soportees-titulo">soportes disponibles</p>
+
+                <div class="soportees-contenedor">
+                    <% if((typeof turnos !== 'undefined' && turnos !== null) && turnos.length > 0) { %>
+                        <% turnos.forEach(turno => { %>
+                            <div class="soportees-item">
+                                <img src="img/user.png" alt="">
+                                <p><%= turno.nombre_usuario %> <%= turno.apellido_usuario %></p>
+                            </div>
+                        <% }) %>
+                    <% } else { %>
+                        <p class="no-hay-soportees">No hay soportes disponibles.</p>
+                    <% } %>
+                </div>
+                
+            </div>
+            <div class="perfil">
+                <hr>
+                <div class="perfil-info">
+                    <p class="perfil-siglas"><%- usuario.nombre[0] %><%- usuario.apellido[0] %></p>
+                    <div class="perfil-usuario">
+                        <p class="perfil-nombre">
+                            <%- usuario.nombre %>
+                            <%- usuario.apellido %>
+                        </p>
+                        <p class="perfil-tipo-usuario">
+                            <%- usuario.tipo_usuario %>
+                        </p>
+                    </div>
+                </div>
+                <a class="perfil-cerrar-sesion" href="/logout"><i class="fa-solid fa-right-from-bracket"></i>Cerrar sesión</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

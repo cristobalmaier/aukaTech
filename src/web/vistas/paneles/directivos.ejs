@@ -39,7 +39,7 @@
             <a href="/"><i class="fas fa-home"></i> <span>Dashboard</span></a>
           </li>
           <li class="active">
-            <a href="/panel/directivos"><i class="fas fa-phone-alt"></i> <span>Llamados</span></a>
+            <a href="/panel/directivos"><i class="fas fa-phone-alt"></i> <span>solicitud</span></a>
           </li>
           <li>
             <a href="/panel/administracion"><i class="fa-solid fa-gear"></i> <span>Administración</span></a>
@@ -63,8 +63,8 @@
 
       <main class="main-panel">
         
-        <div class="header-llamados">
-          <h2>Gestión de Llamados</h2>
+        <div class="header-solicitud">
+          <h2>Gestión de solicitud</h2>
           <div class="exportar">
             <button id="boton-exportar" class="boton-exportar"><i class="fa-solid fa-file-export"></i> Exportar</button>
           </div>
@@ -75,7 +75,7 @@
             <!-- Búsqueda general -->
             <div class="filter">
               <i class="fas fa-search"></i>
-              <input type="text" id="searchInput" placeholder="Buscar por profesor, mensaje, curso" />
+              <input type="text" id="searchInput" placeholder="Buscar por empleado, mensaje, area" />
             </div>
 
             <!-- Filtro por estado -->
@@ -112,7 +112,7 @@
 
         <div class="calls-container">
           <div class="calls-header">
-            <i class="fa-solid fa-phone"></i><h3>Listado de llamados</h3>
+            <i class="fa-solid fa-phone"></i><h3>Listado de solicitud</h3>
           </div>
 
           <div class="calls-table">
@@ -121,28 +121,28 @@
               <thead>
                 <tr>
                   <th>Fecha/Hora</th>
-                  <th>Curso</th>
+                  <th>area</th>
                   <th>Emisor</th>
                   <th>Mensaje</th>
                   <th>Estado</th>
                   <th>Prioridad</th>
-                  <th>Preceptor</th>
+                  <th>soporte</th>
                   <th>Acciones</th>
                 </tr>
               </thead>
               <tbody>
-                <% (llamadosResultado || []).forEach(llamado => { %>
+                <% (solicitudResultado || []).forEach(solicitud => { %>
                   <tr>
                     <td>
                       <div class="call-date">
-                        <%= new Date(llamado.fecha_envio).toLocaleDateString('es-AR', {
+                        <%= new Date(solicitud.fecha_envio).toLocaleDateString('es-AR', {
                           year: 'numeric',
                           month: '2-digit',
                           day: '2-digit'
                         }) %>
                       </div>
                       <div class="call-time">
-                        <%= new Date(llamado.fecha_envio).toLocaleTimeString('es-AR', {
+                        <%= new Date(solicitud.fecha_envio).toLocaleTimeString('es-AR', {
                           hour: 'numeric',
                           minute: 'numeric'
                         }) %>
@@ -151,35 +151,35 @@
                     
                     <td>
                       <div class="call-grade">
-                        <%= llamado.curso %>
+                        <%= solicitud.area %>
                       </div>
                     </td>
                     <td>
                       <div class="emisor">
-                        <%= llamado.nombre %>
+                        <%= solicitud.nombre %>
                       </div>
                     </td>
                     <td class="call-message">
-                      <%= llamado.mensaje %>
+                      <%= solicitud.mensaje %>
                     </td>
                     <td>
-                      <% let statusClass='status-pendiente' ; let statusText='Pendiente' ; if (llamado.cancelado==1) {
-                        statusClass='status-cancelado' ; statusText='Cancelado' ; } else if (llamado.finalizado==1) {
+                      <% let statusClass='status-pendiente' ; let statusText='Pendiente' ; if (solicitud.cancelado==1) {
+                        statusClass='status-cancelado' ; statusText='Cancelado' ; } else if (solicitud.finalizado==1) {
                         statusClass='status-finalizado' ; statusText='Finalizado' ; } %>
                         <span class="status-badge <%= statusClass %>">
                           <%= statusText %>
                         </span>
                     </td>
                     <td>
-                      <% let priorityClass='priority-low' ; let priorityText='Baja' ; if (llamado.prioridad==='media' )
-                        { priorityClass='priority-medium' ; priorityText='Media' ; } else if (llamado.prioridad==='alta'
+                      <% let priorityClass='priority-low' ; let priorityText='Baja' ; if (solicitud.prioridad==='media' )
+                        { priorityClass='priority-medium' ; priorityText='Media' ; } else if (solicitud.prioridad==='alta'
                         ) { priorityClass='priority-high' ; priorityText='Alta' ; } %>
                         <div class="priority-badge <%= priorityClass %>">
                           <%= priorityText %>
                         </div>
                     </td>
                     <td>
-                      <%= llamado.nombre %>
+                      <%= solicitud.nombre %>
                     </td>
                     <td>
                       <button class="action-btn">
@@ -192,9 +192,9 @@
               </tbody>
             </table>
           </div>
-          <% if (!(llamadosResultado && llamadosResultado.length > 0)) { %>
-            <div class="no-hay-llamados">
-              No hay llamados.
+          <% if (!(solicitudResultado && solicitudResultado.length > 0)) { %>
+            <div class="no-hay-solicitud">
+              No hay solicitud.
             </div>
           <% } %>
         </div>
@@ -202,10 +202,10 @@
     </div>
   </div>
 
-  <div id="detalleLlamadoModal" class="modal-llamado" style="display:none;">
-    <div class="modal-llamado-content">
-      <button class="modal-llamado-close" id="cerrarDetalleLlamado">&times;</button>
-      <div id="detalleLlamadoContenido">
+  <div id="detallesolicitudModal" class="modal-solicitud" style="display:none;">
+    <div class="modal-solicitud-content">
+      <button class="modal-solicitud-close" id="cerrarDetallesolicitud">&times;</button>
+      <div id="detallesolicitudContenido">
         <!-- Aquí se cargará el detalle dinámicamente -->
       </div>
     </div>

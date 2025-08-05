@@ -3,30 +3,30 @@ import { peticion } from '../peticion.js'
 
 const socket = io();
 
-// Datos del profesor logeado
-const idProfesor = parseInt(document.documentElement.dataset.id_usuario)
-const nombreProfesor = document.documentElement.dataset.nombre
-const apellidoProfesor = document.documentElement.dataset.apellido
+// Datos del empleado logeado
+const idempleado = parseInt(document.documentElement.dataset.id_usuario)
+const nombreempleado = document.documentElement.dataset.nombre
+const apellidoempleado = document.documentElement.dataset.apellido
 const tipoUsuario = document.documentElement.dataset.tipo_usuario
 
 // Elementos HTML
 const formulario = document.getElementById('formulario')
-const botonLlamado = document.getElementById('boton-llamado')
-const botonCancelarLlamado = document.querySelector('.boton-cancelar')
+const botonsolicitud = document.getElementById('boton-solicitud')
+const botonCancelarsolicitud = document.querySelector('.boton-cancelar')
 const botonCerrar = document.querySelector('.boton-cerrar')
 
-const botonesNiveles = document.querySelectorAll('.boton-select')
-const inputNivel = document.getElementById('nivel-input')
+const botonesprioridades = document.querySelectorAll('.boton-select')
+const inputprioridad = document.getElementById('prioridad-input')
 const inputMensaje = document.getElementById('mensaje')
 const limiteCaracteres = document.querySelector('.limite-caracteres')
 const textoCaracteresRestantes = document.getElementById('caracteres-restantes')
 const textoCaracteresMaximos = document.getElementById('caracteres-maximos')
 
-const primerTitulo = document.querySelector('.estado-llamado-titulo h3')
-const estadoLlamado = document.querySelector('.estado-llamado')
-const estadoPreceptor = document.querySelector('.estado-llamado-preceptor')
-const estadoLlamadoTitulo = document.querySelector('.estado-preceptor-nombre')
-const estadoLlamadoTexto = document.querySelector('.preceptor-mensaje-texto')
+const primerTitulo = document.querySelector('.estado-solicitud-titulo h3')
+const estadosolicitud = document.querySelector('.estado-solicitud')
+const estadosoporte = document.querySelector('.estado-solicitud-soporte')
+const estadosolicitudTitulo = document.querySelector('.estado-soporte-nombre')
+const estadosolicitudTexto = document.querySelector('.soporte-mensaje-texto')
 const estadoProgresoTodos = document.querySelectorAll('.estado-progreso-item')
 
 const hora_recibido = document.querySelector('.hora_recibido')
@@ -36,28 +36,28 @@ const notificacion = document.getElementById('notificacion')
 
 /* ////////////////////////////////////////////////////////////////// */
 
-// ! RESPUESTA DE LLAMADO (BOTONES DE RESPUESTA DE LOS PRECEPTORES)
+// ! RESPUESTA DE solicitud (BOTONES DE RESPUESTA DE LOS soporteES)
 
-socket.on('respuesta-llamado', (data) => {
+socket.on('respuesta-solicitud', (data) => {
     const {
-        nombre: nombrePreceptor,
-        apellido: apellidoPreceptor,
-        usuario_id: idProfesorLlamado,
-        llamado_id,
+        nombre: nombresoporte,
+        apellido: apellidosoporte,
+        usuario_id: idempleadosolicitud,
+        solicitud_id,
         respuesta
     } = data
 
-    // Si el llamado no es del mismo profesor, no se muestra la respuesta
-    if (idProfesorLlamado != idProfesor) return
+    // Si el solicitud no es del mismo empleado, no se muestra la respuesta
+    if (idempleadosolicitud != idempleado) return
 
     // Mostrar notificacion
-    primerTitulo.innerText = 'Respuesta del preceptor'
-    estadoPreceptor.classList.remove('esconder')
-    estadoLlamadoTitulo.innerText = nombrePreceptor + " " + apellidoPreceptor
-    estadoLlamadoTexto.innerText = respuesta
+    primerTitulo.innerText = 'Respuesta del soporte'
+    estadosoporte.classList.remove('esconder')
+    estadosolicitudTitulo.innerText = nombresoporte + " " + apellidosoporte
+    estadosolicitudTexto.innerText = respuesta
     estadoProgresoTodos[1].classList.replace('estado-progreso-idle', 'estado-progreso-encamino')
     estadoProgresoTodos[1].querySelector('.fa-circle').classList.replace('fa-circle', 'fa-arrow-right')
-    botonCancelarLlamado.classList.add('esconder')
+    botonCancelarsolicitud.classList.add('esconder')
 
     const hora = new Date()
     hora_respuesta.innerText = `${hora.getHours()}:${hora.getMinutes()}`
@@ -67,18 +67,18 @@ socket.on('respuesta-llamado', (data) => {
 
 /* ////////////////////////////////////////////////////////////////// */
 
-// ! TERMINAR LLAMADO (BOTON DE TERMINAR DE LOS PRECEPTORES)
+// ! TERMINAR solicitud (BOTON DE TERMINAR DE LOS soporteES)
 
-socket.on('terminar-llamado', (data) => {
+socket.on('terminar-solicitud', (data) => {
     const {
-        nombre: nombrePreceptor,
-        apellido: apellidoPreceptor,
-        usuario_id: idProfesorLlamado,
+        nombre: nombresoporte,
+        apellido: apellidosoporte,
+        usuario_id: idempleadosolicitud,
         respuesta
     } = data
 
-    // Si el llamado es del mismo profesor, no se muestra la respuesta
-    if (idProfesorLlamado != idProfesor) return
+    // Si el solicitud es del mismo empleado, no se muestra la respuesta
+    if (idempleadosolicitud != idempleado) return
 
     botonCerrar.classList.remove('esconder')
     estadoProgresoTodos[2].querySelector('.fa-circle').classList.replace('fa-circle', 'fa-face-smile')
@@ -94,14 +94,14 @@ botonCerrar.addEventListener('click', () => {
 
 /* ////////////////////////////////////////////////////////////////// */
 
-// ! CANCELAR LLAMADO (BOTON DE CANCELAR)
+// ! CANCELAR solicitud (BOTON DE CANCELAR)
 
-botonCancelarLlamado.addEventListener('click', async () => {
+botonCancelarsolicitud.addEventListener('click', async () => {
     const mensaje = formulario.dataset.mensaje
-    const id_llamado = formulario.dataset.id_llamado
+    const id_solicitud = formulario.dataset.id_solicitud
 
     const resultado = await peticion({
-        url: '/api/llamados/actualizar/' + id_llamado,
+        url: '/api/solicitud/actualizar/' + id_solicitud,
         metodo: 'PUT',
         cuerpo: {
             finalizado: true,
@@ -109,10 +109,10 @@ botonCancelarLlamado.addEventListener('click', async () => {
         }
     })
 
-    socket.emit('cancelar-llamado', {
-        usuario_id: idProfesor,
-        nombre: nombreProfesor,
-        apellido: apellidoProfesor,
+    socket.emit('cancelar-solicitud', {
+        usuario_id: idempleado,
+        nombre: nombreempleado,
+        apellido: apellidoempleado,
         fecha_envio: new Date(),
         mensaje
     })
@@ -122,12 +122,12 @@ botonCancelarLlamado.addEventListener('click', async () => {
 
 /* ////////////////////////////////////////////////////////////////// */
 
-// ! LLAMADO (BOTON DE LLAMAR)
+// ! solicitud (BOTON DE LLAMAR)
 
-botonLlamado.addEventListener('click', async () => {
+botonsolicitud.addEventListener('click', async () => {
     const mensaje = formulario.mensaje.value
-    const nivel = parseInt(formulario.nivel.value)
-    const curso = parseInt(formulario.curso.value)
+    const prioridad = parseInt(formulario.prioridad.value)
+    const area = parseInt(formulario.area.value)
 
     // Validaciones
     if(!mensaje || mensaje.length === 0) {
@@ -146,47 +146,47 @@ botonLlamado.addEventListener('click', async () => {
     bloquearFormulario({ mensaje })
 
     const resultado = await peticion({
-        url: '/api/llamados/crear',
+        url: '/api/solicitud/crear',
         metodo: 'POST',
         cuerpo: {
-            id_preceptor: null,
-            id_emisor: idProfesor,
-            id_curso: curso,
-            numero_nivel: nivel,
+            id_soporte: null,
+            id_emisor: idempleado,
+            id_area: area,
+            numero_prioridad: prioridad,
             mensaje
         }
     })
 
     // Si ocurrio un error en la api se muestra una alerta
     if (!resultado.ok) {
-        return alerta({ mensaje: 'No se realizar el llamado, intente de nuevo mas tarde.', tipo: 'error' }) 
+        return alerta({ mensaje: 'No se realizar el solicitud, intente de nuevo mas tarde.', tipo: 'error' }) 
     }
 
-    const llamadoInfo = await resultado.json()
+    const solicitudInfo = await resultado.json()
 
-    socket.emit('nuevo-llamado', {
+    socket.emit('nuevo-solicitud', {
         usuario: {
-            id: idProfesor,
-            nombre: nombreProfesor,
-            apellido: apellidoProfesor,
+            id: idempleado,
+            nombre: nombreempleado,
+            apellido: apellidoempleado,
             tipo_usuario: tipoUsuario
         },
-        llamado: {
-            id: llamadoInfo.data.id,
+        solicitud: {
+            id: solicitudInfo.data.id,
             fecha_envio: new Date(),
-            numero_nivel: nivel,
+            numero_prioridad: prioridad,
             mensaje
         }
     })
 
     formulario.dataset.mensaje = mensaje
-    estadoLlamado.classList.remove('esconder')
-    botonLlamado.disabled = true
-    botonesNiveles.forEach(boton => boton.disabled = true)
+    estadosolicitud.classList.remove('esconder')
+    botonsolicitud.disabled = true
+    botonesprioridades.forEach(boton => boton.disabled = true)
 
     primerTitulo.innerText = 'Esperando respuesta...'
-    estadoPreceptor.classList.add('esconder')
-    estadoLlamadoTitulo.innerText = ''
+    estadosoporte.classList.add('esconder')
+    estadosolicitudTitulo.innerText = ''
 
     const faSelector = estadoProgresoTodos[1].querySelector('.fa-arrow-right')
     if(faSelector) faSelector.classList.replace('fa-arrow-right', 'fa-circle')
@@ -195,7 +195,7 @@ botonLlamado.addEventListener('click', async () => {
     if(faSelector2) faSelector2.classList.replace('fa-face-smile', 'fa-circle')
 
     botonCerrar.classList.add('esconder')
-    botonCancelarLlamado.classList.remove('esconder')
+    botonCancelarsolicitud.classList.remove('esconder')
 
     const hora = new Date()
     hora_recibido.innerText = `${hora.getHours()}:${hora.getMinutes()}`
@@ -209,13 +209,13 @@ botonLlamado.addEventListener('click', async () => {
 
 /* ////////////////////////////////////////////////////////////////// */
 
-// ! SELECCION DE NIVEL DE IMPPORTANCIA DEL LLAMADO
+// ! SELECCION DE prioridad DE IMPPORTANCIA DEL solicitud
 
-botonesNiveles.forEach(boton => {
+botonesprioridades.forEach(boton => {
     boton.addEventListener('click', () => {
-        botonesNiveles.forEach(btn => btn.classList.remove('selected'));
+        botonesprioridades.forEach(btn => btn.classList.remove('selected'));
         boton.classList.add('selected');
-        inputNivel.value = boton.dataset.nivel;
+        inputprioridad.value = boton.dataset.prioridad;
     });
 });
 
@@ -247,20 +247,20 @@ function calcularCaracteres() {
 
 function bloquearFormulario({ mensaje }) {
     formulario.dataset.mensaje = mensaje
-    estadoLlamado.classList.remove('esconder')
-    botonLlamado.disabled = true
-    botonesNiveles.forEach(boton => boton.disabled = true)
+    estadosolicitud.classList.remove('esconder')
+    botonsolicitud.disabled = true
+    botonesprioridades.forEach(boton => boton.disabled = true)
 }
 
 function desbloquearFormulario() {
     formulario.dataset.mensaje = ''
 
     primerTitulo.innerText = 'Esperando respuesta...'
-    estadoPreceptor.classList.add('esconder')
-    estadoLlamadoTitulo.innerText = ''
-    estadoLlamadoTexto.innerText = 'Pendiente...'
-    botonLlamado.disabled = false
-    botonesNiveles.forEach(boton => boton.disabled = false)
+    estadosoporte.classList.add('esconder')
+    estadosolicitudTitulo.innerText = ''
+    estadosolicitudTexto.innerText = 'Pendiente...'
+    botonsolicitud.disabled = false
+    botonesprioridades.forEach(boton => boton.disabled = false)
 
     const faSelector = estadoProgresoTodos[1].querySelector('.fa-arrow-right')
     if(faSelector) faSelector.classList.replace('fa-arrow-right', 'fa-circle')
@@ -269,7 +269,7 @@ function desbloquearFormulario() {
     if(faSelector2) faSelector2.classList.replace('fa-face-smile', 'fa-circle')
 
     botonCerrar.classList.add('esconder')
-    estadoLlamado.classList.add('esconder')
+    estadosolicitud.classList.add('esconder')
 
     for(const estado of estadoProgresoTodos) {
         estado.classList.replace('estado-progreso-encamino', 'estado-progreso-idle') 

@@ -7,64 +7,65 @@ import { config } from '../../web/config.js'
 import { peticion } from '../utiles/peticion.js'
 import { tiempo } from '../utiles/tiempo.js'
 import { obtenerDatosToken } from '../utiles/obtenerDatosToken.js'
-import { esProfesor, esPreceptor, estaLogeado } from '../utiles/auth.js'
+import { esempleado, essoporte, estaLogeado } from '../utiles/auth.js'
 
-panelRutas.get('/panel/preceptor', [estaLogeado, esPreceptor], async (req, res) => {
-    const hora_actual = tiempo({ fecha: new Date() })
+// Función para formatear fechas
+const formatoHora = (fechaString) => {
+    const fecha = new Date(fechaString)
+    return fecha.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' })
+}
 
-    const usuario = obtenerDatosToken(req)
-
-    const llamadosResultado = await peticion({ url: `${API_URL}/llamados`, metodo: 'GET' })
-    const llamados = await llamadosResultado.json()
-
-    const turnosResultado = await peticion({ url: `${API_URL}/turnos/hora/${hora_actual}`, metodo: 'GET' })
-    const turnos = await turnosResultado.json()
-
-    res.render('paneles/preceptor', { titulo: 'AUKA - Panel', usuario, llamados, turnos })
-})
-
-panelRutas.get('/panel/profesor', [estaLogeado, esProfesor], async (req, res) => {
+panelRutas.get('/panel/soporte', [estaLogeado, essoporte], async (req, res) => {
     const hora_actual = tiempo({ fecha: new Date() })
     const usuario = obtenerDatosToken(req)
 
-    const turnosResultado = await peticion({ url: `${API_URL}/turnos/hora/${hora_actual}`, metodo: 'GET' })
-    const turnos = await turnosResultado.json()
-    
-    const cursosResultado = await peticion({ url: `${API_URL}/cursos`, metodo: 'GET' })
-    const cursos = await cursosResultado.json()
+    try {
+        const [solicitudesRes, turnosRes] = await Promise.all([
+            peticion({ 
+                url: `${API_URL}/solicitudes`,
+                metodo: 'GET',
+                query: { incluirDatosUsuario: true } 
+            }),
+            peticion({ url: `${API_URL}/turnos/hora/${hora_actual}`, metodo: 'GET' })
+        ])
 
-    const resultadoLlamado = await peticion({ url: `${API_URL}/llamados?usuarioId=${usuario.id_usuario}`, metodo: 'GET' })
-    let llamado = await resultadoLlamado.json()
+        let solicitudes = await solicitudesRes.json()
+        
+        // Normalización de datos
+        if (!Array.isArray(solicitudes)) {
+            solicitudes = []
+        } else {
+            solicitudes = solicitudes.map(sol => ({
+                ...sol,
+                nombre: sol.nombre || sol.nombre_usuario || '',
+                apellido: sol.apellido || sol.apellido_usuario || '',
+                finalizado: sol.finalizado || 0,
+                cancelado: sol.cancelado || 0,
+                fecha_envio: sol.fecha_envio || new Date().toISOString()
+            }))
+        }
 
-    if(llamado == null) llamado = []
+        const turnos = await turnosRes.json()
 
-    const resultadoRespuesta = await peticion({ url: `${API_URL}/respuestas?llamadoId=${llamado[0]?.id_llamado}`, metodo: 'GET' })
-    let respuesta = await resultadoRespuesta.json()
+        res.render('paneles/soporte', { 
+            titulo: 'AUKA - Panel', 
+            usuario, 
+            solicitud: solicitudes,
+            turnos,
+            formatoHora  // Pasamos la función helper
+        })
 
-    if(respuesta == null) respuesta = []
-
-    const objetoLlamado = {
-        data: {
-            id: llamado[0]?.id_llamado,
-            mensaje: llamado[0]?.mensaje,
-            nivel: llamado[0]?.numero_nivel,
-            fecha: llamado[0]?.fecha_envio,
-            finalizado: llamado[0]?.finalizado,
-        },
-        respuesta: {
-            id: respuesta[0]?.id_respuesta,
-            mensaje: respuesta[0]?.mensaje,
-            fecha: respuesta[0]?.fecha_respuesta,
-            usuario: {
-                id: respuesta[0]?.id_preceptor,
-                nombre: respuesta[0]?.nombre_usuario,
-                apellido: respuesta[0]?.apellido_usuario
-            }
-        },
-        cursos
+    } catch (error) {
+        console.error('Error en panel soporte:', error)
+        res.render('paneles/soporte', {
+            titulo: 'AUKA - Panel',
+            usuario,
+            solicitud: [],
+            turnos: []
+        })
     }
-
-    res.render('paneles/profesor', { titulo: 'AUKA - Panel', usuario, llamado: objetoLlamado, turnos })
 })
+
+// ... (mantén el resto de las rutas igual)
 
 export default panelRutas

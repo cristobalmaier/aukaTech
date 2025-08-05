@@ -160,7 +160,7 @@ Al agregar nuevas pruebas:
 4. Asegúrate de que las pruebas sean independientes
 5. Verifica que todas las pruebas pasen antes de hacer commit
 
-## 📚 Recursos Adicionales
+## 📚 Reareas Adicionales
 
 - [Documentación oficial de Jest](https://jestjs.io/docs/getting-started)
 - [Guía de ES Modules en Jest](https://jestjs.io/docs/ecmascript-modules)
