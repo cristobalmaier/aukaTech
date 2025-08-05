@@ -45,7 +45,7 @@
                     <div class="formulario-area">
                         <label for="area">Área</label>
                         <select name="area" id="area">
-                            <% if (Array.isArray(solicitud?.areas)) { %>
+                            <% if (typeof solicitud !== 'undefined' && Array.isArray(solicitud?.areas)) { %>
                               <% solicitud.areas.forEach(area => { %>
                                 <option value="<%= area.id_area %>"><%= area.area %></option>
                               <% }) %>

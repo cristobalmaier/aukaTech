@@ -15,6 +15,12 @@ const formatoHora = (fechaString) => {
     return fecha.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' })
 }
 
+panelRutas.get('/panel/empleado', [estaLogeado, esempleado], async (req, res) => {
+    const usuario = obtenerDatosToken(req)
+    res.render('paneles/empleado', { titulo: 'AUKA - Panel', usuario })
+})
+
+
 panelRutas.get('/panel/soporte', [estaLogeado, essoporte], async (req, res) => {
     const hora_actual = tiempo({ fecha: new Date() })
     const usuario = obtenerDatosToken(req)
@@ -65,7 +71,5 @@ panelRutas.get('/panel/soporte', [estaLogeado, essoporte], async (req, res) => {
         })
     }
 })
-
-// ... (mantén el resto de las rutas igual)
 
 export default panelRutas
