@@ -12,17 +12,17 @@ class AreaServicio {
     }
 
     async obtenerAreaPorNombre({ nombre }) {
-        const resultado = await query("SELECT * FROM areas WHERE nombre = ?", [nombre]);
+        const resultado = await query("SELECT * FROM areas WHERE area = ?", [nombre]);
         return resultado[0] || null;
     }
-
+    
     async crearArea({ nombre }) {
-        const resultado = await query("INSERT INTO areas (nombre) VALUES (?)", [nombre]);
+        const resultado = await query("INSERT INTO areas (area) VALUES (?)", [nombre]);
         return { id: resultado.insertId, nombre };
     }
-
+    
     async actualizarArea({ id, nombre }) {
-        await query("UPDATE areas SET nombre = ? WHERE id_area = ?", [nombre, id]);
+        await query("UPDATE areas SET area = ? WHERE id_area = ?", [nombre, id]);
         return { id, nombre };
     }
 

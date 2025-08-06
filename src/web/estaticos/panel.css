@@ -320,7 +320,7 @@ hr {
   padding: 5px 12px;
   font-weight: 800;
   font-size: 15px;
-  arear: pointer;
+  cursor: pointer;
 }
 
 .respuesta-personalizada-contenedor {
@@ -349,7 +349,7 @@ hr {
   width: 100%;
   font-weight: 600;
   font-size: 17px;
-  arear: pointer;
+  cursor: pointer;
 }
 
 /* ////////////////////// empleadoES ////////////////////// */
@@ -433,14 +433,14 @@ hr {
   font-weight: 700;
   width: 100%;
   outline: none;
-  arear: pointer;
+  cursor: pointer;
   transition: 0.3s ease background;
 }
 
 .formulario-solicitud button:disabled {
   background-color: #aaa;
   /* o usa un --color-boton-disabled si tienes uno definido */
-  arear: not-allowed;
+  cursor: not-allowed;
   opacity: 0.6;
 }
 
@@ -451,7 +451,7 @@ hr {
 
 .formulario-solicitud .boton-select {
   all: unset;
-  arear: pointer;
+  cursor: pointer;
   box-shadow: inset 0 0 0 2px var(--color-borde-boton-select);
   background-color: var(--color-fondo-boton-select);
   border-radius: 5px;
@@ -483,7 +483,7 @@ hr {
   box-shadow: inset 0 0 0 2px var(--color-borde-boton-select);
   background-color: var(--color-fondo-boton-select);
   color: var(--color-texto-secundario);
-  arear: not-allowed;
+  cursor: not-allowed;
 }
 
 .formulario-solicitud .boton-cancelar {

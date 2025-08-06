@@ -1,4 +1,7 @@
 import mysql from 'mysql2/promise'
+import 'dotenv/config';
+
+// ... el resto del código igual ...
 
 const CONFIGURACION = {
     user: process.env.BD_USUARIO,
@@ -6,6 +9,8 @@ const CONFIGURACION = {
     password: process.env.BD_CONTRASENA,
     host: process.env.BD_HOST
 }
+
+console.log('Config BD:', CONFIGURACION);
 
 export async function query(sql, valores) {
     try {
